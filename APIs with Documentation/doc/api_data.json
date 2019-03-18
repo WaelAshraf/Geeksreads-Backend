@@ -883,8 +883,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "./doc/main.js",
-    "group": "C__Users_ahmed_AMRAWY98_Desktop_Modified_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
-    "groupTitle": "C__Users_ahmed_AMRAWY98_Desktop_Modified_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
+    "group": "C__Users_ahmed_AMRAWY98_Desktop_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
+    "groupTitle": "C__Users_ahmed_AMRAWY98_Desktop_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
     "name": ""
   },
   {
@@ -1067,6 +1067,13 @@
             "optional": false,
             "field": "perPage",
             "description": "<p>Number of comments per page default is <code>20</code></p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Number of current page default is <code>1</code></p>"
           }
         ]
       }

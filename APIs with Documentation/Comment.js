@@ -23,6 +23,7 @@
  * @apiParam{String} type Subject Type Commented On; book,review,etc
  * @apiParam{Number} ID Id of resource given as type Parameter
  * @apiParam{Number} perPage Number of comments per page default is <code>20</code>
+ * @apiParam{Number} pageNumber Number of current page default is <code>1</code>
  */
 function listCommentsOnSubject(type,ID,perPage=20)
 {
