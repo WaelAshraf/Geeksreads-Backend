@@ -14,6 +14,8 @@ const router = express.Router();
 
 //get current User
 router.get('/me', auth, async (req, res) => {
+  let check = await User.findOne({ UserId: req.user._id });
+  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
   const user = await User.findById(req.user._id).select('-UserPassword');
   if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
   res.status(200).send(user);
