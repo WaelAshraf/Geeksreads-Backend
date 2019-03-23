@@ -3,7 +3,7 @@ var express = require('express');
 var Router = express.Router();
 const mongoose = require('mongoose');
 const {validate,comment} = require('../models/comments.model');
-const resource =require('../models/resources.model').resource;
+const resource =mongoose.model('Resources');
 const Joi = require('joi');
 ///////////////////Req and Res Logic////////////////////////
 ////get////
