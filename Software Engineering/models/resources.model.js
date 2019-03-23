@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Joi = require('Joi');
 ObjectId = mongoose.Schema.Types.ObjectId;
 var resourcesSchema = new mongoose.Schema({
     resourceId: {
@@ -20,5 +21,14 @@ var resourcesSchema = new mongoose.Schema({
         type: String//6
     }
 });
-resource=mongoose.model('Resources', resourcesSchema);
-exports.resource=resource;
+const Resource=mongoose.model('Resource',resourcesSchema);
+function validateResource(resource)
+{
+
+    const Schema={
+        ResourceID: Joi.string().required()
+    };
+    return Joi.validate(resource,Schema);
+}
+exports.Resource= Resource;
+exports.validate=validateResource;
