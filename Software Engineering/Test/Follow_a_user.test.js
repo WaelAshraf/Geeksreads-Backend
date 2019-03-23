@@ -1,24 +1,6 @@
+/* const followuser=require('./Follow_a_user');
 
-const request = require('supertest');
-var app = require('../DB').app;
-it("User Not Found (Follow)",  (done) => {
-    request(app)
-     .post('/api/Users/Follow')
-     .send({
-        "myuserid":"1",
-        "userId_tobefollowed":"55"
-        })
-    .expect(404,done);
-});
-
-
-
-it("Follow Successfull",  (done) => {
-    request(app)
-     .post('/api/Users/Follow')
-     .send({
-        userId_tobefollowed:"5c9132dd04ea424bf938e8f8",
-        myuserid:"5c9132dd0a604ca6b1f34117"
-        })
-    .expect(200,done);
-});
+//test calling fn to make user with id 5c9132ddac2fc196bc685ce0 follow 5c9132dd1c3703bfad757ce4
+test('Adding Follow Should return true',()=> {
+    expect(followuser("5c9132ddac2fc196bc685ce0","5c9132dd1c3703bfad757ce4)")).toBeTruthy();
+}) */

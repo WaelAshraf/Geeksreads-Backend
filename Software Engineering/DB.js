@@ -2,7 +2,6 @@ const config = require('config')
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
-require('./models/resources.model');
 const mongoose = require('mongoose');
 const Users = require('./routes/Users');
 const Auth = require('./routes/Auth');
