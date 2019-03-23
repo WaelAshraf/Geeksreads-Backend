@@ -33,7 +33,7 @@ router.put('/like',(req,res)=>{
     console.log(error);
     if(error)
     {
-       return res.status(400).send(error.details[0].message);
+       return res.status(404).send(error.details[0].message);
     }
     const resource= Resource.findOne({ResourceID: req.body.ResourceID})
    if (!resource) return res.status(404).send('resource was not found');
@@ -51,18 +51,46 @@ router.put('/like',(req,res)=>{
     }
     console.log(doc);
     res.send(doc);
+    res.send('liked..')
 
 });
    
  
   
-});/* 
-app.listen(3000);
-function validationRate(req)
-    {
-        const schema = {
-            ResourceID: Joi.number().min(3).max(5).required(),
-        };
-        return Joi.validate(req, schema);
-    } */
-    module.exports = router;
+});
+
+
+/////Unlike a Resource/////
+
+router.put('/unlike',(req,res)=>{
+    // input validation
+      console.log(req.body);
+   
+      const {error}= validate(req.body);
+   
+      console.log(error);
+      if(error)
+      {
+         return res.status(404).send(error.details[0].message);
+      }
+      const resource= Resource.findOne({ResourceID: req.body.ResourceID})
+     if (!resource) return res.status(404).send('resource was not found');
+      
+     Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { seq: -1 } },
+      function(err, doc){
+      if(err){
+          console.log("Something wrong when updating data!");
+      }
+   
+      if (!doc)
+      {
+          return res.status(404).send("resource not found");
+     
+      }
+      console.log(doc);
+      res.send(doc);
+   
+   });
+
+   });
+module.exports = router;
