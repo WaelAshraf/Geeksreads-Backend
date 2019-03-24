@@ -2,11 +2,13 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+require('./models/resources.model');
 const mongoose = require('mongoose');
 const Users = require('./routes/Users');
 const Auth = require('./routes/Auth');
 const Statuses = require('./routes/Statuses');
 const Comments = require("./routes/commentsController");
+const Resources= require("./routes/Resources");
 const express = require('express');
 const app = express();
 if (!config.get('jwtPrivateKey')) {
@@ -23,7 +25,7 @@ app.use('/api/Users', Users);
 app.use('/api/Auth', Auth);
 app.use('/api/user_status',Statuses);
 app.use('/api/comments/',Comments);
-
+app.use('/api/Resources',Resources);
 const port = process.env.PORT || 6000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 module.exports.app= app;

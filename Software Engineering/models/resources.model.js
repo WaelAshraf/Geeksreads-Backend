@@ -20,5 +20,4 @@ var resourcesSchema = new mongoose.Schema({
         type: String//6
     }
 });
-resource=mongoose.model('Resources', resourcesSchema);
-exports.resource=resource;
+mongoose.model('Resources', resourcesSchema);
