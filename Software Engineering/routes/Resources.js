@@ -1,18 +1,14 @@
 /**
- * @api {post} /rating Like a resource 
- * @apiName PostRating
- * @apiGroup Resource
+ * @api {PUT} /like Like a resource 
+ * @apiName PutLike
+ * @apiGroup Resources
  * @apiError {404} NOTFOUND Resource could not be found
- * @apiParam {credentials} apiKey Api key from app console.
- * @apiParam {credentials} apiSecret Api secret from app console.
- * @apiParam {String} accessToken The Access Token obtained from getAccessCredentials.
- * @apiParam {String} accessTokenSecret The Access Secret Token obtained from getAccessCredentials.
- * @apiParam {Number} rating Resource rating.
  * @apiParam {Number} resourceId Id of the resource being liked.
- * @apiParam {String} resourceType Camel case name of the resource type (e.g. UserStatus, Review).
- * 
  *  @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
+ *          {
+ *              Liked
+ *          }
  */
 
 const Joi = require('joi');
@@ -38,7 +34,7 @@ router.put('/like',(req,res)=>{
     const resource= Resource.findOne({ResourceID: req.body.ResourceID})
    if (!resource) return res.status(404).send('resource was not found');
     
-   Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { seq: 1 } },
+   Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { likes: 1 } },
     function(err, doc){
     if(err){
         console.log("Something wrong when updating data!");
@@ -62,6 +58,20 @@ router.put('/like',(req,res)=>{
 
 /////Unlike a Resource/////
 
+/**
+ * @api {PUT} /unlike Unlike a resource 
+ * @apiName PutUnlike
+ * @apiGroup  Resources
+ * @apiError {404} NOTFOUND Resource could not be found
+ * @apiParam {Number} resourceId Id of the resource being liked.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *          {
+ *              Unliked
+ *          }
+ * 
+ */
+
 router.put('/unlike',(req,res)=>{
     // input validation
       console.log(req.body);
@@ -76,7 +86,7 @@ router.put('/unlike',(req,res)=>{
       const resource= Resource.findOne({ResourceID: req.body.ResourceID})
      if (!resource) return res.status(404).send('resource was not found');
       
-     Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { seq: -1 } },
+     Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { likes: -1 } },
       function(err, doc){
       if(err){
           console.log("Something wrong when updating data!");
