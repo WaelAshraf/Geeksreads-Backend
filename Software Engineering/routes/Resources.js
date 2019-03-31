@@ -18,7 +18,7 @@
 const Joi = require('joi');
  const express = require('express');
  const mongoose= require ('mongoose');
-const {Resource,validate} =require('../models/resources.model');
+const {Resource} =require('../models/resources.model');
 const router = express.Router();
 
 router.put('/like',(req,res)=>{
@@ -26,17 +26,16 @@ router.put('/like',(req,res)=>{
     // input validation
     
 
-    console.log(req.body);
- 
-    const {error}= validate(req.body);
+ var error= null;
+ if (req.body.ResourceID.lenght = 0)
+ {
+     error=1 ;
+ }  
 
-    console.log(error);
     if(error)
     {
        return res.status(400).send(error.details[0].message);
     }
-    const resource= Resource.findOne({ResourceID: req.body.ResourceID})
-   if (!resource) return res.status(404).send('resource was not found');
     
    Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { seq: 1 } },
     function(err, doc){
@@ -46,23 +45,48 @@ router.put('/like',(req,res)=>{
 
     if (!doc)
     {
-        return res.status(404).send("resource not found");
+        return res.status(200).send("liked");
    
     }
     console.log(doc);
     res.send(doc);
+    res.send('liked..')
 
 });
    
  
   
-});/* 
-app.listen(3000);
-function validationRate(req)
-    {
-        const schema = {
-            ResourceID: Joi.number().min(3).max(5).required(),
-        };
-        return Joi.validate(req, schema);
-    } */
-    module.exports = router;
+});
+
+
+/////Unlike a Resource/////
+
+router.put('/unlike',(req,res)=>{
+    // input validation
+      console.log(req.body);
+   
+      const {error}= validate(req.body);
+   
+      console.log(error);
+      if(error)
+      {
+         return res.status(404).send(error.details[0].message);
+      }
+     Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { seq: -1 } },
+      function(err, doc){
+      if(err){
+          console.log("Something wrong when updating data!");
+      }
+   
+      if (!doc)
+      {
+          return res.status(404).send("resource not found");
+     
+      }
+      console.log(doc);
+      res.send(doc);
+   
+   });
+
+   });
+module.exports = router;

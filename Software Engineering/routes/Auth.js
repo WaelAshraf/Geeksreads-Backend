@@ -11,6 +11,27 @@ const router = express.Router();
 
 
 //Login Authentication
+
+  /**
+ * @api{Post} /Login/Logs User in
+ * @apiVersion 0.0.0
+ * @apiName Auth 
+ * @apiGroup Auth
+ * 
+ * @apiParam {string} UserEmail User Email
+ * @apiParam {string} UserPassword User Password
+ *
+ * @apiSuccess {string} JWTauthtoken Authentication token
+ *  
+ * @apiSuccessExample  Expected Data on Success
+ * {
+ * "ReturnMsg": "Log in Successful.",
+ * "UserId": user.UserId,
+ * "Token":token
+ * }
+ * @apiError User-Not-Found The <code>User</code> was not found
+ * @apiError Invalid-email-pass The <code>User</code> was not found
+ */
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
