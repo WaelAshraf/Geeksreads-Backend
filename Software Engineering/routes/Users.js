@@ -77,34 +77,34 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
 });
 
 //Follow User
-router.post('/Follow', async (req, res) => {
+router.post('/Follow', async (req, res) => { //sends post request to /Follow End point through the router
   /* console.log(req.body.userId_tobefollowed);
   console.log(req.userId_tobefollowed);
   console.log(req.params.userId_tobefollowed);
   console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
   console.log("my"+req.query.myuserid);*/
-    mongoose.connection.collection("Users").updateOne(
+    mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
       {
           UserId :  req.query.userId_tobefollowed //access document of user i want to follow 
       },
       {$push: { // Push to end of array of the user's followers
         FollowersUserId:req.query.myuserid
       }}
-      ,function (err,doc) {
+      ,function (err,doc) { // error handling and checking for returned mongo doc after query
   
-         if (doc.result.n==0 || err)  
-         { res.status(404).json({
-          success: false ,
+         if (doc.matchedCount==0 || err) //matched count checks for number of affected documents by query 
+         { res.status(404).json({ // sends a json with 404 code 
+          success: false , // Follow Failed
            "Message":"User Id not  found !"});
          }
        else
        {
-       res.status(200).json({
-         success: true ,
+       res.status(200).json({ //sends a json with 200 code
+         success: true ,//Follow Done 
           "Message":"Sucessfully done"});
        }
     });
-    mongoose.connection.collection("Users").updateOne(
+    mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
         {
             UserId :req.query.myuserid//access document of currently logged In user 
         },
@@ -112,38 +112,40 @@ router.post('/Follow', async (req, res) => {
           FollowingUserId: req.query.userId_tobefollowed
         }});
         
+        
        
         });
   
   
   //UNFollow User
-  router.post('/unFollow', async (req, res) => {
+  router.post('/unFollow', async (req, res) => { //sends post request to /unFollow End point through the router
       /* console.log(req.body.userId_tobefollowed);
       console.log(req.userId_tobefollowed);
       console.log(req.params.userId_tobefollowed);
       console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
       console.log("my"+req.query.myuserid);*/
-        mongoose.connection.collection("Users").updateOne(
+        mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
+      
           {
               UserId :  req.query.userId_tobefollowed //access document of user i want to unfollow
           },
           {$pull: { // pull from end of array of the users I follow
             FollowersUserId:req.query.myuserid
           }}
-          ,function (err,doc) {
+          ,function (err,doc) { // error handling and checking for returned mongo doc after query
       
-            if ( doc.matchedCount==0 || err)  
+            if ( doc.matchedCount==0 || err)   //matched count checks for number of affected documents by query 
             { 
               
-              res.status(404).json({
-             success: false ,
+              res.status(404).json({  // sends a json with 404 code
+             success: false ,  // Follow Failed
               "Message":"User Id not  found !"});
             }
           else
           {
           //console.log(doc);
-          res.status(200).json({
-            success: true ,
+          res.status(200).json({ //sends a json with 200 code
+            success: true , //Follow Done 
              "Message":"Sucessfully done"});
           }
         });
