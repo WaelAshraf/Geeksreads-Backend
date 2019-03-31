@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const {Status,validate} = require('../models/Statuses');
+const {User} = require('../models/User');
 const Joi = require('joi');
 const auth = require('../middleware/auth');
 const router = express.Router();
@@ -8,7 +9,7 @@ const router = express.Router();
 
 
 /**
- * @api{Post} /user_status.json Update user status
+ * @api{Post} /user_status/ Update user status
  * @apiVersion 0.0.0
  * @apiName UpdateUserStatuses 
  * @apiGroup Status
@@ -75,7 +76,7 @@ router.post("/",(req,res)=>
  * @apiName GetUserStatuses 
  * @apiGroup Status
  * 
- * @apiParam {string} StatusID status id
+ * @apiParam {string} UserID status id
  *
  * @apiSuccess {string} StatusID status id
  * @apiSuccess {string} UserID User id
@@ -86,12 +87,17 @@ router.post("/",(req,res)=>
  *  
  * @apiSuccessExample  Expected Data on Success
  * {
+ * 
  * StatusID : "82978363763"
  * UserID : "82sdfd8363763"
  * ReviewID : "82gf8363763"
  * StatusBody : "hisa Liked ur comment"
- * 
- * }
+ * }, 
+ * {
+ * StatusID : "82978363763"
+ * UserID : "82sdfd8363763"
+ * .......
+ * },.....
  * @apiError User-Not-Found The <code>User</code> was not found
  * @apiError Status-Not-Found The <code>Status</code> was not found
  */
@@ -99,23 +105,29 @@ router.post("/",(req,res)=>
 
 router.get("/show",(req,res)=>
 {
-     if(req.body.StatusId==null)
+     if(req.body.UserId==null)
      {
-        return  res.status(400).send("Bad request no Satatus Id is there");
+        return  res.status(400).send("Bad request no UserID  Id is there");
     }
  
-      if (req.body.StatusId.length == 0)
+      if (req.body.UserId.length == 0)
      {
        return  res.status(400).send("Bad request no Satatus Id is there");
      }
 
-  Status.findOne( {'StatusId':req.body.StatusId},(err,doc)=>
+
+  Status.find( {'UserId':req.body.UserId},(err,doc)=>
 
    {
     if(!doc)
     {
    return res.status(404).send("Status Not found");
     }
+    if(doc.lenght==0)
+    {
+   return res.status(404).send("Statuses Not found for this User");
+    }
+      
     res.status(200).send(
         doc
     )
@@ -123,6 +135,89 @@ router.get("/show",(req,res)=>
 )
     
 
+});/**
+* @api{Post} /user_status/delete Delete User Status 
+* @apiVersion 0.0.0
+* @apiName DeleteStatus  
+* @apiGroup Status
+* 
+* @apiParam {string} StatusId Status id
+* 
+* @apiSuccess {boolen} DeleteStatusSuc  if the delete happend successfully or not
+* @apiSuccessExample  Expected Data on Success
+* {
+* "DeleteSTatusSuc": true
+* }
+* @apiError Status-Not-Found The <code>StatusID</code> was not found
+*/
+router.post("/delete",(req,res)=>
+{
+     if(req.body.StatusId==null)
+     {
+        return  res.status(400).send("Bad request no statusID  Id is there");
+    }
+ 
+      if (req.body.StatusId.length == 0)
+     {
+       return  res.status(400).send("Bad request no Satatus Id is there");
+     }
+
+
+  Status.findOneAndRemove( {'StatusId':req.body.StatusId},(err,doc)=>
+
+   {
+    if(!doc)
+    {
+   return res.status(404).send("Status Not found");
+    }
+    if(doc.lenght==0)
+    {
+   return res.status(404).send("Statuses Not found for this User");
+    }
+      
+    res.status(200).send(
+   { 
+       "DeleteSTatusSuc" : true
+   
+    }
+    )
+   }
+)
+    
+
 });
 
+function CreatStatuses(UserId, FollowerId,ReviewId,CommentId,StatusDate)
+{
+  var  newStatus = new Status( 
+{ 
+  "UserId":FollowerId,
+  "ReviewId":ReviewId,
+  "CommentId":CommentId,
+  "StatusDate":StatusDate
+ });
+ newStatus.StatusId=newStatus._id;
+  
+ const {error} = validate(newStatus.body);
+ if (error) return console.log(error.details[0].message);
+ 
+  
+ User.findOne({'UserId': UserId},(err,doc)=>{ 
+  if  (!doc)
+{
+  return console.log (" there no scuch a user ")
+}
+
+if (doc)
+{
+  newStatus.body= doc.UserName + " commented on " +newStatus.ReviewId;
+  newStatus.save().then(console.log ("status Updated successfully"));   
+}
+    });   
+}
+
+
+
+
+module.exports =CreatStatuses;
 module.exports = router;

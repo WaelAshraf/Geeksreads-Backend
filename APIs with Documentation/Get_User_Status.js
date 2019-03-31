@@ -1,23 +1,32 @@
-/**
+
+  /**
  * @api{Get} /user_status/show Get User Status
  * @apiVersion 0.0.0
  * @apiName GetUserStatuses 
  * @apiGroup Status
  * 
- * @apiParam {Number} UserStatusID status id
+ * @apiParam {string} UserID status id
  *
- * @apiSuccess {Number} StatusID status id
- * @apiSuccess {String} Book the book name of this status
- * @apiSuccess {Number} Page the page where the reader stopped reading
- * @apiSuccess {datePicker} Date the date when the status was written
+ * @apiSuccess {string} StatusID status id
+ * @apiSuccess {string} UserID User id
+ * @apiSuccess {String} StatusBody the body of this status
+ * @apiSuccess {datePicker} StatusDate the date when the status was written
+ * @apiSuccess {string} CommentId comment id <code>(optional)</code> 
+ * @apiSuccess {string} ReviewId <code>(optional)</code> 
  *  
  * @apiSuccessExample  Expected Data on Success
  * {
- * "StatusID": 10
- * "Book": "The Magic"
- * "Page" :78
- * "Date": "2019-01-02T09:00:16.204"
- * }
+ * 
+ * StatusID : "82978363763"
+ * UserID : "82sdfd8363763"
+ * ReviewID : "82gf8363763"
+ * StatusBody : "hisa Liked ur comment"
+ * }, 
+ * {
+ * StatusID : "82978363763"
+ * UserID : "82sdfd8363763"
+ * .......
+ * },.....
  * @apiError User-Not-Found The <code>User</code> was not found
  * @apiError Status-Not-Found The <code>Status</code> was not found
  */

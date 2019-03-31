@@ -1,19 +1,22 @@
+
 /**
- * @api{Get} /user_status.json Update user status
+ * @api{Post} /user_status/ Update user status
  * @apiVersion 0.0.0
  * @apiName UpdateUserStatuses 
  * @apiGroup Status
  * 
- * @apiParam {Number} UserStatusID status id
- * @apiparam {String} Book the book name of this status
- * @apiparam {Number} Page the page where the reader stoped reading
- * @apiparam {datePicker} Date the date when the status was written
+ * @apiParam {string} StatusID status id
+ * @apiParam {string} UserID User id
+ * @apiparam {String} StatusBody the body of this status
+ * @apiparam {datePicker} StatusDate the date when the status was written
+ * @apiparam {string} CommentId comment id <code>(optional)</code> 
+ * @apiparam {string} ReviewId <code>(optional)</code> 
  *
- * @apiSuccess {boolen} UpdateSuc  if the update happend successfully or not
+ *  @apiSuccess {boolen} UpdateSucc  if the update happend successfully or not
  *   
  * @apiSuccessExample  Expected Data on Success
  * { 
- *  "UpdateSuc": true
+ *  "UpdateSucc": true
  * }
  * @apiError User-Not-Found The <code>User</code> was not found
  * @apiError Status-Not-Found The <code>Status</code> was not found
