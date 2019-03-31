@@ -1,3 +1,4 @@
+const config = require('config');
 const crypto = require('crypto');
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');

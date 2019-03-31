@@ -16,6 +16,12 @@ const Resources= require("./routes/Resources");
 
 
 const app = express();
+
+if (!config.get('jwtPrivateKey')) {
+  console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+  process.exit(1);
+}
+
 // connecting to the database
 mongoose.connect('mongodb://localhost:27017/GreekReaders',{ useNewUrlParser: true })
   .then(() => console.log('Connected to MongoDB...'))
