@@ -15,23 +15,62 @@ const Author= require('../models/Author.model');
 
 //get current User
 
-
 /**
- * @api{Post} /me/Get Current User
- * @apiVersion 0.0.0
- * @apiName GetUser 
- * @apiGroup Users
- * 
- * @apiParam {string} Token JWTtoken
- * @apiSuccessExample  Expected Data on Success
- * {  "UserId" : 'aabb', "UserName" : 'aabb',"UserEmail" : 'aabb' }
- * @apiError Invalid-token The <code>User</code> is not valid
+ *
+ * @api {GET}  /user/me/GetUser Gets Information of Current User
+ * @apiName GetUser
+ * @apiGroup User
+ * @apiHeader {String} x-auth-token Authentication token
+ * @apiSuccess {String}   UserName   UserName of Current User
+ * @apiSuccess {String} UserId Id of Current User
+ * @apiSuccess {String} UserEmail Email of Current User
+ * @apiSuccess {String[]} FollowingAuthorId Ids of Authors Current User is Following
+ * @apiSuccess {String[]} FollowingUserId Ids of Users Current User is Following
+ * @apiSuccess {String[]} FollowersUserId Ids of Users Following Current User
+ * @apiSuccess {String[]} OwnedBookId Ids of Books Owned by Current User
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *     "FollowingAuthorId": [],
+ *     "FollowingUserId": [],
+ *     "FollowersUserId": [],
+ *     "OwnedBookId": [],
+ *     "ShelfId": [],
+ *     "Confirmed": true,
+ *     "UserName": "Ahmed1913",
+ *     "UserEmail": "AhmedAmrKhaled@gmail.com",
+ *     "UserId": "5ca23e81783e981f88e1618c"
+ * }
+ * @apiErrorExample {json} NoTokenMatch-Response:
+ *     HTTP/1.1 400
+ *   {
+ *    "ReturnMsg":"User Doesn't Exist"
+ *   }
+ *
+ * @apiErrorExample {json} UnConfirmedUser-Response:
+ *     HTTP/1.1 401
+ *  {
+ *     "ReturnMsg" :'Your account has not been verified.'
+ *  }
+ *
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ *
  */
 
 router.get('/me', auth, async (req, res) => {
   let check = await User.findOne({ UserId: req.user._id });
   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-  const user = await User.findById(req.user._id).select('-UserPassword');
+  const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v ');
   if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
   res.status(200).send(user);
 });
@@ -41,48 +80,96 @@ router.get('/me', auth, async (req, res) => {
 
 //Verify From Email Link
 
+
 /**
- * @api{Post} /Verify/verify user email
- * @apiVersion 0.0.0
- * @apiName Verify 
- * @apiGroup Users
- * 
- * @apiParam {string} Token JWTtoken
- * @apiSuccessExample  Expected Data on Success
+ *
+ * @api {POST}  /user/Verify/ Verifies User From Email
+ * @apiName EmailVerify
+ * @apiGroup User
+ * @apiHeader {String} x-auth-token Authentication token
+ * @apiSuccess {String}   ReturnMsg   Notifies that User is Confirmed
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *     "ReturnMsg": "User Confirmed"
+ *   }
+ * @apiErrorExample {json} NoTokenMatch-Response:
+ *     HTTP/1.1 400
+ *   {
+ *    "ReturnMsg":"User Doesn't Exist"
+ *   }
+ *
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
  * {
-    "ReturnMsg": "Current User Token.",
-    "Token":token}
- * @apiError Invalid-token The <code>User</code> is not valid
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ *
  */
 
+
 router.post('/verify', auth, async (req, res) => {
+  let check = await User.findOne({ UserId: req.user._id });
+  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
   const user = await User.findById(req.user._id).select('-UserPassword');
   user.Confirmed = true;
   user.save();
-  const token = user.generateAuthToken();
+//  const token = user.generateAuthToken();
 
   res.status(200).send({
-    "ReturnMsg": "Current User Token.",
-    "Token":token});
+    "ReturnMsg": "User Confirmed"
+  });
 });
 
 //Sign Up Api sends verification mail
 
+
 /**
- * @api{Post} /SignUp/Signs User up
- * @apiVersion 0.0.0
- * @apiName SignUp 
- * @apiGroup Users
- * 
- * @apiParam {string} UserName User Name
- * @apiParam {string} UserEmail User Email
- * @apiParam {string} UserPassword User Password
  *
- *  
- * @apiSuccessExample  Expected Data on Success
- * {"ReturnMsg":"A verification email has been sent to " + UserEmail + "."}
- * @apiError Invalid-email-name The <code>User</code> is not valid
+ * @api {POST}  /user/SignUp/ Signs User Up and Sends Verification Email
+ * @apiName SignUp
+ * @apiGroup User
+ * @apiParam {String} UserName User Name to Sign Up.
+ * @apiParam {String} UserEmail User Email to Sign Up.
+ * @apiParam {String} UserPassword User Password to Sign Up.
+ * @apiSuccess {String}   ReturnMsg   Notifies that User a verification Email is sent
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *     "ReturnMsg":"A verification email has been sent to UserEmail."
+ *   }
+ * @apiErrorExample {json} InvalidName-Response:
+ *     HTTP/1.1 400
+ *   {
+ *    "ReturnMsg": "\"UserName\" length must be at least 3 characters long"
+ *   }
+ *
+ * @apiErrorExample {json} InvalidEmail-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg": "\"UserEmail\" must be a valid email"
+ *   }
+ *
+ * @apiErrorExample {json} InvalidPassword-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "\"UserPassword\" length must be at least 6 characters long"
+ * }
+ * @apiErrorExample {json} ExistingEmail-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg":"User already registered."
+ * }
+ *
  */
+
+
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
@@ -157,35 +244,35 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
   console.log("my"+req.query.myuserid);*/
     mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
       {
-          UserId :  req.query.userId_tobefollowed //access document of user i want to follow 
+          UserId :  req.query.userId_tobefollowed //access document of user i want to follow
       },
       {$push: { // Push to end of array of the user's followers
         FollowersUserId:req.query.myuserid
       }}
       ,function (err,doc) { // error handling and checking for returned mongo doc after query
-  
-         if (doc.matchedCount==0 || err) //matched count checks for number of affected documents by query 
-         { res.status(404).json({ // sends a json with 404 code 
+
+         if (doc.matchedCount==0 || err) //matched count checks for number of affected documents by query
+         { res.status(404).json({ // sends a json with 404 code
           success: false , // Follow Failed
            "Message":"User Id not  found !"});
          }
        else
        {
        res.status(200).json({ //sends a json with 200 code
-         success: true ,//Follow Done 
+         success: true ,//Follow Done
           "Message":"Sucessfully done"});
        }
     });
     mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
         {
-            UserId :req.query.myuserid//access document of currently logged In user 
+            UserId :req.query.myuserid//access document of currently logged In user
         },
         {$push: { // Push to end of array of the users I follow
           FollowingUserId: req.query.userId_tobefollowed
         }});
-        
-        
-       
+
+
+
         });
   
   
@@ -226,7 +313,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
     console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
     console.log("my"+req.query.myuserid);*/
       mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
-    
+
         {
             UserId :  req.query.userId_tobefollowed //access document of user i want to unfollow
         },
@@ -234,10 +321,10 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
           FollowersUserId:req.query.myuserid
         }}
         ,function (err,doc) { // error handling and checking for returned mongo doc after query
-    
-          if ( doc.matchedCount==0 || err)   //matched count checks for number of affected documents by query 
-          { 
-            
+
+          if ( doc.matchedCount==0 || err)   //matched count checks for number of affected documents by query
+          {
+
             res.status(404).json({  // sends a json with 404 code
            success: false ,  // unFollow Failed
             "Message":"User Id not  found !"});
@@ -252,7 +339,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
       });
       mongoose.connection.collection("Users").updateOne(
           {
-              UserId :req.query.myuserid//access document of currently logged In user 
+              UserId :req.query.myuserid//access document of currently logged In user
           },
           {$pull: { // pull from end of array of the users I follow
             FollowingUserId: req.query.userId_tobefollowed
