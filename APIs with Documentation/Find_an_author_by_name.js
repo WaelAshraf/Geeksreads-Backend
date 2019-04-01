@@ -1,6 +1,6 @@
 //Find Author by Name 
  /**
- * @api{GET}/api/Author/?auth_name="Value" Find an author by name
+ * @api{GET}/api/Author/?auth_name=Value Find an author by name
  * @apiName Find author by name 
  * @apiGroup Author 
  * @apiError {404} name-not-found Author could not be found
@@ -29,3 +29,36 @@
         ]
   }
  */
+
+
+
+router.get('/Authors', async (req,res) => {
+
+    /*
+    console.log(req.params);
+    console.log(req.params.auth_name);
+    console.log(req.query.auth_name); /// ONLY WORKING
+    console.log(req.params.auth_name.auth_name);
+   */
+    
+  
+    mongoose.connection.collection("Authors").findOne({AuthorName:req.query.auth_name},
+    (err,doc) =>{
+     
+      if(!doc || err)
+      {
+        //console.log(doc);
+        res.status(404).json({  // sends a json with 404 code
+          success: false ,  // user not retrieved  
+           "Message":"Author Name not  found !"});
+      }
+       else
+       {
+       console.log(doc);
+       res.status(200).json(doc);
+      
+       }
+      }
+  
+  
+    )}); 

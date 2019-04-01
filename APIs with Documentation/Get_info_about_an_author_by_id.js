@@ -1,7 +1,7 @@
-//Get Info About Author by id
+ //Get info about author by id 
  /**
- * @api{GET}/api/Author/?auth_id="Value" Get info about an author by id
- * @apiName Get info about an author by id 
+ * @api{GET}/api/Author/byid?auth_id=Value Get info about author by id 
+ * @apiName Get info about author by id 
  * @apiGroup Author 
  * @apiError {404} id-not-found Author could not be found
  * @apiErrorExample {JSON}
@@ -10,7 +10,7 @@
  * "success": false,
  * "Message":"Author  not  found !"
  * }
- * @apiParam {String} auth_id Author Name
+ * @apiParam {String} auth_id Author ID
  * @apiSuccess {JSON} Author data for the required Author
  * @apiSuccessExample
  * HTTP/1.1 200 OK
@@ -29,3 +29,36 @@
         ]
   }
  */
+
+
+
+router.get('/Authors/byid', async (req,res) => {
+
+  /*
+  console.log(req.params);
+  console.log(req.params.auth_name);
+  console.log(req.query.auth_name); /// ONLY WORKING
+  console.log(req.params.auth_name.auth_name);
+ */
+  
+
+  mongoose.connection.collection("Authors").findOne({AuthorId:req.query.auth_id},
+  (err,doc) =>{
+   
+    if(!doc || err)
+    {
+      //console.log(doc);
+      res.status(404).json({  // sends a json with 404 code
+        success: false ,  // user not retrieved  
+         "Message":"Author ID not  found !"});
+    }
+     else
+     {
+     console.log(doc);
+     res.status(200).json(doc);
+    
+     }
+    }
+
+
+  )}); 

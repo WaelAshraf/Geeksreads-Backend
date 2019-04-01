@@ -9,6 +9,7 @@ const express = require('express');
 require('./models/resources.model');
 // the routes used till now
 const Users = require('./routes/Users');
+const Authors = require('./routes/Authors');
 const Auth = require('./routes/Auth');
 const Statuses = require('./routes/Statuses');
 const Comments = require("./routes/commentsController");
@@ -32,6 +33,7 @@ app.use(express.json());
 
 // 
 app.use('/api/Users', Users);
+app.use('/api/Authors',Authors);
 app.use('/api/Auth', Auth);
 app.use('/api/user_status',Statuses);
 app.use('/api/comments/',Comments);
