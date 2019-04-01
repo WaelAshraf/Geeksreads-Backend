@@ -9,10 +9,12 @@
  * {
  * "AddedReviewSuc": true
  * }
- * @apiParam {NUmber} book_id id of the book
- * @apiParam {string} body body text of the review
- * @apiParam {Number} stars number of stars given to the book
- * @apiParam {DatePicker} readAt the date the book was read at
+ * @apiParam {String} Body The body of the review  
+ * @apiParam {ObjectId} BookID  Id of Book the review belongs to
+ * @apiParam {String} userName Name of user who wrote the review
+ * @apiParam {ObjectId} userID  Id of user who wrote the review
+ * @apiParam {datePicker} date the date the review was written on
+ * @apiParam {Number} Stars Rating (0-5) (optional, default is 0 (No rating))
  * @apiParam {String} shelf the shlef the book is placed in by the user
  */
 function addReview(book_id,body,stars=0,readAt,shelf)
@@ -30,7 +32,7 @@ function addReview(book_id,body,stars=0,readAt,shelf)
  * {
  * "editReviewSuc": true
  * }
- * @apiParam {Number} Review_Id review Id
+ * @apiParam {ObjectId} Review_Id review Id
  * @apiParam {String} Body Text of the review (optional)
  * @apiParam {Number} Stars Rating (0-5) (optional, default is 0 (No rating))
  * @apiParam {DatePicker} readAt Date (YYYY-MM-DD format, e.g. 2008-02-01)
@@ -51,7 +53,7 @@ function editReview(Review_Id,Body,Stars=0,readAt,shelf)
  * {
  * "deleteReviewSuc": true
  * }
- * @apiParam {Number} review_Id Id of the review to be deleted
+ * @apiParam {ObjectId} review_Id Id of the review to be deleted
  */
 function deleteReview(review_Id)
 {
@@ -65,28 +67,18 @@ function deleteReview(review_Id)
  * @apiSuccess {Number} likes number of likes on review,comment
  * @apiSuccess {String} body body text of review,comment
  * @apiSuccess {String} userName name of the user who wrote review,comment
- * @apiSuccess {Number} userId the id of the user who wrote review,comment
+ * @apiSuccess {ObjectId} userId the id of the user who wrote review,comment
  * @apiSuccess {datePicker} date the date of each review,comment
  * @apiSuccessExample
  * HTTP/1.1 200 OK
  * {
- * "review":{"likes": 11,
+ *   "review":{"likes": 11,
  *           "body": "Hello World !",
  *           "userName": "zzzdwsdsdsdsd zzzdwsdsdsdsd",
  *           "userId": "567890987654567890",
- *           "date": "2019-01-02T09:00:16.204Z"
- *          },
- * "comment":[
- *         {"likes": 11,
- *           "body": "Hello World !",
- *           "userName": "zzzdwsdsdsdsd zzzdwsdsdsdsd",
- *           "userId": "567890987654567890",
- *           "date": "2019-01-02T09:00:16.204Z"
- *         },......
- * ]
+ *           "date": "2019-01-02T09:00:16.204Z"}
  * }
- * @apiParam {Number} review_Id Id of the review
- * @apiParam {Number} comments_Per_Page number of comments review in one page default <code>20</code>
+ * @apiParam {ObjectId} review_Id Id of the review
  */
 function getReview(review_Id,comments_Per_Page=20)
 {
@@ -94,26 +86,27 @@ function getReview(review_Id,comments_Per_Page=20)
 }
 /**
  * @api{GET}/geeksreads/:review Get review by Book 
- * @apiName getReviewByBook
+ * @apiName getReviewsByBook
  * @apiGroup Review 
  * @apiError {404} NOTFOUND review  you are looking for does not exist
  * @apiSuccess {Number} likes number of likes on review
  * @apiSuccess {String} body body text of review
  * @apiSuccess {String} userName name of the user who wrote review
- * @apiSuccess {Number} userId the id of the user who wrote review
+ * @apiSuccess {ObjectId} userId the id of the user who wrote review
  * @apiSuccess {datePicker} date the date of each review
  * @apiSuccessExample
  * HTTP/1.1 200 OK
  * {
- * "review":{"likes": 11,
+ *     "reviews":[{"likes": 11,
  *           "body": "Hello World !",
  *           "userName": "zzzdwsdsdsdsd zzzdwsdsdsdsd",
  *           "userId": "567890987654567890",
  *           "date": "2019-01-02T09:00:16.204Z"
- *          }
+ *          },.......
+ *      ]
  * }
- * @apiParam {Number} user_Id Id of the user
- * @apiParam {Number} book_id Id of the book
+ * @apiParam {ObjectId} user_Id Id of the user
+ * @apiParam {ObjectId} book_id Id of the book
  * @apiParam {Boolean} include_review_on_work View another review of the book if the review was not found default is <code>false</code>  
  */
 function getReviewByBook(user_Id,book_id,include_review_on_work=false)
