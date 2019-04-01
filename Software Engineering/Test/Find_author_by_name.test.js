@@ -3,7 +3,7 @@ const request = require('supertest'); //imports supertest framework
 var app = require('../DB').app; // imports server app
 it("Find Author by name(invalid)",  (done) => { //Test for an invalid Author Name to fetch 
     request(app) //sends request to server
-     .post('/api/Authors')//Define request as post  specific end point
+     .get('/api/Authors')//Define request as post  specific end point
      .query({ //adds Request Paramters 
         auth_name:"sally 1"
         })
@@ -14,7 +14,7 @@ it("Find Author by name(invalid)",  (done) => { //Test for an invalid Author Nam
 
 it("Find Author by name(valid)",  (done) => { //Test for an valid  Request
     request(app)// imports server app
-     .post('/api/Authors')//Define request as post 
+     .get('/api/Authors')//Define request as post 
      .query({ //sends request to server
         auth_name:"Alberta Bean"
         })

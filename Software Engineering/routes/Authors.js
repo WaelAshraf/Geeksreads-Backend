@@ -62,7 +62,7 @@ router.get('/', async (req,res) => {
       }
        else
        {
-       console.log(doc);
+       //console.log(doc);
        res.status(200).json(doc);
       
        }
@@ -128,7 +128,7 @@ router.get('/', async (req,res) => {
       }
        else
        {
-       console.log(doc);
+       //console.log(doc);
        res.status(200).json(doc);
       
        }
