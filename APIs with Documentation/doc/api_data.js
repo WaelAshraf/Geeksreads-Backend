@@ -925,17 +925,17 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "ObjectId",
             "optional": false,
-            "field": "type",
-            "description": "<p>Subject Type Commented On; book,review,etc</p>"
+            "field": "BookID",
+            "description": "<p>Id of Book the review commented on belongs to</p>"
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
-            "field": "ID",
-            "description": "<p>Id of resource given as type Parameter</p>"
+            "field": "ReviewID",
+            "description": "<p>Id of review the comment belongs to</p>"
           },
           {
             "group": "Parameter",
@@ -946,7 +946,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "userID",
             "description": "<p>Id of user who wrote the comment</p>"
@@ -1022,7 +1022,7 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "userId",
             "description": "<p>the id of the user who wrote each comment</p>"
@@ -1049,31 +1049,10 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "ObjectId",
             "optional": false,
-            "field": "type",
-            "description": "<p>Subject Type Commented On; book,review,etc</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "ID",
-            "description": "<p>Id of resource given as type Parameter</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "perPage",
-            "description": "<p>Number of comments per page default is <code>20</code></p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "pageNumber",
-            "description": "<p>Number of current page default is <code>1</code></p>"
+            "field": "ReviewId",
+            "description": "<p>Id of the review the comments belong to</p>"
           }
         ]
       }
@@ -1730,31 +1709,45 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "NUmber",
+            "type": "String",
             "optional": false,
-            "field": "book_id",
-            "description": "<p>id of the book</p>"
+            "field": "Body",
+            "description": "<p>The body of the review</p>"
           },
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "ObjectId",
             "optional": false,
-            "field": "body",
-            "description": "<p>body text of the review</p>"
+            "field": "BookID",
+            "description": "<p>Id of Book the review belongs to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "userName",
+            "description": "<p>Name of user who wrote the review</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userID",
+            "description": "<p>Id of user who wrote the review</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "datePicker",
+            "optional": false,
+            "field": "date",
+            "description": "<p>the date the review was written on</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "stars",
-            "description": "<p>number of stars given to the book</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "DatePicker",
-            "optional": false,
-            "field": "readAt",
-            "description": "<p>the date the book was read at</p>"
+            "field": "Stars",
+            "description": "<p>Rating (0-5) (optional, default is 0 (No rating))</p>"
           },
           {
             "group": "Parameter",
@@ -1814,7 +1807,7 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "review_Id",
             "description": "<p>Id of the review to be deleted</p>"
@@ -1869,7 +1862,7 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "Review_Id",
             "description": "<p>review Id</p>"
@@ -1954,7 +1947,7 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "userId",
             "description": "<p>the id of the user who wrote review,comment</p>"
@@ -1971,7 +1964,7 @@ define({ "api": [
       "examples": [
         {
           "title": "HTTP/1.1 200 OK",
-          "content": "HTTP/1.1 200 OK\n{\n\"review\":{\"likes\": 11,\n          \"body\": \"Hello World !\",\n          \"userName\": \"zzzdwsdsdsdsd zzzdwsdsdsdsd\",\n          \"userId\": \"567890987654567890\",\n          \"date\": \"2019-01-02T09:00:16.204Z\"\n         },\n\"comment\":[\n        {\"likes\": 11,\n          \"body\": \"Hello World !\",\n          \"userName\": \"zzzdwsdsdsdsd zzzdwsdsdsdsd\",\n          \"userId\": \"567890987654567890\",\n          \"date\": \"2019-01-02T09:00:16.204Z\"\n        },......\n]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"review\":{\"likes\": 11,\n          \"body\": \"Hello World !\",\n          \"userName\": \"zzzdwsdsdsdsd zzzdwsdsdsdsd\",\n          \"userId\": \"567890987654567890\",\n          \"date\": \"2019-01-02T09:00:16.204Z\"}\n}",
           "type": "json"
         }
       ]
@@ -1981,17 +1974,10 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "review_Id",
             "description": "<p>Id of the review</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "comments_Per_Page",
-            "description": "<p>number of comments review in one page default <code>20</code></p>"
           }
         ]
       }
@@ -2004,7 +1990,7 @@ define({ "api": [
     "type": "GET",
     "url": "/geeksreads/:review",
     "title": "Get review by Book",
-    "name": "getReviewByBook",
+    "name": "getReviewsByBook",
     "group": "Review",
     "error": {
       "fields": {
@@ -2045,7 +2031,7 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "userId",
             "description": "<p>the id of the user who wrote review</p>"
@@ -2062,7 +2048,7 @@ define({ "api": [
       "examples": [
         {
           "title": "HTTP/1.1 200 OK",
-          "content": "HTTP/1.1 200 OK\n{\n\"review\":{\"likes\": 11,\n          \"body\": \"Hello World !\",\n          \"userName\": \"zzzdwsdsdsdsd zzzdwsdsdsdsd\",\n          \"userId\": \"567890987654567890\",\n          \"date\": \"2019-01-02T09:00:16.204Z\"\n         }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"reviews\":[{\"likes\": 11,\n          \"body\": \"Hello World !\",\n          \"userName\": \"zzzdwsdsdsdsd zzzdwsdsdsdsd\",\n          \"userId\": \"567890987654567890\",\n          \"date\": \"2019-01-02T09:00:16.204Z\"\n         },.......\n     ]\n}",
           "type": "json"
         }
       ]
@@ -2072,14 +2058,14 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "user_Id",
             "description": "<p>Id of the user</p>"
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "ObjectId",
             "optional": false,
             "field": "book_id",
             "description": "<p>Id of the book</p>"
@@ -2397,7 +2383,7 @@ define({ "api": [
   },
   {
     "type": "Post",
-    "url": "/user_status/destroy",
+    "url": "/user_status/delete",
     "title": "Delete User Status",
     "version": "0.0.0",
     "name": "DeleteStatus",
@@ -2407,9 +2393,9 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "string",
             "optional": false,
-            "field": "ID",
+            "field": "StatusId",
             "description": "<p>Status id</p>"
           }
         ]
@@ -2524,9 +2510,9 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "string",
             "optional": false,
-            "field": "UserStatusID",
+            "field": "UserID",
             "description": "<p>status id</p>"
           }
         ]
@@ -2537,38 +2523,52 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "string",
             "optional": false,
             "field": "StatusID",
             "description": "<p>status id</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "string",
             "optional": false,
-            "field": "Book",
-            "description": "<p>the book name of this status</p>"
+            "field": "UserID",
+            "description": "<p>User id</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "Page",
-            "description": "<p>the page where the reader stopped reading</p>"
+            "field": "StatusBody",
+            "description": "<p>the body of this status</p>"
           },
           {
             "group": "Success 200",
             "type": "datePicker",
             "optional": false,
-            "field": "Date",
+            "field": "StatusDate",
             "description": "<p>the date when the status was written</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "CommentId",
+            "description": "<p>comment id <code>(optional)</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p><code>(optional)</code></p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Expected Data on Success",
-          "content": "{\n\"StatusID\": 10\n\"Book\": \"The Magic\"\n\"Page\" :78\n\"Date\": \"2019-01-02T09:00:16.204\"\n}",
+          "content": "{\n\nStatusID : \"82978363763\"\nUserID : \"82sdfd8363763\"\nReviewID : \"82gf8363763\"\nStatusBody : \"hisa Liked ur comment\"\n}, \n{\nStatusID : \"82978363763\"\nUserID : \"82sdfd8363763\"\n.......\n},.....",
           "type": "json"
         }
       ]
@@ -2595,8 +2595,8 @@ define({ "api": [
     "groupTitle": "Status"
   },
   {
-    "type": "Get",
-    "url": "/user_status.json",
+    "type": "Post",
+    "url": "/user_status/",
     "title": "Update user status",
     "version": "0.0.0",
     "name": "UpdateUserStatuses",
@@ -2606,31 +2606,45 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "string",
             "optional": false,
-            "field": "UserStatusID",
+            "field": "StatusID",
             "description": "<p>status id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "UserID",
+            "description": "<p>User id</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Book",
-            "description": "<p>the book name of this status</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "Page",
-            "description": "<p>the page where the reader stoped reading</p>"
+            "field": "StatusBody",
+            "description": "<p>the body of this status</p>"
           },
           {
             "group": "Parameter",
             "type": "datePicker",
             "optional": false,
-            "field": "Date",
+            "field": "StatusDate",
             "description": "<p>the date when the status was written</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "CommentId",
+            "description": "<p>comment id <code>(optional)</code></p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p><code>(optional)</code></p>"
           }
         ]
       }
@@ -2642,7 +2656,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "boolen",
             "optional": false,
-            "field": "UpdateSuc",
+            "field": "UpdateSucc",
             "description": "<p>if the update happend successfully or not</p>"
           }
         ]
@@ -2650,7 +2664,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Expected Data on Success",
-          "content": "{ \n \"UpdateSuc\": true\n}",
+          "content": "{ \n \"UpdateSucc\": true\n}",
           "type": "json"
         }
       ]
@@ -2682,25 +2696,6 @@ define({ "api": [
     "title": "Follow a user",
     "name": "Follow_user",
     "group": "User",
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "type": "404",
-            "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>User could not be found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "id-not-found",
-            "description": "<p>The<code>ID</code> was not found.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2716,7 +2711,7 @@ define({ "api": [
       "examples": [
         {
           "title": "{",
-          "content": "{\n   \"Followed\": true\n}",
+          "content": "\n{\n   \"Followed\": true\n}",
           "type": "Boolean"
         }
       ]
@@ -2728,8 +2723,27 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "userId",
+            "field": "myuserId",
             "description": "<p>GoodReads User ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "userId_tobefollowed",
+            "description": "<p>GoodReads User ID</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "id-not-found",
+            "description": "<p>The<code>userId</code> was not found.</p>"
           }
         ]
       }
@@ -2799,7 +2813,7 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
             "field": "UserID",
             "description": "<p>User id</p>"
@@ -2836,7 +2850,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Expected Data on Success",
-          "content": "{ \n\"Seen\": false\n\"Body\" : \"You have a friend request\"\n\"date\": \"2019-01-02T09:00:16.204\"\n}",
+          "content": "{ \n\"Seen\": false\n\"Body\" : \"You have a friend request\"\n\"date\": \"2019-01-02T09:00:16.204\"\n},\n { \n\"Seen\": true\n\"Body\" : \"You have a friend request\"\n\"date\": \"2019-01-02T09:00:16.204\"\n},.....",
           "type": "json"
         }
       ]
