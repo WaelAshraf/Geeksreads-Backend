@@ -1,7 +1,7 @@
 
 const request = require('supertest'); //imports supertest framework
 var app = require('../DB').app; // imports server app
-it("User Not Found (Follow)",  (done) => { //Test for an invalid user ID to follow 
+it("Following a User(invalid)",  (done) => { //Test for an invalid user ID to follow 
     request(app) //sends request to server
      .post('/api/Users/Follow')//Define request as post  specific end point
      .query({ //adds Request Paramters 
@@ -13,7 +13,7 @@ it("User Not Found (Follow)",  (done) => { //Test for an invalid user ID to foll
 
 
 
-it("Follow Successfull",  (done) => { //Test for an valid Follow Request
+it("Following a user(Successfull)",  (done) => { //Test for an valid Follow Request
     request(app)// imports server app
      .post('/api/Users/Follow')//Define request as post 
      .query({ //sends request to server

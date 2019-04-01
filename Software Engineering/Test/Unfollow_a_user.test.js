@@ -1,7 +1,7 @@
 
 const request = require('supertest'); //imports supertest framework
 var app = require('../DB').app;  // imports server app
-it("UNFollow Successfull",  (done) => {//Test for  valid unfollow request
+it("unFollowing a User(Successfull)",  (done) => {//Test for  valid unfollow request
     request(app)//sends request to server
      .post('/api/Users/unFollow') //Define request as post to specific end point
      .query({ //adds Request Paramters 
@@ -11,7 +11,7 @@ it("UNFollow Successfull",  (done) => {//Test for  valid unfollow request
     .expect(200,done);//expects status 200 to pass test 
 });
 
-it("User Not Found (UNfollow)",  (done) => {  //Test for an invalid user ID to unfollow
+it("unFollowing a User(invalid)",  (done) => {  //Test for an invalid user ID to unfollow
     request(app) //sends request to server
      .post('/api/Users/unFollow')//Define request as post  specific end point
      .query({//adds Request Paramters

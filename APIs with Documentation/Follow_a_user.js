@@ -1,54 +1,64 @@
 /**
  * 
- * @api {POST}  /user/userID/ Follow a user
+ * @api {POST}  /api/Users/Follow Follow a user
  * @apiName Follow user
  * @apiGroup User
- *
- * @apiSuccess {Boolean} Follow Successful or not
- * @apiParam  {Number} myuserId GoodReads User ID
- * @apiParam  {Number} userId_tobefollowed GoodReads User ID
- * @apiSuccessExample {Boolean}
- * 
+ * @apiError {404} id-not-found The<code>userId_tobefollowed</code> was not found.
+ * @apiSuccess {200} Follow Successful or not
+ * @apiParam  {String} myuserId GoodReads User ID
+ * @apiParam  {String} userId_tobefollowed GoodReads User ID
+ * @apiSuccessExample {JSON}
+ * HTTP/1.1 200 OK
    {
-      "Followed": true
+      "success": true,
+      "Message":"Successfully done"
    }
- *  @apiError id-not-found The<code>userId</code> was not found.
+ *  @apiErrorExample {JSON}
+ *HTTP/1.1 404 Not Found
+ * {
+ * "success": false,
+ * "Message":"User Id not  found !"
+ * }
+ * 
  * 
  */
 
- const mongoose = require("mongoose"); //imports mongoose module
-/* mongoose.connect('mongodb://localhost:27017/GreekReaders', {useNewUrlParser: true});
-var conn = mongoose.connection; //accesses basic mongodb driver to bypass mongoosed models  
-  */
-function followuser(myuserId,userId_tobefollowed)
-{
-  /*
-  conn.collection("CollectionName")
-  .update({"SELECTION CRITERIA"},{"UPDATE COMMANDS"})
-*/
-mongoose.connect('mongodb://localhost:27017/GreekReaders', {useNewUrlParser: true}, ()=>{
-    const conn = mongoose.connection;
-    conn.collection('Users').updateOne(
+
+//Follow User
+router.post('/Follow', async (req, res) => { //sends post request to /Follow End point through the router
+  /* console.log(req.body.userId_tobefollowed);
+  console.log(req.userId_tobefollowed);
+  console.log(req.params.userId_tobefollowed);
+  console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
+  console.log("my"+req.query.myuserid);*/
+    mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
+      {
+          UserId :  req.query.userId_tobefollowed //access document of user i want to follow 
+      },
+      {$push: { // Push to end of array of the user's followers
+        FollowersUserId:req.query.myuserid
+      }}
+      ,function (err,doc) { // error handling and checking for returned mongo doc after query
+  
+         if (doc.matchedCount==0 || err) //matched count checks for number of affected documents by query 
+         { res.status(404).json({ // sends a json with 404 code 
+          success: false , // Follow Failed
+           "Message":"User Id not  found !"});
+         }
+       else
+       {
+       res.status(200).json({ //sends a json with 200 code
+         success: true ,//Follow Done 
+          "Message":"Sucessfully done"});
+       }
+    });
+    mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
         {
-            "UserId" : userId_tobefollowed //access document of currently logged In user 
+            UserId :req.query.myuserid//access document of currently logged In user 
         },
         {$push: { // Push to end of array of the users I follow
-          "FollowersUserId":myuserId
-        }}).then(() => {return true;});
-        conn.collection('Users').updateOne(
-          {
-              "UserId" : myuserId //access document of currently logged In user 
-          },
-          {$push: { // Push to end of array of the users I follow
-            "FollowingUserId":userId_tobefollowed
-          }}).then(mongoose.disconnect()).then(() => {return true;});
-});
-afterAll(async done => {
-  // Closing the DB connection allows Jest to exit successfully.
-  conn.close();
-  done();
-return true;
-});
-}
-
-module.exports=followuser;
+          FollowingUserId: req.query.userId_tobefollowed
+        }});
+        });
+  
+  
