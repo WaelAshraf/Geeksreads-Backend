@@ -3,8 +3,8 @@
  * @apiName GetRead_Statuses
  * @apiGroup Status
  * @apiError {404} NOTFOUND Status could not be found
- * @apiParam {Credentials} apiKey Api key from app console.
  * @apiParam {Number} Statusid Read status id.
+ * @apiParam {Number} User_id 
  * 
  * @apiSuccess  status
  * 

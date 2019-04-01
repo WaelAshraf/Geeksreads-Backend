@@ -4,7 +4,6 @@
  * @apiGroup Owned Books
  * @apiError {404} NOTFOUND Book could not be found
  * @apiParam {Number} current_owner_id the current owner's user id.
- * @apiParam {Number} BookCrossing (bcid).
  * @apiParam {Number} OWNED_BOOK_ID a unique identifier for the owned book (not a book_id).
  * 
  * @apiSuccess  BookName
