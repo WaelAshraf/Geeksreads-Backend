@@ -11,6 +11,39 @@ const router = express.Router();
 
 
 //Login Authentication
+
+/**
+ *
+ * @api {POST}  /user/SignIn/ Signing in by Email and Password
+ * @apiName SignIn
+ * @apiGroup User
+ *
+ * @apiParam  {String} UserEmail Email of User
+ * @apiParam  {String} UserPassword Password of User
+ * @apiSuccess {String}   ReturnMsg   Return Message Log in Successful.
+ * @apiSuccess {String} UserId Id of User after Successfully Signing in
+ * @apiSuccess {String} Token Authentication Access Token
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ * {
+ *        "ReturnMsg": "Log in Successful.",
+ *        "UserId": "5ca23e81783e981f88e1618c",
+ *        "Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2EyM2U4MTc4M2U5ODFmODhlMTYxOGMiLCJpYXQiOjE1NTQxMzcxMjJ9.rUfROgeq1wgmsUxljg_ZLI2UbFMQubHQEYLKz2zd29Q"
+ *   }
+ * @apiErrorExample {json} InvalidEmailorPassword-Response:
+ *     HTTP/1.1 400
+ *  {
+ *    "ReturnMsg":"Invalid email or password."
+ *  }
+ *
+ * @apiErrorExample {json} UnConfirmedUser-Response:
+ *     HTTP/1.1 401
+ *  {
+ *    "ReturnMsg" :'Your account has not been verified.'
+ *  }
+ *
+ */
+
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});

@@ -1,3 +1,4 @@
+// Important requires
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
@@ -6,7 +7,7 @@ const mongoose = require('mongoose');
 const StatusesSchema = new mongoose.Schema({
     StatusId: {
         type: String,
-        unique :true
+        unique :true // it must be unique
     },
     UserId:
     {
@@ -31,9 +32,10 @@ const StatusesSchema = new mongoose.Schema({
         type: Date
     }
     });
+
 const Statuses = mongoose.model('Statuses', StatusesSchema);
    
-   
+ // Important vaidations for the schema  
 function validateStatuses(Status) {
     const schema = {
         StatusId: Joi.string().required(),
@@ -45,6 +47,6 @@ function validateStatuses(Status) {
     };
     return Joi.validate(Status, schema);
     }
-    
+// Important Exports   
 exports.Status = Statuses;
 exports.validate = validateStatuses;

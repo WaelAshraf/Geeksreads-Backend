@@ -13,7 +13,7 @@ it("can't accept requests with missing required argument",(done)=>
      .end(done)
     }) ;
 //check the validations of the requests
- it("can't accept requests with false parmeters",(done)=>
+ it("Update can't accept requests with false parmeters",(done)=>
  {
      request(app)
      .post("/api/user_status/")
@@ -22,19 +22,19 @@ it("can't accept requests with missing required argument",(done)=>
      .end(done)
  }); 
  //check the behavior of the requests on the datatbase
- /* it("Normal acceptance for update",(done)=>
+ it("Normal acceptance for update",(done)=>
  {
      request(app)
      .post("/api/user_status/")
      .send ({
-        "StatusId":"198s998",
+        "StatusId":"1ss998",
          "UserId":"28938983",
          "ReviewId":"83939839",
         "StatusBody":"Hsis likes a comment"
         })
      .expect(200)
      .end(done)
- }); */
+ }); 
 ////////////////////////////////////////////////////////////////////
 //get statuses request Tests
 ////////////////////////////////////////////////////////////////////
@@ -67,11 +67,11 @@ it("didn't find the status ",(done)=>
  }) ;
 //the resopnse of the right request 
  
-/* it("Normal acceptance for show",(done)=>
+it("Normal acceptance for show",(done)=>
 {
     request(app)
-    .post("/api/user_status/show")
-    .send ({"StatusId":"8378"})// already exicting data
+    .get("/api/user_status/show")
+    .send({"StatusId":"198998"})// already exicting data
     .expect(200)
     .end(done)
-}); */
+}); 

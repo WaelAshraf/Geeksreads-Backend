@@ -1,51 +1,71 @@
-/**
+//UNFollow User
+ /**
  * 
- * @api {POST}  /user/userID Unfollow a user
+ * @api {POST}  /api/Users/unFollow Unfollow a user
  * @apiName Unfollow user
  * @apiGroup User
- * @apiError {404} NOTFOUND User could not be found
- * @apiSuccess {Boolean} UNFollow Successful or not
- * @apiParam  {Number} userId GoodReads User ID
- * @apiSuccessExample {Boolean}
+ * @apiError {404} id-not-found The<code>userId_tobefollowed</code> was not found.
+ * @apiSuccess {200} UNFollow Successful 
+ * @apiParam  {String} myuserId GoodReads User ID
+ * @apiParam  {String} userId_tobefollowed GoodReads User ID
+  
+ * @apiSuccessExample {JSON}
+ * HTTP/1.1 200 OK
    {
-      "unFollowed": true
+      "success": true,
+      "Message":"Successfully done"
    }
- *  @apiError id-not-found The<code>ID</code> was not found.
+ *  @apiError id-not-found The<code>userId</code> was not found.
+ *  @apiErrorExample {JSON}
+ *  HTTP/1.1 404 Not Found
+ * {
+ * "success": false,
+ * "Message":"User Id not  found !"
+ * }
+ *  
  * 
  */
-const mongoose = require("mongoose"); //imports mongoose module
 
-function unfollowuser(myuserId,userId_tobefollowed)
-{
-  /*
-  conn.collection("CollectionName")
-  .update({"SELECTION CRITERIA"},{"UPDATE COMMANDS"})
-*/
-
-//connect to DB with the query as a callback fn to ensure query is executed after connection
-mongoose.connect('mongodb://localhost:27017/GreekReaders', {useNewUrlParser: true}, ()=>{
-    const conn = mongoose.connection; //access basic mongodb driver
-    conn.collection('Users').updateOne(
+  //UNFollow User
+  router.post('/unFollow', async (req, res) => { //sends post request to /unFollow End point through the router
+    /* console.log(req.body.userId_tobefollowed);
+    console.log(req.userId_tobefollowed);
+    console.log(req.params.userId_tobefollowed);
+    console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
+    console.log("my"+req.query.myuserid);*/
+      mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
+    
         {
-            "UserId" : userId_tobefollowed //access document of user that we need to unfollow 
+            UserId :  req.query.userId_tobefollowed //access document of user i want to unfollow
         },
-        {$pull: { // pulls to end of array of the users I follow
-          "FollowersUserId":myuserId
-        }})
-        conn.collection('Users').updateOne(
+        {$pull: { // pull from end of array of the users I follow
+          FollowersUserId:req.query.myuserid
+        }}
+        ,function (err,doc) { // error handling and checking for returned mongo doc after query
+    
+          if ( doc.matchedCount==0 || err)   //matched count checks for number of affected documents by query 
+          { 
+            
+            res.status(404).json({  // sends a json with 404 code
+           success: false ,  // Follow Failed
+            "Message":"User Id not  found !"});
+          }
+        else
+        {
+        //console.log(doc);
+        res.status(200).json({ //sends a json with 200 code
+          success: true , //Follow Done 
+           "Message":"Sucessfully done"});
+        }
+      });
+      mongoose.connection.collection("Users").updateOne(
           {
-              "UserId" : myuserId //access document of currently logged In user 
+              UserId :req.query.myuserid//access document of currently logged In user 
           },
-          {$pull: { // Pulls from end of array of the users I follow
-            "FollowingUserId":userId_tobefollowed
-          }}).then(mongoose.disconnect()).then(() => {return true;}); //Promise to disconnect and return true if no err thrown;
-});
-afterAll(async done => {
-  // Closing the DB connection allows Jest to exit successfully.
-  conn.close();
-  done();
-return true;
-});
-}
-
-module.exports=unfollowuser;
+          {$pull: { // pull from end of array of the users I follow
+            FollowingUserId: req.query.userId_tobefollowed
+          }});
+          
+         
+          });  
+ 

@@ -14,7 +14,7 @@
 const Joi = require('joi');
  const express = require('express');
  const mongoose= require ('mongoose');
-const {Resource,validate} =require('../models/resources.model');
+const {Resource} =require('../models/resources.model');
 const router = express.Router();
 
 router.put('/like',(req,res)=>{
@@ -22,17 +22,16 @@ router.put('/like',(req,res)=>{
     // input validation
     
 
-    console.log(req.body);
- 
-    const {error}= validate(req.body);
+ var error= null;
+ if (req.body.ResourceID.lenght = 0)
+ {
+     error=1 ;
+ }  
 
-    console.log(error);
     if(error)
     {
        return res.status(404).send(error.details[0].message);
     }
-    const resource= Resource.findOne({ResourceID: req.body.ResourceID})
-   if (!resource) return res.status(404).send('resource was not found');
     
    Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { likes: 1 } },
     function(err, doc){
@@ -42,7 +41,7 @@ router.put('/like',(req,res)=>{
 
     if (!doc)
     {
-        return res.status(404).send("resource not found");
+        return res.status(200).send("liked");
    
     }
     console.log(doc);
@@ -83,8 +82,6 @@ router.put('/unlike',(req,res)=>{
       {
          return res.status(404).send(error.details[0].message);
       }
-      const resource= Resource.findOne({ResourceID: req.body.ResourceID})
-     if (!resource) return res.status(404).send('resource was not found');
       
      Resource.findByIdAndUpdate({ResourceID:req.body.ResourceID},{ $inc: { likes: -1 } },
       function(err, doc){

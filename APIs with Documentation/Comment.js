@@ -6,7 +6,7 @@
  * @apiSuccess {Number} likes number of likes on each comment
  * @apiSuccess {String} body body text of each comment
  * @apiSuccess {String} userName name of the user who wrote each comment
- * @apiSuccess {Number} userId the id of the user who wrote each comment
+ * @apiSuccess {ObjectId} userId the id of the user who wrote each comment
  * @apiSuccess {datePicker} date the date of each comment
  * @apiSuccessExample
  * HTTP/1.1 200 OK
@@ -20,10 +20,7 @@
  *         },......
  * ]
  * }
- * @apiParam{String} type Subject Type Commented On; book,review,etc
- * @apiParam{Number} ID Id of resource given as type Parameter
- * @apiParam{Number} perPage Number of comments per page default is <code>20</code>
- * @apiParam{Number} pageNumber Number of current page default is <code>1</code>
+ * @apiParam{ObjectId} ReviewId Id of the review the comments belong to
  */
 function listCommentsOnSubject(type,ID,perPage=20)
 {
@@ -40,10 +37,10 @@ function listCommentsOnSubject(type,ID,perPage=20)
  * @apiName creatComment
  * @apiGroup Comments
  * @apiParam{String} Body The body of the comment  
- * @apiParam{String} type Subject Type Commented On; book,review,etc
- * @apiParam{Number} ID  Id of resource given as type Parameter
+ * @apiParam{ObjectId} BookID  Id of Book the review commented on belongs to
+ * @apiParam{ObjectId} ReviewID  Id of review the comment belongs to
  * @apiParam{String} userName Name of user who wrote the comment
- * @apiParam{Number} userID  Id of user who wrote the comment
+ * @apiParam{ObjectId} userID  Id of user who wrote the comment
  * @apiParam{datePicker} date the date the comment was written on
  * @apiError EmptyComment Must Have At Least <code>1</code> Character In Comment
  */

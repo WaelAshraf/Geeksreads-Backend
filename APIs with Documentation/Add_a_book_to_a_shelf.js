@@ -6,9 +6,9 @@
  * @apiGroup Shelves
  * @apiPermission all
  *
- *
+ * @apiHeader {String} x-auth-token Authentication token
  * @apiParam {String} Shelf-Name Shelf Name.
- * @apiParam {Number} Book-ID Book id to add to shelf.
+ * @apiParam {String} Book-ID Book id to add to shelf.
  *
  * @apiSuccess {Boolean} AddedbookSuc         Book added successfully.
  * @apiSuccessExample {json} Success
