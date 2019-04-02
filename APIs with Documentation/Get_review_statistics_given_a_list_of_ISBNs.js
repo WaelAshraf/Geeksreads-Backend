@@ -1,7 +1,7 @@
 /**
  * 
- * @api {get} /book/review_counts.json   Get review statistics given a list of ISBNs
- * @apiName review_counts
+ * @api {GET} /book/reviewstatistics.json   Get review statistics given a list of ISBNs
+ * @apiName ReviewStatistics
  * @apiGroup Books
  * @apiVersion  0.0.0
  * 
@@ -22,12 +22,7 @@
  *     }
  *
  * 
- * @apiError NotSpecified The <code>isbns</code> of the books was not found.
- * @apiError BookNotFound The <code>reviews</code> of the books was not found.
+ * @apiError Books-Not-Found Some or all of the ISBNs entered are not valid.
  */
 
 
-function review_counts(isbns)
-{
-
-}
