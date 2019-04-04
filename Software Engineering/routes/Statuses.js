@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const {Status,validate} = require('../models/Statuses');
 const {User} = require('../models/User');
+const auth = require('../middleware/auth');
 const Joi = require('joi');
 const auth = require('../middleware/auth');
 const router = express.Router();
@@ -75,35 +76,58 @@ router.post("/",(req,res)=>
  * @apiVersion 0.0.0
  * @apiName GetUserStatuses 
  * @apiGroup Status
- * 
- * @apiParam {string} UserID status id
+ * @apiHeader {String} x-auth-token Authentication token
  *
- * @apiSuccess {string} StatusID status id
- * @apiSuccess {string} UserID User id
- * @apiSuccess {String} StatusBody the body of this status
+ * @apiSuccess {string} StatusId status id
+ * @apiSuccess {string} UserId User id the user who is to see the status 
  * @apiSuccess {datePicker} StatusDate the date when the status was written
- * @apiSuccess {string} CommentId comment id <code>(optional)</code> 
- * @apiSuccess {string} ReviewId <code>(optional)</code> 
- *  
+ * @apiSuccess {string} CommentId comment id if the type is comment <code>(optional)</code> 
+ * @apiSuccess {string} ReviewId  review Id  alawys exisit weather the type is comment or review
+ * @apiSuccess {string} MakerId the id of the user who made the status
+ * @apiSuccess {string} Type  Wheather  it is Comment or Review 
  * @apiSuccessExample  Expected Data on Success
  * {
+ *
+ * type : Review 
+ * StatusId : "82978363763"
+ * MakerId : "shjfhghdsg"
+ * UserId : "82sdfd8363763"
+ * ReviewId : "82gf8363763"
  * 
- * StatusID : "82978363763"
- * UserID : "82sdfd8363763"
- * ReviewID : "82gf8363763"
- * StatusBody : "hisa Liked ur comment"
  * }, 
  * {
- * StatusID : "82978363763"
- * UserID : "82sdfd8363763"
+ * 
+ * type : Comment
+ * CommentId : "hisadsfjhdld"  
+ * StatusId : "82978363763"
+ * MakerId : "shjfhghdsg"
+ * UserId : "82sdfd8363763"
+ * ReviewId : "82gf8363763"
  * .......
  * },.....
+ * @apiErrorExample {json} NotFound statuses:
+ *     HTTP/1.1 400
+ *  {
+ *    "ReturnMsg":"No statuses were found"
+ *  }
+ * 
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
  * @apiError User-Not-Found The <code>User</code> was not found
  * @apiError Status-Not-Found The <code>Status</code> was not found
  */
 
 
-router.get("/show",(req,res)=>
+router.get("/show",auth ,(req,res)=>
 {
      if(req.body.UserId==null)
      {
@@ -121,11 +145,11 @@ router.get("/show",(req,res)=>
    {
     if(!doc)
     {
-   return res.status(404).send("Status Not found");
+   return res.status(404).send("No statuses were found");
     }
     if(doc.lenght==0)
     {
-   return res.status(404).send("Statuses Not found for this User");
+   return res.status(404).send("No statuses were found");
     }
       
     res.status(200).send(
@@ -187,7 +211,7 @@ router.post("/delete",(req,res)=>
 
 });
 
-function CreatStatuses(UserId, FollowerId,ReviewId,CommentId,StatusDate)
+function CreatStatuses( FollowerId ,ReviewId ,StatusDate, CommentId, StatusBody )
 {
   var  newStatus = new Status( 
 { 
@@ -201,8 +225,15 @@ function CreatStatuses(UserId, FollowerId,ReviewId,CommentId,StatusDate)
  const {error} = validate(newStatus.body);
  if (error) return console.log(error.details[0].message);
  
-  
- User.findOne({'UserId': UserId},(err,doc)=>{ 
+  if (StatusBody)
+  {
+    newStatus.body=StatusBody;
+  }
+}
+
+function CreatStatusBody(UserId,CommentId,ReviewId,bookId)
+{  
+User.findOne({'UserId': UserId},(err,doc)=>{ 
   if  (!doc)
 {
   return console.log (" there no scuch a user ")
@@ -210,14 +241,22 @@ function CreatStatuses(UserId, FollowerId,ReviewId,CommentId,StatusDate)
 
 if (doc)
 {
-  newStatus.body= doc.UserName + " commented on " +newStatus.ReviewId;
-  newStatus.save().then(console.log ("status Updated successfully"));   
+  if (CommentId)
+  {
+  return newStatus.body= doc.UserName + " commented on " +ReviewId;
+  }
+  
+  else if (bookId){
+    
+    
+   return newStatus.body = doc.UserName + " reviewed on " +ReviewId;
+  }
+  else return null
 }
     });   
-}
+  }
 
 
 
-
-module.exports =CreatStatuses;
+module.exports = CreatStatuses;
 module.exports = router;

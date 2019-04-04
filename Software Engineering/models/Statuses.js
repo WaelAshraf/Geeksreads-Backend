@@ -13,6 +13,11 @@ const StatusesSchema = new mongoose.Schema({
     {
         type: String
     },
+    
+    TheMakerId:
+    {
+        type: String
+    },
     ReviewId:
     {
         type: String
@@ -42,8 +47,8 @@ function validateStatuses(Status) {
         UserId: Joi.string().required(),
         StatusBody: Joi.string().required().max(200),
         ReviewId: Joi.string(),
-        CommentId: Joi.string()
-    
+        CommentId: Joi.string(),
+        StatusDate:  Joi.date().iso()
     };
     return Joi.validate(Status, schema);
     }

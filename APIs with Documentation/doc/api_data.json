@@ -1,9 +1,9 @@
 [
   {
-    "type": "POST",
-    "url": "/author_followings",
-    "title": "Follow an author",
-    "name": "Follow_Author",
+    "type": "GET",
+    "url": "/api/Author/?auth_name=Value",
+    "title": "Find an author by name",
+    "name": "Find_author_by_name",
     "group": "Author",
     "error": {
       "fields": {
@@ -12,14 +12,28 @@
             "group": "Error 4xx",
             "type": "404",
             "optional": false,
-            "field": "NOTFOUND",
+            "field": "name-not-found",
             "description": "<p>Author could not be found</p>"
-          },
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 404 Not Found",
+          "content": "HTTP/1.1 404 Not Found\n{\n\"success\": false,\n\"Message\":\"Author  not  found !\"\n}",
+          "type": "JSON"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
           {
-            "group": "Error 4xx",
+            "group": "Parameter",
+            "type": "String",
             "optional": false,
-            "field": "id-not-found",
-            "description": "<p>The<code>ID</code> was not found.</p>"
+            "field": "auth_name",
+            "description": "<p>Author Name</p>"
           }
         ]
       }
@@ -29,18 +43,48 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "JSON",
             "optional": false,
-            "field": "Follow",
-            "description": "<p>Successful or not</p>"
+            "field": "Author",
+            "description": "<p>data for the required Author</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "{",
-          "content": "{\n   \"UserFollowed\": true\n}",
-          "type": "Boolean"
+          "title": "HTTP/1.1 200 OK",
+          "content": "HTTP/1.1 200 OK\n\n {\n        \"_id\" : ObjectId(\"5c9284d5e0a57a14e749981a\"),\n        \"BookId\" : [\n                \"5c91157331557ebe471e0a12\"\n        ],\n        \"AuthorId\" : \"5c91157301d63f812a141932\",\n        \"AuthorName\" : \"Alberta Bean\",\n        \"Photo\" : \"http://placehold.it/32x32\",\n        \"FollowingUserId\" : [\n                \"5c9132dd99a8a3609cca3406\",\n                \"5c91344d99a8a3609cca3406\"\n        ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./Find_an_author_by_name.js",
+    "groupTitle": "Author"
+  },
+  {
+    "type": "GET",
+    "url": "/api/Author/byid?auth_id=Value",
+    "title": "Get info about author by id",
+    "name": "Get_info_about_author_by_id",
+    "group": "Author",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "id-not-found",
+            "description": "<p>Author could not be found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 404 Not Found",
+          "content": "HTTP/1.1 404 Not Found\n{\n\"success\": false,\n\"Message\":\"Author  not  found !\"\n}",
+          "type": "JSON"
         }
       ]
     },
@@ -49,22 +93,42 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "authorId",
+            "type": "String",
             "optional": false,
-            "field": "authorId",
-            "description": "<p>GoodReads author ID</p>"
+            "field": "auth_id",
+            "description": "<p>Author ID</p>"
           }
         ]
       }
     },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "Author",
+            "description": "<p>data for the required Author</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 200 OK",
+          "content": "HTTP/1.1 200 OK\n\n {\n        \"_id\" : ObjectId(\"5c9284d5e0a57a14e749981a\"),\n        \"BookId\" : [\n                \"5c91157331557ebe471e0a12\"\n        ],\n        \"AuthorId\" : \"5c91157301d63f812a141932\",\n        \"AuthorName\" : \"Alberta Bean\",\n        \"Photo\" : \"http://placehold.it/32x32\",\n        \"FollowingUserId\" : [\n                \"5c9132dd99a8a3609cca3406\",\n                \"5c91344d99a8a3609cca3406\"\n        ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
     "version": "0.0.0",
-    "filename": "./Follow_an_author.js",
+    "filename": "./Get_info_about_an_author_by_id.js",
     "groupTitle": "Author"
   },
   {
-    "type": "DELETE ",
-    "url": "/author_followings",
-    "title": "Unfollow an author",
+    "type": "POST",
+    "url": "/api/Authors/unFollow",
+    "title": "Unfollow an Author",
     "name": "Unfollow_Author",
     "group": "Author",
     "error": {
@@ -74,35 +138,36 @@
             "group": "Error 4xx",
             "type": "404",
             "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>Author could not be found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
             "field": "id-not-found",
-            "description": "<p>The<code>ID</code> was not found.</p>"
+            "description": "<p>The<code>myuserId</code> was not found.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 404 Not Found",
+          "content": " HTTP/1.1 404 Not Found\n{\n\"success\": false,\n\"Message\":\"Author Id not  found !\"\n}",
+          "type": "JSON"
+        }
+      ]
     },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "200",
             "optional": false,
-            "field": "unFollow",
-            "description": "<p>Successful or not</p>"
+            "field": "UNFollow",
+            "description": "<p>Successful</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "{",
-          "content": "{\n   \"Followed\": true\n}",
-          "type": "Boolean"
+          "title": "HTTP/1.1 200 OK",
+          "content": "HTTP/1.1 200 OK\n   {\n      \"success\": true,\n      \"Message\":\"Successfully done\"\n   }",
+          "type": "JSON"
         }
       ]
     },
@@ -111,10 +176,17 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "userId",
-            "description": "<p>GoodReads author ID</p>"
+            "field": "myuserId",
+            "description": "<p>GoodReads User ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "auth_id",
+            "description": "<p>GoodReads Author ID</p>"
           }
         ]
       }
@@ -124,10 +196,10 @@
     "groupTitle": "Author"
   },
   {
-    "type": "GET",
-    "url": "/api/author_url/<ID>",
-    "title": "Find an author by name",
-    "name": "findAuthorByName",
+    "type": "POST",
+    "url": "/api/Authors/Follow",
+    "title": "follow an Author",
+    "name": "follow_Author",
     "group": "Author",
     "error": {
       "fields": {
@@ -136,68 +208,61 @@
             "group": "Error 4xx",
             "type": "404",
             "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>Author could not be found</p>"
+            "field": "id-not-found",
+            "description": "<p>The<code>myuserId</code> was not found.</p>"
           }
         ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Author id</p>"
-          }
-        ]
-      }
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 404 Not Found",
+          "content": " HTTP/1.1 404 Not Found\n{\n\"success\": false,\n\"Message\":\"Author Id not  found !\"\n}",
+          "type": "JSON"
+        }
+      ]
     },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Author",
+            "type": "200",
             "optional": false,
-            "field": "Athr",
-            "description": "<p>data for the required Author</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>author id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>author name</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "link",
-            "description": "<p>author link</p>"
+            "field": "UNFollow",
+            "description": "<p>Successful</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "HTTP/1.1 200 OK",
-          "content": "HTTP/1.1 200 OK\n{\n\"Athr\": {\n\"id\": 589\n\"name\": \"Orson Scott Card\"\n\"link\": \"https://www.geeksreads.com/author/show/589.Orson_Scott_Card?utm_medium=api&utm_source=author_link\"\n        }\n}",
-          "type": "json"
+          "content": "HTTP/1.1 200 OK\n   {\n      \"success\": true,\n      \"Message\":\"Successfully done\"\n   }",
+          "type": "JSON"
         }
       ]
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "myuserId",
+            "description": "<p>GoodReads User ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "auth_id",
+            "description": "<p>GoodReads Author ID</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
-    "filename": "./Find_an_author_by_name.js",
+    "filename": "./Follow_an_author.js",
     "groupTitle": "Author"
   },
   {
@@ -257,79 +322,12 @@
     "groupTitle": "Author"
   },
   {
-    "type": "get",
-    "url": "/author/show.json",
-    "title": "Get info about an author by id",
-    "name": "get_author_info",
-    "group": "Author",
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "type": "404",
-            "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>Author could not be found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "id-not-found",
-            "description": "<p>The<code>ID</code> was not found.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "INFO",
-            "description": "<p>info of User</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "{",
-          "content": "{\n   \"Name\":Michael,\n   \"Age\":30,\n   \"NumBooks Written\":344\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "ID",
-            "description": "<p>GeeksdReads Author ID</p>"
-          }
-        ]
-      }
-    },
+    "type": "GET",
+    "url": "/book/book.json",
+    "title": "Find books by title, author, or ISBN. Gets found book",
     "version": "0.0.0",
-    "filename": "./Get_info_about_an_author_by_id.js",
-    "groupTitle": "Author"
-  },
-  {
-    "type": "get",
-    "url": "/search/index.json",
-    "title": "Find books by title, author, or ISBN",
-    "version": "0.0.0",
-    "name": "Find",
+    "name": "FindBooks",
     "group": "Books",
-    "permission": [
-      {
-        "name": "all"
-      }
-    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -378,66 +376,94 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "id",
+            "field": "BookId",
             "description": "<p>Book-ID.</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "Book-count",
-            "description": "<p>Number of results.</p>"
+            "field": "Title",
+            "description": "<p>Book-Title.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "AuthorId",
+            "description": "<p>Author-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ISBN",
+            "description": "<p>Book-ISBN.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "DatePicker",
+            "optional": false,
+            "field": "Published",
+            "description": "<p>Date when book was published.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Publisher",
+            "description": "<p>The name of the book's publisher.</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "ratings-count",
-            "description": "<p>Number of ratings.</p>"
+            "field": "Pages",
+            "description": "<p>Number of book pages.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Description",
+            "description": "<p>Small breifing about the book's contents.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Cover",
+            "description": "<p>Link that holds the book's cover picture.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "Store",
+            "description": "<p>Links for webpages that store the book.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Select",
+            "optional": false,
+            "field": "ReadStatus",
+            "description": "<p>Read, Currently Reading, or Want to Read.</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "text-reviews-count",
-            "description": "<p>Number of text reviews.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "original-publication-year",
-            "description": "<p>Publication year.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "original-publication-month",
-            "description": "<p>Publication month.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "original-publication-day",
-            "description": "<p>Publication day.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "average-rating",
-            "description": "<p>Average Rating.</p>"
+            "field": "BookRating",
+            "description": "<p>Rating for the book.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"average-rating\": 4.30,\n  \"id\": 1,\n  \"Book-count\": 20,\n  \"ratings-count\": 20,\n  \"text-reviews-count\": 20,\n  \"original-publication-year\": 1985,\n  \"original-publication-month\": 5,\n  \"original-publication-day\": 25\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"BookId\":\"5c911452bbfd1717b8a7a169\",\n  \"Title\":\"sit\",\n  \"AuthorId\":\"5c911452a48b42bb84bc785c\",\n  \"ISBN\":\"5c911452ce18b2b3276d4b45\",\n  \"Published\":\"2001-05-08 \",\n  \"Publisher\":\"COREPAN\",\n  \"Pages\":226.0,\n  \"Description\":\"Ad officia duis enim occaecat ullamco aliqua sint mollit non ea et ea aliqua ea. Reprehenderit eu ut in elit ex eu. Excepteur Lorem est ad amet sunt.\\r\\n\",\n  \"Cover\":\"http://placehold.it/32x32\",\n  \"Store\":[\"http://placehold.it/32x32\",\"http://placehold.it/32x32\",\"http://placehold.it/32x32\",\"http://placehold.it/32x32\",\"http://placehold.it/32x32\",\"http://placehold.it/32x32\",\"http://placehold.it/32x32\"],\n  \"ReadStatus\":\"Read\",\n  \"BookRating\":5.0\n}",
           "type": "json"
         }
       ]
@@ -450,11 +476,525 @@
             "optional": false,
             "field": "Book-not-found",
             "description": "<p>The <code>Book</code> was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Author-not-found",
+            "description": "<p>The <code>Author</code> was not found.</p>"
           }
         ]
       }
     },
     "filename": "./Find_books_by_title_author_or_ISBN.js",
+    "groupTitle": "Books"
+  },
+  {
+    "type": "GET",
+    "url": "/book/getreviews.json",
+    "title": "Get the reviews for a book given a Geeksreads book id",
+    "name": "GetReviewsbyBookId",
+    "group": "Books",
+    "version": "0.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Book ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": true,
+            "field": "rating",
+            "defaultValue": "0",
+            "description": "<p>Limit reviews to a particular rating or above,(default is 0).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "UserId",
+            "description": "<p>User-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "BookId",
+            "description": "<p>Book-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p>Review-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewBody",
+            "description": "<p>The text for the review entered by user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "DatePicker",
+            "optional": false,
+            "field": "ReviewDate",
+            "description": "<p>Date where review was entered by user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "ReviewRating",
+            "description": "<p>Rating for the review.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n     \"ReviewId\":\"5c9243a5beb4101160e23fdd\",\n     \"BookId\":\"5c9114a012d11bb226399497\",\n     \"UserId\":\"5c9132dd47cb909f7fbbe875\",\n     \"ReviewRating\":5.0,\n     \"ReviewBody\":\"Mollit tempor consequat magna officia occaecat laborum duis consequat qui sunt ipsum. Commodo cillum voluptate incididunt mollit non non voluptate cillum id magna qui laborum ullamco adipisicing. Dolore consequat fugiat ut Lorem incididunt ea dolore voluptate aliquip. Reprehenderit duis est do ad consequat ad enim pariatur ad Lorem Lorem enim officia exercitation. Magna ea ipsum laborum sint est.\\r\\n\",\n     \"ReviewDate\":\" 2015-12-03T02:44:27 -02:00\"\n     \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Book-Not-Found",
+            "description": "<p>The <code>Book</code> was not found</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./Get_the_reviews_for_a_book_given_a_Goodreads_book_id.js",
+    "groupTitle": "Books"
+  },
+  {
+    "type": "GET",
+    "url": "/book/getreviews.json",
+    "title": "Get the reviews for a book given an ISBN",
+    "name": "GetReviewsbyBookIsbn",
+    "group": "Books",
+    "version": "0.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "isbn",
+            "description": "<p>Book ISBN.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": true,
+            "field": "rating",
+            "defaultValue": "0",
+            "description": "<p>Limit reviews to a particular rating or above,(default is 0).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "UserId",
+            "description": "<p>User-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "BookId",
+            "description": "<p>Book-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p>Review-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewBody",
+            "description": "<p>The text for the review entered by user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "DatePicker",
+            "optional": false,
+            "field": "ReviewDate",
+            "description": "<p>Date where review was entered by user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "ReviewRating",
+            "description": "<p>Rating for the review.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n     \"ReviewId\":\"5c9243a5beb4101160e23fdd\",\n     \"BookId\":\"5c9114a012d11bb226399497\",\n     \"UserId\":\"5c9132dd47cb909f7fbbe875\",\n     \"ReviewRating\":5.0,\n     \"ReviewBody\":\"Mollit tempor consequat magna officia occaecat laborum duis consequat qui sunt ipsum. Commodo cillum voluptate incididunt mollit non non voluptate cillum id magna qui laborum ullamco adipisicing. Dolore consequat fugiat ut Lorem incididunt ea dolore voluptate aliquip. Reprehenderit duis est do ad consequat ad enim pariatur ad Lorem Lorem enim officia exercitation. Magna ea ipsum laborum sint est.\\r\\n\",\n     \"ReviewDate\":\" 2015-12-03T02:44:27 -02:00\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Book-Not-Found",
+            "description": "<p>The <code>Book</code> was not found</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./Get_the_reviews_for_a_book_given_an_ISBN.js",
+    "groupTitle": "Books"
+  },
+  {
+    "type": "GET",
+    "url": "/book/getreviews.json",
+    "title": "Get the reviews for a book given a title string",
+    "name": "GetReviewsbyBookTitle",
+    "group": "Books",
+    "version": "0.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "title_string",
+            "description": "<p>Book title.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": true,
+            "field": "rating",
+            "defaultValue": "0",
+            "description": "<p>Limit reviews to a particular rating or above,(default is 0).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "UserId",
+            "description": "<p>User-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "BookId",
+            "description": "<p>Book-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p>Review-ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "ReviewBody",
+            "description": "<p>The text for the review entered by user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "DatePicker",
+            "optional": false,
+            "field": "ReviewDate",
+            "description": "<p>Date where review was entered by user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "ReviewRating",
+            "description": "<p>Rating for the review.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n     \"ReviewId\":\"5c9243a5beb4101160e23fdd\",\n     \"BookId\":\"5c9114a012d11bb226399497\",\n     \"UserId\":\"5c9132dd47cb909f7fbbe875\",\n     \"ReviewRating\":5.0,\n     \"ReviewBody\":\"Mollit tempor consequat magna officia occaecat laborum duis consequat qui sunt ipsum. Commodo cillum voluptate incididunt mollit non non voluptate cillum id magna qui laborum ullamco adipisicing. Dolore consequat fugiat ut Lorem incididunt ea dolore voluptate aliquip. Reprehenderit duis est do ad consequat ad enim pariatur ad Lorem Lorem enim officia exercitation. Magna ea ipsum laborum sint est.\\r\\n\",\n     \"ReviewDate\":\" 2015-12-03T02:44:27 -02:00\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Book-Not-Found",
+            "description": "<p>The <code>Book</code> was not found</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./Get_the_reviews_for_a_book_given_a_title_string.js",
+    "groupTitle": "Books"
+  },
+  {
+    "type": "get",
+    "url": "/book/bookids.json",
+    "title": "Get Geeksreads book IDs given ISBNs",
+    "name": "IsbntoId",
+    "group": "Books",
+    "version": "0.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string[]",
+            "optional": false,
+            "field": "isbns",
+            "description": "<p>Book-ISBNs.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string[]",
+            "optional": false,
+            "field": "ids",
+            "description": "<p>Book-IDs.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n  \"BookIds\": [5c911452bbfd1717b8a7a169,5c9114526f1439874b7cca1a]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Books-Not-Found",
+            "description": "<p>Some or all of the ISBNs entered are not valid.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./Get_Goodreads_book_IDs_given_ISBNs.js",
+    "groupTitle": "Books"
+  },
+  {
+    "type": "Get",
+    "url": "/Review/Rate",
+    "title": "Rate a Reviw",
+    "version": "0.0.0",
+    "name": "RateReviw",
+    "group": "Books",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p>the review ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "Rating",
+            "description": "<p>Number of stars must be integar</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "boolean",
+            "optional": false,
+            "field": "RateSucc",
+            "description": "<p>true if the rating was done</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Expected Data on Success",
+          "content": "{\n \"RateSucc\" :true\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "NotFound Review:",
+          "content": "   HTTP/1.1 400\n{\n  \"ReturnMsg\":\"No Review  were found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "User-Not-Found",
+            "description": "<p>The <code>User</code> was not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Review-Not-Found",
+            "description": "<p>The <code>Review</code> was not found</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./RateReview.js",
+    "groupTitle": "Books"
+  },
+  {
+    "type": "GET",
+    "url": "/book/reviewstatistics.json",
+    "title": "Get review statistics given a list of ISBNs",
+    "name": "ReviewStatistics",
+    "group": "Books",
+    "version": "0.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string[]",
+            "optional": false,
+            "field": "isbns",
+            "description": "<p>Book ISBN.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Param",
+          "content": "{\n  isbns=0441172717,0141439602\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "review-count",
+            "description": "<p>Statistics of Book Reviews.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n  \"Number of reviews\": 80\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Books-Not-Found",
+            "description": "<p>Some or all of the ISBNs entered are not valid.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./Get_review_statistics_given_a_list_of_ISBNs.js",
     "groupTitle": "Books"
   },
   {
@@ -506,360 +1046,6 @@
     "groupTitle": "Books"
   },
   {
-    "type": "get",
-    "url": "/book/isbn_to_id",
-    "title": "Get Geeksreads book IDs given ISBNs",
-    "name": "isbn_to_id",
-    "group": "Books",
-    "version": "0.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "isbn",
-            "description": "<p>Book ISBN.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Book ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BookNotFound",
-            "description": "<p>The <code>id</code> of the Book was not found.</p>"
-          }
-        ]
-      }
-    },
-    "filename": "./Get_Goodreads_book_IDs_given_ISBNs.js",
-    "groupTitle": "Books"
-  },
-  {
-    "type": "get",
-    "url": "/book/review_counts.json",
-    "title": "Get review statistics given a list of ISBNs",
-    "name": "review_counts",
-    "group": "Books",
-    "version": "0.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string[]",
-            "optional": false,
-            "field": "isbns",
-            "description": "<p>Book ISBN.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Param",
-          "content": "{\n  isbns=0441172717,0141439602\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "review-count",
-            "description": "<p>Statistics of Book Reviews.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"Number of reviews\": 80\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "NotSpecified",
-            "description": "<p>The <code>isbns</code> of the books was not found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BookNotFound",
-            "description": "<p>The <code>reviews</code> of the books was not found.</p>"
-          }
-        ]
-      }
-    },
-    "filename": "./Get_review_statistics_given_a_list_of_ISBNs.js",
-    "groupTitle": "Books"
-  },
-  {
-    "type": "get",
-    "url": "/book/show",
-    "title": "Get the reviews for a book given a Geeksreads book id",
-    "name": "show",
-    "group": "Books",
-    "version": "0.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Book ID.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "number",
-            "optional": true,
-            "field": "rating",
-            "defaultValue": "0",
-            "description": "<p>Limit reviews to a particular rating or above,(default is 0).</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "boolean",
-            "optional": true,
-            "field": "reviews-textOnly",
-            "defaultValue": "false",
-            "description": "<p>Limit reviews to text only,(default is false).</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "number",
-            "optional": false,
-            "field": "User-id",
-            "description": "<p>User ID.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "User-name",
-            "description": "<p>Username.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "text-reviews",
-            "description": "<p>User review.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n     \"User-id\": 1,\n     \"User-name\": \"AvidReader\",\n     \"text-reviews\": \"A great book. Would recommend everyone to read.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BookNotFound",
-            "description": "<p>The <code>reviews</code> of the Book was not found.</p>"
-          }
-        ]
-      }
-    },
-    "filename": "./Get_the_reviews_for_a_book_given_a_Goodreads_book_id.js",
-    "groupTitle": "Books"
-  },
-  {
-    "type": "get",
-    "url": "/book/isbn",
-    "title": "Get the reviews for a book given an ISBN",
-    "name": "show_by_isbn",
-    "group": "Books",
-    "version": "0.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "isbn",
-            "description": "<p>Book ISBN.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "number",
-            "optional": true,
-            "field": "rating",
-            "defaultValue": "0",
-            "description": "<p>Limit reviews to a particular rating or above,(default is 0).</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "number",
-            "optional": false,
-            "field": "User-id",
-            "description": "<p>User ID.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "User-name",
-            "description": "<p>Username.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "text-reviews",
-            "description": "<p>User review.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n     \"User-id\": 1,\n     \"User-name\": \"AvidReader\",\n     \"text-reviews\": \"A great book. Would recommend everyone to read.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BookNotFound",
-            "description": "<p>The <code>reviews</code> of the Book was not found.</p>"
-          }
-        ]
-      }
-    },
-    "filename": "./Get_the_reviews_for_a_book_given_an_ISBN.js",
-    "groupTitle": "Books"
-  },
-  {
-    "type": "get",
-    "url": "/book/title",
-    "title": "Get the reviews for a book given a title string",
-    "name": "title",
-    "group": "Books",
-    "version": "0.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "title_string",
-            "description": "<p>Book title.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "number",
-            "optional": true,
-            "field": "rating",
-            "defaultValue": "0",
-            "description": "<p>Limit reviews to a particular rating or above,(default is 0).</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "number",
-            "optional": false,
-            "field": "User-id",
-            "description": "<p>User ID.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "User-name",
-            "description": "<p>Username.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "text-reviews",
-            "description": "<p>User review.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n     \"User-id\": 1,\n     \"User-name\": \"AvidReader\",\n     \"text-reviews\": \"A great book. Would recommend everyone to read.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BookNotFound",
-            "description": "<p>The <code>reviews</code> of the Book was not found.</p>"
-          }
-        ]
-      }
-    },
-    "filename": "./Get_the_reviews_for_a_book_given_a_title_string.js",
-    "groupTitle": "Books"
-  },
-  {
     "success": {
       "fields": {
         "Success 200": [
@@ -883,8 +1069,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "./doc/main.js",
-    "group": "C__Users_ahmed_AMRAWY98_Desktop_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
-    "groupTitle": "C__Users_ahmed_AMRAWY98_Desktop_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
+    "group": "C__Users_Hisa_EL_Zankaloni_Desktop_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
+    "groupTitle": "C__Users_Hisa_EL_Zankaloni_Desktop_Geeksreads_Backend_APIs_with_Documentation_doc_main_js",
     "name": ""
   },
   {
@@ -1062,6 +1248,65 @@
     "groupTitle": "Comments"
   },
   {
+    "type": "DELETE",
+    "url": "/owned_books/destroy/ID",
+    "title": "Delete an owned book",
+    "name": "DELETEOwned_books",
+    "group": "Owned_Books",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "NOTFOUND",
+            "description": "<p>Book could not be found</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "ownedBookId",
+            "description": "<p>ownedBookId is a unique identifier for the owned book (not a book_id).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "User_ID",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "Book_ID",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./Delete_an_owned_book.js",
+    "groupTitle": "Owned_Books"
+  },
+  {
     "type": "get",
     "url": "/owned_books/",
     "title": "List books owned by a user",
@@ -1085,45 +1330,10 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "credentials",
-            "optional": false,
-            "field": "apiKey",
-            "description": "<p>Api key from app console.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "credentials",
-            "optional": false,
-            "field": "apiSecret",
-            "description": "<p>Api secret from app console.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "accessToken",
-            "description": "<p>The Access Token obtained from getAccessCredentials.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "accessTokenSecret",
-            "description": "<p>The Access Secret Token obtained from getAccessCredentials.</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "userId",
             "description": "<p>Geeksware user_id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "page",
-            "description": "<p>Which page of results to show (default 1).</p>"
           }
         ]
       }
@@ -1169,13 +1379,6 @@
             "optional": false,
             "field": "current_owner_id",
             "description": "<p>the current owner's user id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "BookCrossing",
-            "description": "<p>(bcid).</p>"
           },
           {
             "group": "Parameter",
@@ -1234,34 +1437,6 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "credentials",
-            "optional": false,
-            "field": "apiKey",
-            "description": "<p>Api key from app console.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "credentials",
-            "optional": false,
-            "field": "apiSecret",
-            "description": "<p>Api secret from app console</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "accessToken",
-            "description": "<p>The Access Token obtained from getAccessCredentials.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "accessTokenSecret",
-            "description": "<p>The Access Secret Token obtained from getAccessCredentials.</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "bookid",
@@ -1297,10 +1472,17 @@
           },
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "Number",
             "optional": false,
-            "field": "uniqueCode",
-            "description": "<p>BookCrossing id (BCID)</p>"
+            "field": "Owned_Book_ID",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "User_ID",
+            "description": ""
           }
         ]
       }
@@ -1431,79 +1613,6 @@
     },
     "version": "0.0.0",
     "filename": "./Update_an_owned_book.js",
-    "groupTitle": "Owned_Books"
-  },
-  {
-    "type": "post",
-    "url": "/owned_books/destroy/ID",
-    "title": "Delete an owned book",
-    "name": "postOwned_books",
-    "group": "Owned_Books",
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "type": "404",
-            "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>Book could not be found</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "credentials",
-            "optional": false,
-            "field": "apiKey",
-            "description": "<p>Api key from app console.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "credentials",
-            "optional": false,
-            "field": "apiSecret",
-            "description": "<p>Api secret from app console.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "accessToken",
-            "description": "<p>The Access Token obtained from getAccessCredentials.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "accessTokenSecret",
-            "description": "<p>The Access Secret Token obtained from getAccessCredentials.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "ownedBookId",
-            "description": "<p>ownedBookId is a unique identifier for the owned book (not a book_id).</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./Delete_an_owned_book.js",
     "groupTitle": "Owned_Books"
   },
   {
@@ -2085,34 +2194,41 @@
     "groupTitle": "Review"
   },
   {
-    "type": "post",
-    "url": "/user_shelves",
-    "title": "Add book shelf",
-    "version": "0.0.0",
-    "name": "ADDshelf",
+    "type": "POST",
+    "url": "/Shelf/AddShelf.json",
+    "title": "Add a New Shelf",
+    "name": "AddShelf",
     "group": "Shelves",
-    "permission": [
-      {
-        "name": "all"
-      }
-    ],
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Bolean",
             "optional": false,
-            "field": "Shelf-Name",
-            "description": "<p>Shelf Name to Add.</p>"
+            "field": "ExclusiveFlag",
+            "defaultValue": "false",
+            "description": "<p>Set Shelf as Exclusive (Default is Shelf not Exclusive).</p>"
           },
           {
             "group": "Parameter",
-            "type": "Select",
+            "type": "String",
             "optional": false,
-            "field": "Exclusive-Flag",
-            "defaultValue": "false",
-            "description": "<p>Set shelf as exclusive.</p>"
+            "field": "ShelfName",
+            "description": "<p>Shelf Name.</p>"
+          }
+        ]
+      }
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
           }
         ]
       }
@@ -2122,55 +2238,68 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "String",
             "optional": false,
-            "field": "AddedShelfSuc",
-            "description": "<p>Shelf added successfully.</p>"
+            "field": "ReturnMsg",
+            "description": "<p>Notifies User that the Shelf was Added Successfully.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"AddedShelfSuc\": true\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"ReturnMsg\": \"Shelf was Created Successfully.\"\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Invalid-Shelf-Name",
-            "description": "<p>The <code>Shelf-Name</code> is invalid.</p>"
-          }
-        ]
-      },
       "examples": [
         {
-          "title": "Error-NotAdded:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"AddedShelfSuc\": false\n}",
+          "title": "InvalidShelf-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":\"InValid Shelf Name\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "ShelfExist-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"Shelf Already Exists.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
           "type": "json"
         }
       ]
     },
-    "filename": "./Add_book_shelf.js",
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
     "groupTitle": "Shelves"
   },
   {
-    "type": "post",
-    "url": "/shelf/add_to_shelf.json",
-    "title": "Add a book to a shelf",
-    "version": "0.0.0",
-    "name": "ADDtoshelf",
+    "type": "POST",
+    "url": "/Shelf/AddToShelf.json",
+    "title": "Add a Book to a Shelf",
+    "name": "AddToShelf",
     "group": "Shelves",
-    "permission": [
-      {
-        "name": "all"
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
       }
-    ],
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2178,14 +2307,14 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Shelf-Name",
-            "description": "<p>Shelf Name.</p>"
+            "field": "ShelfId",
+            "description": "<p>Shelf Id to add book to.</p>"
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "Book-ID",
+            "field": "BookId",
             "description": "<p>Book id to add to shelf.</p>"
           }
         ]
@@ -2196,61 +2325,69 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "String",
             "optional": false,
-            "field": "AddedbookSuc",
-            "description": "<p>Book added successfully.</p>"
+            "field": "ReturnMsg",
+            "description": "<p>Notifies User that the Book was added successfully.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"AddedbookSuc\": true\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"ReturnMsg\": \"Book was added successfully.\"\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Book-not-found",
-            "description": "<p>The <code>Book</code> was not found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Shelf-not-found",
-            "description": "<p>The <code>Shelf</code> was not found.</p>"
-          }
-        ]
-      },
       "examples": [
         {
-          "title": "Error-NotAdded:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"AddedbookSuc\": false\n}",
+          "title": "NoBook-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":\"Book Doesn't Exist.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoShelf-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"Shelf Does't Exist.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
           "type": "json"
         }
       ]
     },
-    "filename": "./Add_a_book_to_a_shelf.js",
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
     "groupTitle": "Shelves"
   },
   {
     "type": "post",
-    "url": "/shelf/add_books_to_shelves.json",
-    "title": "Add books to many shelves",
+    "url": "/Shelf/AddBooksToShelves.json",
+    "title": "Add Books to Many Shelves",
     "version": "0.0.0",
-    "name": "ADDtoshelves",
+    "name": "AddToShelves",
     "group": "Shelves",
-    "permission": [
-      {
-        "name": "all"
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
       }
-    ],
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2258,14 +2395,14 @@
             "group": "Parameter",
             "type": "String[]",
             "optional": false,
-            "field": "Shelf-Names",
-            "description": "<p>Shelf Names(List).</p>"
+            "field": "ShelIds",
+            "description": "<p>Shelf Ids(List).</p>"
           },
           {
             "group": "Parameter",
-            "type": "Number[]",
+            "type": "String[]",
             "optional": false,
-            "field": "Book-IDs",
+            "field": "BookIds",
             "description": "<p>Book ids to add to shelves(List).</p>"
           }
         ]
@@ -2276,72 +2413,76 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "String",
             "optional": false,
-            "field": "AddedbooksSuc",
-            "description": "<p>Books added successfully.</p>"
+            "field": "ReturnMsg",
+            "description": "<p>Books Added Successfully.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"AddedbooksSuc\": true\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"ReturnMsg\": \"Books were Added Successfully.\"\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Book-not-found",
-            "description": "<p>The <code>Books</code> were not found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Shelf-not-found",
-            "description": "<p>The <code>Shelves</code> were not found.</p>"
-          }
-        ]
-      },
       "examples": [
         {
-          "title": "ErrorBooksNotAdded:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"AddedbooksSuc\": false\n}",
+          "title": "NoBook-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":\"Book Doesn't Exist.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoShelf-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"Shelf Does't Exist.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
           "type": "json"
         }
       ]
     },
-    "filename": "./Add_books_to_many_shelves.js",
+    "filename": "./MohamedAshraf UpdatedApis.js",
     "groupTitle": "Shelves"
   },
   {
-    "type": "Put",
-    "url": "/user_shelves/User_Shelves_ID",
-    "title": "Edit book shelf",
-    "version": "0.0.0",
-    "name": "UpdateShelf",
+    "type": "POST",
+    "url": "/Shelf/EditShelf.json",
+    "title": "Edits a Shelf",
+    "name": "EditShelf",
     "group": "Shelves",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "ID",
-            "description": "<p>shelf id</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "ShelfName",
-            "description": "<p>Shelf New Name</p>"
+            "field": "ShelfId",
+            "description": "<p>Shelf Id to edit.</p>"
           }
         ]
       }
@@ -2351,34 +2492,104 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "boolen",
+            "type": "String",
             "optional": false,
-            "field": "UpdateShelfSuc",
-            "description": "<p>if the update happens successfully or not</p>"
+            "field": "ReturnMsg",
+            "description": "<p>Notifies User that the Shelf was Edited successfully.</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Expected Data on Success",
-          "content": "{\n\"UpdateShelfSuc\": true\n}",
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n  \"ReturnMsg\": \"Shelf was Edited Successfully.\"\n}",
           "type": "json"
         }
       ]
     },
     "error": {
+      "examples": [
+        {
+          "title": "NoShelf-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"Shelf Does't Exist.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
+    "groupTitle": "Shelves"
+  },
+  {
+    "type": "GET",
+    "url": "/Shelf/GetUserShelves.json",
+    "title": "Gets All User's Shelves",
+    "name": "GetUserShelves",
+    "group": "Shelves",
+    "header": {
       "fields": {
-        "Error 4xx": [
+        "Header": [
           {
-            "group": "Error 4xx",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "Shelf-Not-Found",
-            "description": "<p>The <code>ShelfID</code> was not found</p>"
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
           }
         ]
       }
     },
-    "filename": "./Edit_book_shelf.js",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "UserShelves",
+            "description": "<p>Gives the User the Ids of His Shelves.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n  \"UserShelves\": [\n                     \"Shelf1\",\n                     \"Shelf2\",\n                     \"Shelf3\"\n                ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "NoShelvesExist-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"User has No Shelves\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
     "groupTitle": "Shelves"
   },
   {
@@ -2437,20 +2648,20 @@
     "groupTitle": "Status"
   },
   {
-    "type": "get",
-    "url": "/read_statuses/id",
-    "title": "Get a user's read status",
-    "name": "GetRead_Statuses",
+    "type": "GET",
+    "url": "/Shelf/GetUserReadStatus.json",
+    "title": "Gets information about a read Status update",
+    "name": "GetUserReadStatus",
     "group": "Status",
-    "error": {
+    "header": {
       "fields": {
-        "Error 4xx": [
+        "Header": [
           {
-            "group": "Error 4xx",
-            "type": "404",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>Status could not be found</p>"
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
           }
         ]
       }
@@ -2460,17 +2671,10 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Credentials",
+            "type": "String",
             "optional": false,
-            "field": "apiKey",
-            "description": "<p>Api key from app console.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "Statusid",
-            "description": "<p>Read status id.</p>"
+            "field": "StatusId",
+            "description": "<p>The Status Read Id that was Updated.</p>"
           }
         ]
       }
@@ -2480,22 +2684,70 @@
         "Success 200": [
           {
             "group": "Success 200",
+            "type": "String",
             "optional": false,
-            "field": "status",
-            "description": ""
+            "field": "UserId",
+            "description": "<p>Gives the User  Id that Updated the Status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ReviewId",
+            "description": "<p>Gives the User the Id of the Review on the Status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "CommentId",
+            "description": "<p>Gives the User the Id of the Comment on the Status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "StatusBody",
+            "description": "<p>Gives the User the Body of the Status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "StatusDate",
+            "description": "<p>Gives the User the Date of the Status.</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "HTTP/1.1 200 0k",
-          "content": "     HTTP/1.1 200 0k\n{ \n     \"status\": \"Read\"\n}",
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n  \"UserId\":\"5c9132dd1c5d63da0a184964\",\n  \"ReviewId\":\"5c9243a5311a20ca08d1844d\",\n  \"StatusBody\":\"Officia adipisicing cillum in minim ut incididunt non. Reprehenderit labore duis minim reprehenderit minim esse excepteur irure anim incididunt id. Minim eiusmod proident officia voluptate esse esse enim dolor minim officia labore enim.\\r\\n\",\n  \"StatusDate\":\" 2018-12-12T07:50:35 -02:00\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "NoStatus-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"Invalid Status Id\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "./Get_a_user's_read_status.js",
+    "filename": "./MohamedAshraf UpdatedApis.js",
     "groupTitle": "Status"
   },
   {
@@ -2505,15 +2757,15 @@
     "version": "0.0.0",
     "name": "GetUserStatuses",
     "group": "Status",
-    "parameter": {
+    "header": {
       "fields": {
-        "Parameter": [
+        "Header": [
           {
-            "group": "Parameter",
-            "type": "string",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "UserID",
-            "description": "<p>status id</p>"
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
           }
         ]
       }
@@ -2525,22 +2777,15 @@
             "group": "Success 200",
             "type": "string",
             "optional": false,
-            "field": "StatusID",
+            "field": "StatusId",
             "description": "<p>status id</p>"
           },
           {
             "group": "Success 200",
             "type": "string",
             "optional": false,
-            "field": "UserID",
-            "description": "<p>User id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "StatusBody",
-            "description": "<p>the body of this status</p>"
+            "field": "UserId",
+            "description": "<p>User id the user who is to see the status</p>"
           },
           {
             "group": "Success 200",
@@ -2554,26 +2799,57 @@
             "type": "string",
             "optional": false,
             "field": "CommentId",
-            "description": "<p>comment id <code>(optional)</code></p>"
+            "description": "<p>comment id if the type is comment <code>(optional)</code></p>"
           },
           {
             "group": "Success 200",
             "type": "string",
             "optional": false,
             "field": "ReviewId",
-            "description": "<p><code>(optional)</code></p>"
+            "description": "<p>review Id  alawys exisit weather the type is comment or review</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "MakerId",
+            "description": "<p>the id of the user who made the status</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "Type",
+            "description": "<p>Wheather  it is Comment or Review</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Expected Data on Success",
-          "content": "{\n\nStatusID : \"82978363763\"\nUserID : \"82sdfd8363763\"\nReviewID : \"82gf8363763\"\nStatusBody : \"hisa Liked ur comment\"\n}, \n{\nStatusID : \"82978363763\"\nUserID : \"82sdfd8363763\"\n.......\n},.....",
+          "content": "{\n\ntype : Review \nStatusId : \"82978363763\"\nMakerId : \"shjfhghdsg\"\nUserId : \"82sdfd8363763\"\nReviewId : \"82gf8363763\"\n\n}, \n{\n\ntype : Comment\nCommentId : \"hisadsfjhdld\"  \nStatusId : \"82978363763\"\nMakerId : \"shjfhghdsg\"\nUserId : \"82sdfd8363763\"\nReviewId : \"82gf8363763\"\n.......\n},.....",
           "type": "json"
         }
       ]
     },
     "error": {
+      "examples": [
+        {
+          "title": "NotFound statuses:",
+          "content": "   HTTP/1.1 400\n{\n  \"ReturnMsg\":\"No statuses were found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
+          "type": "json"
+        }
+      ],
       "fields": {
         "Error 4xx": [
           {
@@ -2692,16 +2968,98 @@
   },
   {
     "type": "POST",
-    "url": "/user/userID/",
-    "title": "Follow a user",
-    "name": "Follow_user",
+    "url": "/user/Verify.json",
+    "title": "Verifies User From Email",
+    "name": "EmailVerify",
     "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "String",
+            "optional": false,
+            "field": "ReturnMsg",
+            "description": "<p>Notifies that User is Confirmed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "  HTTP/1.1 200 OK\n{\n  \"ReturnMsg\": \"User Confirmed\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "NoTokenMatch-Response:",
+          "content": "  HTTP/1.1 400\n{\n \"ReturnMsg\":\"User Doesn't Exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "POST",
+    "url": "/api/Users/Follow",
+    "title": "Follow a user",
+    "name": "Follow_user",
+    "group": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "id-not-found",
+            "description": "<p>The<code>userId_tobefollowed</code> was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 404 Not Found",
+          "content": "HTTP/1.1 404 Not Found\n{\n\"success\": false,\n\"Message\":\"User Id not  found !\"\n}",
+          "type": "JSON"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "200",
             "optional": false,
             "field": "Follow",
             "description": "<p>Successful or not</p>"
@@ -2710,9 +3068,9 @@
       },
       "examples": [
         {
-          "title": "{",
-          "content": "\n{\n   \"Followed\": true\n}",
-          "type": "Boolean"
+          "title": "HTTP/1.1 200 OK",
+          "content": "HTTP/1.1 200 OK\n   {\n      \"success\": true,\n      \"Message\":\"Successfully done\"\n   }",
+          "type": "JSON"
         }
       ]
     },
@@ -2721,14 +3079,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
             "field": "myuserId",
             "description": "<p>GoodReads User ID</p>"
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
             "field": "userId_tobefollowed",
             "description": "<p>GoodReads User ID</p>"
@@ -2736,20 +3094,117 @@
         ]
       }
     },
-    "error": {
+    "version": "0.0.0",
+    "filename": "./Follow_a_user.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/me/GetUser.json",
+    "title": "Gets Information of Current User",
+    "name": "GetUser",
+    "group": "User",
+    "header": {
       "fields": {
-        "Error 4xx": [
+        "Header": [
           {
-            "group": "Error 4xx",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "id-not-found",
-            "description": "<p>The<code>userId</code> was not found.</p>"
+            "field": "x-auth-token",
+            "description": "<p>Authentication token</p>"
           }
         ]
       }
     },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "UserName",
+            "description": "<p>UserName of Current User</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "UserId",
+            "description": "<p>Id of Current User</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "UserEmail",
+            "description": "<p>Email of Current User</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "FollowingAuthorId",
+            "description": "<p>Ids of Authors Current User is Following</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "FollowingUserId",
+            "description": "<p>Ids of Users Current User is Following</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "FollowersUserId",
+            "description": "<p>Ids of Users Following Current User</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "OwnedBookId",
+            "description": "<p>Ids of Books Owned by Current User</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "    HTTP/1.1 200 OK\n  {\n    \"FollowingAuthorId\": [],\n    \"FollowingUserId\": [],\n    \"FollowersUserId\": [],\n    \"OwnedBookId\": [],\n    \"ShelfId\": [],\n    \"Confirmed\": true,\n    \"UserName\": \"Ahmed1913\",\n    \"UserEmail\": \"AhmedAmrKhaled@gmail.com\",\n    \"UserId\": \"5ca23e81783e981f88e1618c\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "NoTokenMatch-Response:",
+          "content": "  HTTP/1.1 400\n{\n \"ReturnMsg\":\"User Doesn't Exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "UnConfirmedUser-Response:",
+          "content": "   HTTP/1.1 401\n{\n   \"ReturnMsg\" :'Your account has not been verified.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalidtoken-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\":'Invalid token.'\n}",
+          "type": "json"
+        },
+        {
+          "title": "NoTokenSent-Response:",
+          "content": "    HTTP/1.1 401\n{\n  \"ReturnMsg\":'Access denied. No token provided.'\n}",
+          "type": "json"
+        }
+      ]
+    },
     "version": "0.0.0",
-    "filename": "./Follow_a_user.js",
+    "filename": "./MohamedAshraf UpdatedApis.js",
     "groupTitle": "User"
   },
   {
@@ -2868,74 +3323,6 @@
       }
     },
     "filename": "./See_the_current_user's_notifications.js",
-    "groupTitle": "User"
-  },
-  {
-    "type": "get",
-    "url": "/shelf/list",
-    "title": "Get User's Shelves",
-    "version": "0.0.0",
-    "name": "GetUserShelves",
-    "group": "User",
-    "permission": [
-      {
-        "name": "all"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "User-ID",
-            "description": "<p>User ID to get his/her shelves.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "Page",
-            "defaultValue": "1",
-            "description": "<p>page to preview results.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String[]",
-            "optional": false,
-            "field": "UserShelves",
-            "description": "<p>Shelves of the user(List).</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"UserShelves\": [\"Science\",\"Biology\",\"Mathematics\"]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserID-not-found",
-            "description": "<p>The <code>User-ID</code> was not found.</p>"
-          }
-        ]
-      }
-    },
-    "filename": "./Get_User's_Shelves.js",
     "groupTitle": "User"
   },
   {
@@ -3071,7 +3458,166 @@
   },
   {
     "type": "POST",
-    "url": "/user/userID",
+    "url": "/user/SignIn.json",
+    "title": "Signing in by Email and Password",
+    "name": "SignIn",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "UserEmail",
+            "description": "<p>Email of User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "UserPassword",
+            "description": "<p>Password of User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ReturnMsg",
+            "description": "<p>Return Message Log in Successful.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "UserId",
+            "description": "<p>Id of User after Successfully Signing in</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Authentication Access Token</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "    HTTP/1.1 200 OK\n{\n       \"ReturnMsg\": \"Log in Successful.\",\n       \"UserId\": \"5ca23e81783e981f88e1618c\",\n       \"Token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2EyM2U4MTc4M2U5ODFmODhlMTYxOGMiLCJpYXQiOjE1NTQxMzcxMjJ9.rUfROgeq1wgmsUxljg_ZLI2UbFMQubHQEYLKz2zd29Q\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "InvalidEmailorPassword-Response:",
+          "content": "   HTTP/1.1 400\n{\n  \"ReturnMsg\":\"Invalid email or password.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "UnConfirmedUser-Response:",
+          "content": "   HTTP/1.1 401\n{\n  \"ReturnMsg\" :'Your account has not been verified.'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "POST",
+    "url": "/user/SignUp.json",
+    "title": "Signs User Up and Sends Verification Email",
+    "name": "SignUp",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "UserName",
+            "description": "<p>User Name to Sign Up.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "UserEmail",
+            "description": "<p>User Email to Sign Up.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "UserPassword",
+            "description": "<p>User Password to Sign Up.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ReturnMsg",
+            "description": "<p>Notifies that User a verification Email is sent</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "  HTTP/1.1 200 OK\n{\n  \"ReturnMsg\":\"A verification email has been sent to UserEmail.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "InvalidName-Response:",
+          "content": "  HTTP/1.1 400\n{\n \"ReturnMsg\": \"\\\"UserName\\\" length must be at least 3 characters long\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "InvalidEmail-Response:",
+          "content": "  HTTP/1.1 400\n{\n   \"ReturnMsg\": \"\\\"UserEmail\\\" must be a valid email\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "InvalidPassword-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\": \"\\\"UserPassword\\\" length must be at least 6 characters long\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "ExistingEmail-Response:",
+          "content": "    HTTP/1.1 400\n{\n  \"ReturnMsg\":\"User already registered.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./MohamedAshraf UpdatedApis.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "POST",
+    "url": "/api/Users/unFollow",
     "title": "Unfollow a user",
     "name": "Unfollow_user",
     "group": "User",
@@ -3082,35 +3628,36 @@
             "group": "Error 4xx",
             "type": "404",
             "optional": false,
-            "field": "NOTFOUND",
-            "description": "<p>User could not be found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
             "field": "id-not-found",
-            "description": "<p>The<code>ID</code> was not found.</p>"
+            "description": "<p>The<code>userId_tobefollowed</code> was not found.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "HTTP/1.1 404 Not Found",
+          "content": " HTTP/1.1 404 Not Found\n{\n\"success\": false,\n\"Message\":\"User Id not  found !\"\n}",
+          "type": "JSON"
+        }
+      ]
     },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "200",
             "optional": false,
             "field": "UNFollow",
-            "description": "<p>Successful or not</p>"
+            "description": "<p>Successful</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "{",
-          "content": "{\n   \"unFollowed\": true\n}",
-          "type": "Boolean"
+          "title": "HTTP/1.1 200 OK",
+          "content": "HTTP/1.1 200 OK\n   {\n      \"success\": true,\n      \"Message\":\"Successfully done\"\n   }",
+          "type": "JSON"
         }
       ]
     },
@@ -3119,9 +3666,16 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "userId",
+            "field": "myuserId",
+            "description": "<p>GoodReads User ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "userId_tobefollowed",
             "description": "<p>GoodReads User ID</p>"
           }
         ]

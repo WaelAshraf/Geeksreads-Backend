@@ -22,7 +22,7 @@ it("can't accept requests with missing required argument",(done)=>
      .end(done)
  }); 
  //check the behavior of the requests on the datatbase
- it("Normal acceptance for update",(done)=>
+/* it("Normal acceptance for update",(done)=>
  {
      request(app)
      .post("/api/user_status/")
@@ -34,7 +34,7 @@ it("can't accept requests with missing required argument",(done)=>
         })
      .expect(200)
      .end(done)
- }); 
+ });*/ 
 ////////////////////////////////////////////////////////////////////
 //get statuses request Tests
 ////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ it("can't accept requests with wrong argument",(done)=>
      .end(done)
  }) ;
 //check t
-it("didn't find the status ",(done)=>
+/*it("didn't find the status ",(done)=>
 {
      request(app)
      .get("/api/user_status/show")
@@ -74,4 +74,4 @@ it("Normal acceptance for show",(done)=>
     .send({"StatusId":"198998"})// already exicting data
     .expect(200)
     .end(done)
-}); 
+}); */

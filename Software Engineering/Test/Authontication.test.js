@@ -39,7 +39,7 @@ it("Invalid Name Sign Up",  (done) => {
          })
      .expect(401,done);
  });
- it("Send Verification Email",  (done) => {
+ /*it("Send Verification Email",  (done) => {
      request(app)
       .post('/api/Users/')
       .send({
@@ -58,3 +58,4 @@ it("Invalid Name Sign Up",  (done) => {
          })
      .expect(200,done);
 })
+*/
