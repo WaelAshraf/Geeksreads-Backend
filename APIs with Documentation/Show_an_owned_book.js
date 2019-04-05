@@ -3,8 +3,8 @@
  * @apiName GetOwned_Books_Show
  * @apiGroup Owned Books
  * @apiError {404} NOTFOUND Book could not be found
- * @apiParam {Number} current_owner_id the current owner's user id.
- * @apiParam {Number} OWNED_BOOK_ID a unique identifier for the owned book (not a book_id).
+ * @apiParam {Objectid} AccessToken the current owner's user id.
+ * @apiParam {Objectid} OWNED_BOOK_ID a unique identifier for the owned book (not a book_id).
  * 
  * @apiSuccess  BookName
  * 
