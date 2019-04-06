@@ -263,14 +263,14 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
  router.get('/GetBookReadStatus', auth, async (req, res) => {
    let check = await User.findOne({ UserId: req.user._id });
    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-   let Read = await User.findOne({ Read:{ $all: req.body.BookId }});
-   let WantToRead = await User.findOne({ WantToRead:{ $all: req.body.BookId }});
-   let Reading = await User.findOne({ Reading:{ $all: req.body.BookId }});
-   if(!Read || !WantToRead || !Reading) return res.status(400).send({"ReturnMsg": "Invalid Book Id"});
+   let Read =  await User.findOne({ Read:req.body.BookId });
+   let WantToRead = await User.findOne({ WantToRead:req.body.BookId });
+   let Reading =  await User.findOne({ Reading:req.body.BookId });
+   if(!Read && !WantToRead && !Reading) return res.status(400).send({"ReturnMsg": "Invalid Book Id"});
 
   if (Read) res.status(200).send({"ReturnMsg": "Read"});
-  if (WantToRead) res.status(200).send({"ReturnMsg": "Want To Read"});
-  if (Reading) res.status(200).send({"ReturnMsg": "Currently Reading"});
+  else if (WantToRead) {res.status(200).send({"ReturnMsg": "Want To Read"});}
+  else if (Reading) {res.status(200).send({"ReturnMsg": "Currently Reading"});}
  });
 
 
