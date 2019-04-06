@@ -209,8 +209,75 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
 });
 });
 
+
 /**
- * 
+ * @api {GET} /Shelf/GetUserReadStatus.json  Gets information about a book's read Status
+ * @apiName GetUserReadStatus
+ * @apiGroup Shelves
+ *
+ * @apiHeader {String} x-auth-token Authentication token
+ * @apiParam {String} BookId  The Book Id To Get Status for.
+ * @apiSuccess {String} ReturnMsg        Book Status.
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "ReturnMsg":"Read"
+ *     }
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "ReturnMsg":"Currently Reading"
+ *     }
+ *
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "ReturnMsg":"Want to Read"
+ *     }
+ * @apiErrorExample {json} NoBook-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "Invalid Book Id"
+ * }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ * @apiErrorExample {json} NoTokenMatch-Response:
+ *     HTTP/1.1 400
+ *   {
+ *    "ReturnMsg":"User Doesn't Exist"
+ *   }
+ *
+ */
+
+
+
+ router.post('/GetBookReadStatus', auth, async (req, res) => {
+   let check = await User.findOne({ UserId: req.user._id });
+   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+   let Read = await User.findOne({ Read:{ $all: req.body.BookId }});
+   let WantToRead = await User.findOne({ WantToRead:{ $all: req.body.BookId }});
+   let Reading = await User.findOne({ Reading:{ $all: req.body.BookId }});
+   if(!Read || !WantToRead || !Reading) return res.status(400).send({"ReturnMsg": "Invalid Book Id"});
+
+  if (Read) res.status(200).send({"ReturnMsg": "Read"});
+  if (WantToRead) res.status(200).send({"ReturnMsg": "Want To Read"});
+  if (Reading) res.status(200).send({"ReturnMsg": "Currently Reading"});
+ });
+
+
+
+
+/**
+ *
  * @api {POST}  /api/Users/Follow Follow a user
  * @apiName Follow user
  * @apiGroup User
@@ -230,8 +297,8 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
  * "success": false,
  * "Message":"User Id not  found !"
  * }
- * 
- * 
+ *
+ *
  */
 
 
@@ -274,20 +341,20 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
 
 
         });
-  
-  
-  
+
+
+
   //UNFollow User
  /**
- * 
+ *
  * @api {POST}  /api/Users/unFollow Unfollow a user
  * @apiName Unfollow user
  * @apiGroup User
  * @apiError {404} id-not-found The<code>userId_tobefollowed</code> was not found.
- * @apiSuccess {200} UNFollow Successful 
+ * @apiSuccess {200} UNFollow Successful
  * @apiParam  {String} myuserId GoodReads User ID
  * @apiParam  {String} userId_tobefollowed GoodReads User ID
-  
+
  * @apiSuccessExample {JSON}
  * HTTP/1.1 200 OK
    {
@@ -301,8 +368,8 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  * "success": false,
  * "Message":"User Id not  found !"
  * }
- *  
- * 
+ *
+ *
  */
 
   //UNFollow User
@@ -333,7 +400,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
         {
         //console.log(doc);
         res.status(200).json({ //sends a json with 200 code
-          success: true , //unFollow Done 
+          success: true , //unFollow Done
            "Message":"Sucessfully done"});
         }
       });
@@ -344,9 +411,9 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
           {$pull: { // pull from end of array of the users I follow
             FollowingUserId: req.query.userId_tobefollowed
           }});
-          
-         
-          });  
- 
-   
+
+
+          });
+
+
 module.exports = router;
