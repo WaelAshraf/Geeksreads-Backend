@@ -326,6 +326,7 @@
  *
  * @apiHeader {String} x-auth-token Authentication token
  * @apiParam {String} ShelfId Shelf Id to edit.
+ * @apiParam {String} ShelfName New Shelf Name.
  *
  * @apiSuccess {String} ReturnMsg         Notifies User that the Shelf was Edited successfully.
  * @apiSuccessExample {json} Success
@@ -344,6 +345,12 @@
  *     HTTP/1.1 400
  *   {
  *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} InvalidShelf-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":"InValid Shelf Name"
  *   }
  *
  * @apiErrorExample {json} NoTokenSent-Response:
