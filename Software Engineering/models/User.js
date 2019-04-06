@@ -30,31 +30,43 @@ const UserSchema = new mongoose.Schema({
   FollowingAuthorId:{
     type:"array",
     "items":{
-      type:Number
+      type:String
     }
   },
   FollowingUserId:{
     type:"array",
     "items":{
-      type:Number
+      type:String
     }
   },
   FollowersUserId:{
     type:"array",
     "items":{
-      type:Number
+      type:String
     }
   },
   OwnedBookId:{
     type:"array",
     "items":{
-      type:Number
+      type:String
     }
   },
-  ShelfId:{
+  Read:{
     type:"array",
     "items":{
-      type:Number
+      type:String
+    }
+  },
+  WantToRead:{
+    type:"array",
+    "items":{
+      type:String
+    }
+  },
+  Reading:{
+    type:"array",
+    "items":{
+      type:String
     }
   },
   Confirmed:{
