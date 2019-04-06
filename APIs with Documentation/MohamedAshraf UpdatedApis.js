@@ -176,50 +176,50 @@
 
 
 
-//Add Book to Shelf
+ //Edit Book Shelf
 
 
+ /**
+  * @api {POST} /Shelf/EditShelf.json  Edits a Shelf
+  * @apiName EditShelf
+  * @apiGroup Shelves
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam {String} ShelfId Shelf Id to edit.
+  * @apiParam {String} ShelfName New Shelf Name.
+  *
+  * @apiSuccess {String} ReturnMsg         Notifies User that the Shelf was Edited successfully.
+  * @apiSuccessExample {json} Success
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "ReturnMsg": "Shelf was Edited Successfully."
+  *     }
+  *
+  *
+  * @apiErrorExample {json} NoShelf-Response:
+  *     HTTP/1.1 400
+  * {
+  *   "ReturnMsg": "Shelf Does't Exist."
+  * }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} InvalidShelf-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":"InValid Shelf Name"
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  */
 
-/**
- * @api {POST} /Shelf/AddToShelf.json  Add a Book to a Shelf
- * @apiName AddToShelf
- * @apiGroup Shelves
- *
- * @apiHeader {String} x-auth-token Authentication token
- * @apiParam {String} ShelfType Shelf Type to add book to.
- * @apiParam {String} BookId Book id to add to shelf.
- *
- * @apiSuccess {String} ReturnMsg         Notifies User that the Book was added successfully.
- * @apiSuccessExample {json} Success
- *     HTTP/1.1 200 OK
- *     {
- *       "ReturnMsg": "Book was added successfully."
- *     }
- *
- *
- * @apiErrorExample {json} NoBook-Response:
- *     HTTP/1.1 400
- *   {
- *      "ReturnMsg":"Book Doesn't Exist."
- *   }
- *
- * @apiErrorExample {json} BookExist-Response:
- *     HTTP/1.1 400
- * {
- *   "ReturnMsg": "Book Already in Shelf."
- * }
- * @apiErrorExample {json} Invalidtoken-Response:
- *     HTTP/1.1 400
- *   {
- *      "ReturnMsg":'Invalid token.'
- *   }
- *
- * @apiErrorExample {json} NoTokenSent-Response:
- *     HTTP/1.1 401
- * {
- *   "ReturnMsg":'Access denied. No token provided.'
- * }
- */
 
 
 //Add A new Book Shelf
@@ -266,6 +266,52 @@
    *   "ReturnMsg":'Access denied. No token provided.'
    * }
    */
+
+
+   //Add Book to Shelf
+
+
+
+   /**
+    * @api {POST} /Shelf/AddToShelf.json  Add a Book to a Shelf
+    * @apiName AddToShelf
+    * @apiGroup Shelves
+    *
+    * @apiHeader {String} x-auth-token Authentication token
+    * @apiParam {String} ShelfType Shelf Type to add book to.
+    * @apiParam {String} BookId Book id to add to shelf.
+    *
+    * @apiSuccess {String} ReturnMsg         Notifies User that the Book was added successfully.
+    * @apiSuccessExample {json} Success
+    *     HTTP/1.1 200 OK
+    *     {
+    *       "ReturnMsg": "Book was added successfully."
+    *     }
+    *
+    *
+    * @apiErrorExample {json} NoBook-Response:
+    *     HTTP/1.1 400
+    *   {
+    *      "ReturnMsg":"Book Doesn't Exist."
+    *   }
+    *
+    * @apiErrorExample {json} BookExist-Response:
+    *     HTTP/1.1 400
+    * {
+    *   "ReturnMsg": "Book Already in Shelf."
+    * }
+    * @apiErrorExample {json} Invalidtoken-Response:
+    *     HTTP/1.1 400
+    *   {
+    *      "ReturnMsg":'Invalid token.'
+    *   }
+    *
+    * @apiErrorExample {json} NoTokenSent-Response:
+    *     HTTP/1.1 401
+    * {
+    *   "ReturnMsg":'Access denied. No token provided.'
+    * }
+    */
 
 
 
@@ -317,50 +363,6 @@
  * }
  */
 
-
-//Edit Book Shelf
-
-
-/**
- * @api {POST} /Shelf/EditShelf.json  Edits a Shelf
- * @apiName EditShelf
- * @apiGroup Shelves
- *
- * @apiHeader {String} x-auth-token Authentication token
- * @apiParam {String} ShelfId Shelf Id to edit.
- * @apiParam {String} ShelfName New Shelf Name.
- *
- * @apiSuccess {String} ReturnMsg         Notifies User that the Shelf was Edited successfully.
- * @apiSuccessExample {json} Success
- *     HTTP/1.1 200 OK
- *     {
- *       "ReturnMsg": "Shelf was Edited Successfully."
- *     }
- *
- *
- * @apiErrorExample {json} NoShelf-Response:
- *     HTTP/1.1 400
- * {
- *   "ReturnMsg": "Shelf Does't Exist."
- * }
- * @apiErrorExample {json} Invalidtoken-Response:
- *     HTTP/1.1 400
- *   {
- *      "ReturnMsg":'Invalid token.'
- *   }
- *
- * @apiErrorExample {json} InvalidShelf-Response:
- *     HTTP/1.1 400
- *   {
- *      "ReturnMsg":"InValid Shelf Name"
- *   }
- *
- * @apiErrorExample {json} NoTokenSent-Response:
- *     HTTP/1.1 401
- * {
- *   "ReturnMsg":'Access denied. No token provided.'
- * }
- */
 
 
 //Get User's Shelves
@@ -422,7 +424,7 @@
  /**
   * @api {GET} /Shelf/GetUserReadStatus.json  Gets information about a book's read Status
   * @apiName GetUserReadStatus
-  * @apiGroup Status
+  * @apiGroup Shelves
   *
   * @apiHeader {String} x-auth-token Authentication token
   * @apiParam {String} BookId  The Book Id To Get Status for.
@@ -460,3 +462,107 @@
   *   "ReturnMsg":'Access denied. No token provided.'
   * }
   */
+
+
+
+  //Remove Book From Shelf
+
+
+  /**
+   * @api {POST} /Shelf/RemoveFromShelf.json  Removes a Books From User Shelves
+   * @apiName RemoveFromShelf
+   * @apiGroup Shelves
+   *
+   * @apiHeader {String} x-auth-token Authentication token
+   * @apiParam {String} BookId  The Book Id To Remove.
+   * @apiSuccess {String} ReturnMsg        Notifies is Successfully Removed.
+   * @apiSuccessExample {json} Success
+   *     HTTP/1.1 200 OK
+   *     {
+   *       "ReturnMsg":"Book Removed"
+   *     }
+   * @apiErrorExample {json} WrongBookId-Response:
+   *     HTTP/1.1 400
+   * {
+   *   "ReturnMsg": "Book Does't Exist"
+   * }
+   * @apiErrorExample {json} Invalidtoken-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":'Invalid token.'
+   *   }
+   *
+   * @apiErrorExample {json} NoTokenSent-Response:
+   *     HTTP/1.1 401
+   * {
+   *   "ReturnMsg":'Access denied. No token provided.'
+   * }
+   */
+
+   //Update Book Status Want to Read to Reading
+
+
+   /**
+    * @api {POST} /Shelf/UpdateWantToReading.json  Updates Book Status From Want to Read to Reading
+    * @apiName UpdateWantToReading
+    * @apiGroup Shelves
+    *
+    * @apiHeader {String} x-auth-token Authentication token
+    * @apiParam {String} BookId  The Book Id To Update.
+    * @apiSuccess {String} ReturnMsg        Notifies is Successfully updated.
+    * @apiSuccessExample {json} Success
+    *     HTTP/1.1 200 OK
+    *     {
+    *       "ReturnMsg":"Book Status Updated"
+    *     }
+    * @apiErrorExample {json} WrongBookId-Response:
+    *     HTTP/1.1 400
+    * {
+    *   "ReturnMsg": "Book Does't Exist"
+    * }
+    * @apiErrorExample {json} Invalidtoken-Response:
+    *     HTTP/1.1 400
+    *   {
+    *      "ReturnMsg":'Invalid token.'
+    *   }
+    *
+    * @apiErrorExample {json} NoTokenSent-Response:
+    *     HTTP/1.1 401
+    * {
+    *   "ReturnMsg":'Access denied. No token provided.'
+    * }
+    */
+
+    //Update Book Status Reading to Read
+
+
+    /**
+     * @api {POST} /Shelf/UpdateReadingToRead.json  Updates Book Status From Reading to Read
+     * @apiName UpdateReadingToRead
+     * @apiGroup Shelves
+     *
+     * @apiHeader {String} x-auth-token Authentication token
+     * @apiParam {String} BookId  The Book Id To Update.
+     * @apiSuccess {String} ReturnMsg        Notifies is Successfully updated.
+     * @apiSuccessExample {json} Success
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "ReturnMsg":"Book Status Updated"
+     *     }
+     * @apiErrorExample {json} WrongBookId-Response:
+     *     HTTP/1.1 400
+     * {
+     *   "ReturnMsg": "Book Does't Exist"
+     * }
+     * @apiErrorExample {json} Invalidtoken-Response:
+     *     HTTP/1.1 400
+     *   {
+     *      "ReturnMsg":'Invalid token.'
+     *   }
+     *
+     * @apiErrorExample {json} NoTokenSent-Response:
+     *     HTTP/1.1 401
+     * {
+     *   "ReturnMsg":'Access denied. No token provided.'
+     * }
+     */
