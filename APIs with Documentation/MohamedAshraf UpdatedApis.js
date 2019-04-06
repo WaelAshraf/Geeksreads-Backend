@@ -186,7 +186,7 @@
  * @apiGroup Shelves
  *
  * @apiHeader {String} x-auth-token Authentication token
- * @apiParam {String} ShelfId Shelf Id to add book to.
+ * @apiParam {String} ShelfType Shelf Type to add book to.
  * @apiParam {String} BookId Book id to add to shelf.
  *
  * @apiSuccess {String} ReturnMsg         Notifies User that the Book was added successfully.
@@ -203,10 +203,10 @@
  *      "ReturnMsg":"Book Doesn't Exist."
  *   }
  *
- * @apiErrorExample {json} NoShelf-Response:
+ * @apiErrorExample {json} BookExist-Response:
  *     HTTP/1.1 400
  * {
- *   "ReturnMsg": "Shelf Does't Exist."
+ *   "ReturnMsg": "Book Already in Shelf."
  * }
  * @apiErrorExample {json} Invalidtoken-Response:
  *     HTTP/1.1 400
@@ -274,14 +274,16 @@
 
 
 /**
- * @api {post} /Shelf/AddBooksToShelves.json  Add Books to Many Shelves
+ * @api {POST} /Shelf/AddBooksToShelves.json  Add Books to Many Shelves
  * @apiVersion 0.0.0
  * @apiName AddToShelves
  * @apiGroup Shelves
  *
  * @apiHeader {String} x-auth-token Authentication token
- * @apiParam {String[]} ShelIds Shelf Ids(List).
- * @apiParam {String[]} BookIds Book ids to add to shelves(List).
+ *
+ * @apiParam {String[]} ReadBookIds Book ids to add to Read(List).
+ * @apiParam {String[]} WantToReadBookIds Book ids to add to Want to Read(List).
+ * @apiParam {String[]} ReadingBookIds Book ids to add to Reading(List).
  *
  * @apiSuccess {String} ReturnMsg         Books Added Successfully.
  * @apiSuccessExample {json} Success
@@ -297,10 +299,10 @@
  *      "ReturnMsg":"Book Doesn't Exist."
  *   }
  *
- * @apiErrorExample {json} NoShelf-Response:
+ * @apiErrorExample {json} BookExist-Response:
  *     HTTP/1.1 400
  * {
- *   "ReturnMsg": "Shelf Does't Exist."
+ *   "ReturnMsg": "Book Already in Shelf."
  * }
  * @apiErrorExample {json} Invalidtoken-Response:
  *     HTTP/1.1 400
@@ -371,14 +373,26 @@
  *
  * @apiHeader {String} x-auth-token Authentication token
  *
- * @apiSuccess {String[]} UserShelves        Gives the User the Ids of His Shelves.
+ * @apiSuccess {String[]} ReadUserShelf        Gives the User the Book Ids of His Read.
+ * @apiSuccess {String[]} WantToReadUserShelf        Gives the User the Book Ids of His Want to Read.
+ * @apiSuccess {String[]} ReadingUserShelf        Gives the User the Book Ids of His Currently Reading.
  * @apiSuccessExample {json} Success
  *     HTTP/1.1 200 OK
  *     {
- *       "UserShelves": [
- *                          "Shelf1",
- *                          "Shelf2",
- *                          "Shelf3"
+ *       "ReadUserShelf": [
+ *                          "Book1",
+ *                          "Book2",
+ *                          "Book3"
+ *                     ],
+ *       "WantToReadUserShelf": [
+ *                          "Book4",
+ *                          "Book5",
+ *                          "Book6"
+ *                     ],
+ *       "ReadingUserShelf": [
+ *                          "Book7",
+ *                          "Book8",
+ *                          "Book9"
  *                     ]
  *     }
  *
@@ -406,30 +420,33 @@
 
 
  /**
-  * @api {GET} /Shelf/GetUserReadStatus.json  Gets information about a read Status update
+  * @api {GET} /Shelf/GetUserReadStatus.json  Gets information about a book's read Status
   * @apiName GetUserReadStatus
   * @apiGroup Status
   *
   * @apiHeader {String} x-auth-token Authentication token
-  * @apiParam {String} StatusId  The Status Read Id that was Updated.
-  * @apiSuccess {String} UserId        Gives the User  Id that Updated the Status.
-  * @apiSuccess {String} ReviewId        Gives the User the Id of the Review on the Status.
-  * @apiSuccess {String} CommentId        Gives the User the Id of the Comment on the Status.
-  * @apiSuccess {String} StatusBody        Gives the User the Body of the Status.
-  * @apiSuccess {Date} StatusDate        Gives the User the Date of the Status.
+  * @apiParam {String} BookId  The Book Id To Get Status for.
+  * @apiSuccess {String} ReturnMsg        Book Status.
   * @apiSuccessExample {json} Success
   *     HTTP/1.1 200 OK
   *     {
-  *       "UserId":"5c9132dd1c5d63da0a184964",
-  *       "ReviewId":"5c9243a5311a20ca08d1844d",
-  *       "StatusBody":"Officia adipisicing cillum in minim ut incididunt non. Reprehenderit labore duis minim reprehenderit minim esse excepteur irure anim incididunt id. Minim eiusmod proident officia voluptate esse esse enim dolor minim officia labore enim.\r\n",
-  *       "StatusDate":" 2018-12-12T07:50:35 -02:00"
+  *       "ReturnMsg":"Read"
+  *     }
+  * @apiSuccessExample {json} Success
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "ReturnMsg":"Currently Reading"
   *     }
   *
-  * @apiErrorExample {json} NoStatus-Response:
+  * @apiSuccessExample {json} Success
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "ReturnMsg":"Want to Read"
+  *     }
+  * @apiErrorExample {json} NoBook-Response:
   *     HTTP/1.1 400
   * {
-  *   "ReturnMsg": "Invalid Status Id"
+  *   "ReturnMsg": "Invalid Book Id"
   * }
   * @apiErrorExample {json} Invalidtoken-Response:
   *     HTTP/1.1 400
