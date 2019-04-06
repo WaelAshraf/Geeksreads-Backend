@@ -260,7 +260,7 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
 
 
 
- router.post('/GetBookReadStatus', auth, async (req, res) => {
+ router.get('/GetBookReadStatus', auth, async (req, res) => {
    let check = await User.findOne({ UserId: req.user._id });
    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
    let Read = await User.findOne({ Read:{ $all: req.body.BookId }});
