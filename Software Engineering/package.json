@@ -6,7 +6,7 @@
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
     "apidoc": "^0.17.7",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "config": "^3.0.1",
     "crypto": "^1.0.1",
@@ -22,7 +22,6 @@
     "mongoose": "^5.4.19",
     "nodemailer": "^5.1.1",
     "nodemon": "^1.18.10",
-
     "sendgrid": "^5.2.3",
     "supertest": "^4.0.2"
   },
@@ -33,7 +32,6 @@
   "scripts": {
     "test": "nyc mocha --timeout 15000"
   },
-  
   "author": "",
   "license": "ISC"
 }

@@ -36,10 +36,10 @@ app.use('/api/Users', Users);
 app.use('/api/Authors',Authors);
 app.use('/api/Auth', Auth);
 app.use('/api/user_status',Statuses);
-app.use('/api/comments/',Comments);
+app.use('/api/comments/',Comments); 
 app.use('/api/Resources',Resources);
 // the port where the application run
-const port = process.env.PORT || 6001;
+const port = process.env.PORT || 6000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 // importannt Exports

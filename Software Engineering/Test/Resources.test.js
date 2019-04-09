@@ -1,6 +1,6 @@
 const request = require('supertest');
 var app = require('../DB').app;
-it("Invalid ResourceID",  (done) => {
+it("Not Found ResourceID",  (done) => {
     request(app)
      .put('/Resource.json')
      .send({
@@ -9,7 +9,7 @@ it("Invalid ResourceID",  (done) => {
     .expect(404,done); 
 });
 
-it("Invalid ResourceID",  (done) => {
+it("Not Found ResourceID",  (done) => {
     request(app)
      .put('/Resource.json')
      .send({
@@ -17,7 +17,7 @@ it("Invalid ResourceID",  (done) => {
         })
     .expect(404,done);
 });
-it("Invalid ResourceID",  (done) => {
+it("Not Found ResourceID",  (done) => {
     request(app)
      .put('/Resource.json')
      .send({
@@ -35,7 +35,7 @@ it("NotFound ResourceID",  (done) => {
     .expect(404,done);
 });
 
-it("Invalid ResourceID",  (done) => {
+it("Not Found ResourceID",  (done) => {
     request(app)
      .put('/Resource.json')
      .send({
