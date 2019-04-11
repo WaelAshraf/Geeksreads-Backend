@@ -49,22 +49,30 @@ const BookSchema = new mongoose.Schema({
     unique: true
   },
   Genre:{
-    type:String
+    type:String,
+    minlength: 3,
+    maxlength: 50
   }
   });
 
-UserSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
-  return token;
-}
+
 const Book = mongoose.model('Book', BookSchema);
-function validateUser(Book) {
+function validateBook(Book) {
 const schema = {
 Title: Joi.string().min(3).max(50).required(),
-UserEmail: Joi.string().min(6).max(255).required().email(),
-UserPassword: Joi.string().min(6).max(255).required()
+Cover: Joi.string(),
+ReadStatus: Joi.string(),
+Publisher: Joi.string(),
+Published: Joi.Date(),
+Description: Joi.string().min(1).max(1024),
+Pages: Joi.Number(),
+BookId: Joi.string().required(),
+AuthorId: Joi.string().required(),
+Isbn: Joi.string().required(),
+Genre: Joi.string().min(3).max(50)
 };
 return Joi.validate(Book, schema);
 }
 exports.Book = Book;
 exports.validate= validateBook;
+
