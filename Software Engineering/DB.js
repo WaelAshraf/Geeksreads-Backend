@@ -13,6 +13,7 @@ const Authors = require('./routes/Authors');
 const Auth = require('./routes/Auth');
 const Statuses = require('./routes/Statuses');
 const Comments = require("./routes/commentsController");
+const Review = require("./routes/reviewsController");
 const Resources= require("./routes/Resources");
 
 
@@ -37,6 +38,7 @@ app.use('/api/Authors',Authors);
 app.use('/api/Auth', Auth);
 app.use('/api/user_status',Statuses);
 app.use('/api/comments/',Comments); 
+app.use('/api/review/',Review);
 app.use('/api/Resources',Resources);
 // the port where the application run
 const port = process.env.PORT || 6000;
