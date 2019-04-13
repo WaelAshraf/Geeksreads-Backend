@@ -76,7 +76,7 @@ router.get("/find",(req,res)=>
      else if (req.body.Isbn!=null)
      {
         field = 'Isbn';
-        given = req.body.Isbn!=null;
+        given = req.body.Isbn;
      }
      else
      {
