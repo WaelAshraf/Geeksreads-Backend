@@ -381,17 +381,17 @@
  * @apiSuccessExample {json} Success
  *     HTTP/1.1 200 OK
  *     {
- *       "ReadUserShelf": [
+ *       "Read": [
  *                          "Book1",
  *                          "Book2",
  *                          "Book3"
  *                     ],
- *       "WantToReadUserShelf": [
+ *       "WantToRead": [
  *                          "Book4",
  *                          "Book5",
  *                          "Book6"
  *                     ],
- *       "ReadingUserShelf": [
+ *       "Reading": [
  *                          "Book7",
  *                          "Book8",
  *                          "Book9"
