@@ -170,7 +170,7 @@ router.post('/verify', auth, async (req, res) => {
  */
 
 
-router.post('/', async (req, res) => {
+router.post('/SignUp', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
   let user = await User.findOne({ UserEmail: req.body.UserEmail });
@@ -275,6 +275,65 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
 
 
 
+ //Get User's Shelves
+
+
+ /**
+  * @api {GET} /Shelf/GetUserShelves.json  Gets All User's Shelves
+  * @apiName GetUserShelves
+  * @apiGroup Shelves
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  *
+  * @apiSuccess {String[]} ReadUserShelf        Gives the User the Book Ids of His Read.
+  * @apiSuccess {String[]} WantToReadUserShelf        Gives the User the Book Ids of His Want to Read.
+  * @apiSuccess {String[]} ReadingUserShelf        Gives the User the Book Ids of His Currently Reading.
+  * @apiSuccessExample {json} Success
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "Read": [
+  *                          "Book1",
+  *                          "Book2",
+  *                          "Book3"
+  *                     ],
+  *       "WantToRead": [
+  *                          "Book4",
+  *                          "Book5",
+  *                          "Book6"
+  *                     ],
+  *       "Reading": [
+  *                          "Book7",
+  *                          "Book8",
+  *                          "Book9"
+  *                     ]
+  *     }
+  *
+  * @apiErrorExample {json} NoShelvesExist-Response:
+  *     HTTP/1.1 400
+  * {
+  *   "ReturnMsg": "User has No Shelves"
+  * }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  */
+
+
+  router.get('/GetUserShelves', auth, async (req, res) => {
+    let check = await User.findOne({ UserId: req.user._id });
+    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
+    res.status(200).send(user);
+  });
+
 
 /**
  *
@@ -309,7 +368,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
   console.log(req.params.userId_tobefollowed);
   console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
   console.log("my"+req.query.myuserid);*/
-    mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
+    mongoose.connection.collection("users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
       {
           UserId :  req.query.userId_tobefollowed //access document of user i want to follow
       },
@@ -330,7 +389,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
           "Message":"Sucessfully done"});
        }
     });
-    mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
+    mongoose.connection.collection("users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
         {
             UserId :req.query.myuserid//access document of currently logged In user
         },
@@ -379,7 +438,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
     console.log(req.params.userId_tobefollowed);
     console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
     console.log("my"+req.query.myuserid);*/
-      mongoose.connection.collection("Users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
+      mongoose.connection.collection("users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
 
         {
             UserId :  req.query.userId_tobefollowed //access document of user i want to unfollow
@@ -404,7 +463,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
            "Message":"Sucessfully done"});
         }
       });
-      mongoose.connection.collection("Users").updateOne(
+      mongoose.connection.collection("users").updateOne(
           {
               UserId :req.query.myuserid//access document of currently logged In user
           },
