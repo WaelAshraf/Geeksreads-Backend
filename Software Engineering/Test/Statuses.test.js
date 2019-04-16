@@ -22,7 +22,7 @@ it("can't accept requests with missing required argument",(done)=>
      .end(done)
  }); 
  //check the behavior of the requests on the datatbase
-/* it("Normal acceptance for update",(done)=>
+ it("Normal acceptance for update",(done)=>
  {
      request(app)
      .post("/api/user_status/")
@@ -34,7 +34,7 @@ it("can't accept requests with missing required argument",(done)=>
         })
      .expect(200)
      .end(done)
- });*/ 
+ });
 ////////////////////////////////////////////////////////////////////
 //get statuses request Tests
 ////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ it("can't accept requests with wrong argument",(done)=>
      .end(done)
  }) ;
 //check t
-/*it("didn't find the status ",(done)=>
+it("didn't find the status ",(done)=>
 {
      request(app)
      .get("/api/user_status/show")
@@ -74,4 +74,43 @@ it("Normal acceptance for show",(done)=>
     .send({"StatusId":"198998"})// already exicting data
     .expect(200)
     .end(done)
-}); */
+}); 
+//remove statuses request Tests
+////////////////////////////////////////////////////////////////////
+//check the validations of the requests  
+it("can't accept requests with missing required argument for delete",(done)=>
+ {
+     request(app)
+     .post("/api/user_status/delete")
+     .send ({})
+     .expect(400)
+     .end(done)
+ }) ;
+//check the validations of the requests  
+it("can't accept requests with wrong argument for delete",(done)=>
+{
+     request(app)
+     .post("/api/user_status/delete")
+     .send ({"bookId ":"1989"})
+     .expect(400)
+     .end(done)
+ }) ;
+//check t
+it("didn't find the status for delete",(done)=>
+{
+     request(app)
+     .post("/api/user_status/delete")
+     .send({"StatusId":"198928"})
+     .expect(404)
+     .end(done)
+ }) ;
+//the resopnse of the right request 
+ 
+it("Normal acceptance for delete",(done)=>
+{
+    request(app)
+    .post("/api/user_status/delete")
+    .send({"StatusId":"198998"})// already exicting data
+    .expect(200)
+    .end(done)
+}); 
