@@ -1,7 +1,57 @@
+//Update User Information (Name, Photo, Date)
+
+
+/**
+ *
+ * @api {POST}  /user/UpdateUserInfo.json Update User Information (UserName, Photo, Date).
+ * @apiName SignIn
+ * @apiGroup User
+ *
+ * @apiParam  {String} NewUserName New User Name
+ * @apiParam  {String} NewUserPhoto New User Photo
+ * @apiParam  {Date} NewUserBirthDate New User BirthDate
+ * @apiSuccess {String}   ReturnMsg   Return Message Update is Successful
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ * {
+ *        "ReturnMsg": "Update Successful"
+ *   }
+ * @apiErrorExample {json} InvalidName-Response:
+ *     HTTP/1.1 400
+ *  {
+ *    "ReturnMsg":"Error Detail"
+ *  }
+ * @apiErrorExample {json} InvalidDate-Response:
+ *     HTTP/1.1 400
+ *  {
+ *    "ReturnMsg":"Error Detail"
+ *  }
+ * @apiErrorExample {json} InvalidPhoto-Response:
+ *     HTTP/1.1 400
+ *  {
+ *    "ReturnMsg":"Error Detail"
+ *  }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ *
+ *
+ */
+
+
+
+
 
 
 //Login Authentication
-
 
 
 /**
