@@ -12,7 +12,7 @@ const Book= require('../models/Book.model');
 
 //Find book by ID.
 /**
- * @api {GET} /book/get Find book by BookId
+ * @api {GET} /api/Book/byid/?book_id=Value Find book by BookId
  * @apiVersion 0.0.0
  * @apiName GetBook
  * @apiGroup Books
@@ -54,7 +54,7 @@ const Book= require('../models/Book.model');
  * @apiError Book-not-found   The <code>Book</code> was not found.
  */
 
-router.get('/', async (req,res) => {
+router.get('/byid', async (req,res) => {
   
         
       
@@ -169,7 +169,7 @@ router.get("/find",(req,res)=>
 //Get reviews from book by id 
 /**
  * 
- * @api {GET} /api/Book/byid/?book_id=Value Get book reviews by id 
+ * @api {GET} /api/Book/reviewbyid/?book_id=Value Get book reviews by id 
  * @apiName GetReviewsbyBookId
  * @apiGroup Books
  * @apiVersion  0.0.0
@@ -201,7 +201,7 @@ router.get("/find",(req,res)=>
  */
 
 
-    router.get('/byid', async (req,res) => {
+    router.get('/reviewbyid', async (req,res) => {
   
         
       
