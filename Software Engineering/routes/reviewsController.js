@@ -44,13 +44,15 @@ Router.post('/remove',async (req,res)=>{
     const { error } = validateget(req.body);
     if (error) return res.status(400).send(error.details[0].message);
  review.findOneAndDelete({'reviewId':req.body.reviewId},(err)=>{
-    if(err){res.status(400).json({"deleteReviewSuc": false})};
-    res.status(200).json({"deleteReviewSuc": true});
+    if(err)
+    {res.status(400).json({"deleteReviewSuc": false})}
+    else{ 
+     res.status(200).json({"deleteReviewSuc": true});}
 })
 })
 function validateget(reqin) {
     const schema = {
-    ReviewId:Joi.string().min(24),
+    ReviewId:Joi.string().min(24).max(24),
     };
     return Joi.validate(reqin, schema);
     }

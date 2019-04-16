@@ -9,12 +9,12 @@ it("Invalid comment Body",  (done) => {
         ,"userName":"dodoshark"
         ,"BookId":"5c9114a012d11bb226399497"
         , "ReviewId":"5c9243a5beb4101160e23fdd"
-        ,"userId":"5c9132dd47cb909f7fbbe885"
+        ,"userId":"5c9620083a3c692cd445a32a"
         ,"date":"2008-09-15T15:53:00"
         })
     .expect(400,done);
 });
-it("Invalid comment userName",  (done) => {
+it("Invalid comment userId",  (done) => {
     request(app)
      .post('/api/comments')
      .send({
@@ -22,7 +22,7 @@ it("Invalid comment userName",  (done) => {
         ,"userName":"k"
         ,"BookId":"5c9114a012d11bb226399497"
         , "ReviewId":"5c9243a5beb4101160e23fdd"
-        ,"userId":"5c9132dd47cb909f7fbbe885"
+        ,"userId":"5c9620083a3c692cd445a32apew"
         ,"date":"2008-09-15T15:53:00"
         })
     .expect(400,done);
@@ -35,7 +35,7 @@ it("Invalid comment BookId",  (done) => {
         ,"userName":"caffAddict"
         ,"BookId":"5c9114a012d11bb2263994"
         , "ReviewId":"5c9243a5beb4101160e23fdd"
-        ,"userId":"5c9132dd47cb909f7fbbe885"
+        ,"userId":"5c9620083a3c692cd445a32a"
         ,"date":"2008-09-15T15:53:00"
         })
     .expect(400,done);
@@ -48,7 +48,7 @@ it("Invalid comment ReviewId",  (done) => {
         ,"userName":"caffAddict"
         ,"BookId":"5c9114a012d11bb226399497"
         , "ReviewId":"5c9243a5beb4101160e"
-        ,"userId":"5c9132dd47cb909f7fbbe885"
+        ,"userId":"5c9620083a3c692cd445a32a"
         ,"date":"2008-09-15T15:53:00"
         })
     .expect(400,done);
@@ -61,7 +61,7 @@ it("Invalid comment userId",  (done) => {
         ,"userName":"dodoshark"
         ,"BookId":"5c9114a012d11bb226399497"
         , "ReviewId":"5c9243a5beb4101160e23fdd"
-        ,"userId":"5c9132dd47cb909f7fbbe"
+        ,"userId":"5c9620083a3c692cd445a32akkk"
         ,"date":"2008-09-15T15:53:00"
         })
     .expect(400,done);
@@ -74,7 +74,7 @@ it("Invalid comment userId",  (done) => {
         ,"userName":"dodoshark"
         ,"BookId":"5c9114a012d11bb226399497"
         , "ReviewId":"5c9243a5beb4101160e23fdd"
-        ,"userId":"5c9132dd47cb909f7fbbe"
+        ,"userId":"5c9620083a3c692cd445"
         ,"date":"22-5"
         })
     .expect(400,done);
@@ -87,7 +87,7 @@ it("Valid Request",  (done) => {
             ,"userName":"coffeAddict"
             ,"BookId":"5c9114a012d11bb226399497"
             , "ReviewId":"5c9243a5beb4101160e23fdd"
-            ,"userId":"5c9132dd47cb909f7fbbe885"
+            ,"userId":"5c9620083a3c692cd445a32a"
             ,"date":"2008-09-15T15:53:00"
         })
     .expect(200,done);
