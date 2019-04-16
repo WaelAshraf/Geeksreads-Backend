@@ -15,7 +15,7 @@ const Statuses = require('./routes/Statuses');
 const Comments = require("./routes/commentsController");
 const Review = require("./routes/reviewsController");
 const Resources= require("./routes/Resources");
-
+const Books = require("./routes/Books");
 
 const app = express();
 
@@ -40,6 +40,7 @@ app.use('/api/user_status',Statuses);
 app.use('/api/comments/',Comments); 
 app.use('/api/review/',Review);
 app.use('/api/Resources',Resources);
+app.use ('/api/book',Books);
 // the port where the application run
 const port = process.env.PORT || 6000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
