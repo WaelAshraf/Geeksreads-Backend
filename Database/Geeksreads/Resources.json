@@ -1,0 +1,10 @@
+{"_id":{"$oid":"5c92769fe0a57a14e7499807"},"ResourceId":"5c9275cf1215a31756b4a6ab","ReviewId":"5c9243a5beb4101160e23fdd","UserId":"5c9132dd47cb909f7fbbe875","Likes":96.0,"Type":"Review"}
+{"_id":{"$oid":"5c92769fe0a57a14e7499808"},"ResourceId":"5c9275cf8b6a8eaff276f757","ReviewId":"5c9243a5be95a16e4d1192e0","UserId":"5c9132ddf03b9d5d978d9a71","Likes":29.0,"Type":"Review"}
+{"_id":{"$oid":"5c92769fe0a57a14e7499809"},"ResourceId":"5c9275cfc64b7939acbf7d32","ReviewId":"5c9243a5311a20ca08d1844d","UserId":"5c9132dd1c5d63da0a184964","Likes":-30.0,"Type":"Review"}
+{"_id":{"$oid":"5c92769fe0a57a14e749980a"},"ResourceId":"5c9275cfb04c95ee1a76d003","ReviewId":"5c9243a57703fa12e7494dad","UserId":"5c9132dd99a8a3609cca3406","Likes":-30.0,"Type":"Review"}
+{"_id":{"$oid":"5c92769fe0a57a14e749980b"},"ResourceId":"5c9275cf4b4f7e5c978b894b","ReviewId":"5c9243a55d7ae3803fb6e11f","UserId":"5c9132dd0c408db9e777d5ee","Likes":-44.0,"Type":"Review"}
+{"_id":{"$oid":"5c92769fe0a57a14e749980c"},"ResourceId":"5c9275cf8e519160a8a32a49","CommentId":"5c924677fac9562e332b0af8","UserId":"5c9132dd47cb909f7fbbe875","Likes":95.0,"Type":"Comment"}
+{"_id":{"$oid":"5c92769fe0a57a14e749980d"},"ResourceId":"5c9275cf65f40e9bf8f68268","CommentId":"5c9246772b3efcbac20f7bb3","UserId":"5c9132ddf03b9d5d978d9a71","Likes":-86.0,"Type":"Comment"}
+{"_id":{"$oid":"5c92769fe0a57a14e749980e"},"ResourceId":"5c9275cf7cba63c7526f29bf","CommentId":"5c924677ea0068fca04580ec","UserId":"5c9132dd1c5d63da0a184964","Likes":44.0,"Type":"Comment"}
+{"_id":{"$oid":"5c92769fe0a57a14e749980f"},"ResourceId":"5c9275cf162b7df62254d35b","CommentId":"5c924677d2fb198f9aafa3f3","UserId":"5c9132dd99a8a3609cca3406","Likes":85.0,"Type":"Comment"}
+{"_id":{"$oid":"5c92769fe0a57a14e7499810"},"ResourceId":"5c9275cf08e1a5abaeeb0125","CommentId":"5c924677ccafe656788f2f78","UserId":"5c9132dd99a8a3609cca3406","Likes":34.0,"Type":"Comment"}
