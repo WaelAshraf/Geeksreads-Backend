@@ -425,9 +425,9 @@
  *
  * @apiHeader {String} x-auth-token Authentication token
  *
- * @apiSuccess {String[]} ReadUserShelf        Gives the User the Book Ids of His Read.
- * @apiSuccess {String[]} WantToReadUserShelf        Gives the User the Book Ids of His Want to Read.
- * @apiSuccess {String[]} ReadingUserShelf        Gives the User the Book Ids of His Currently Reading.
+ * @apiSuccess {String[]} Read        Gives the User the Book Ids of His Read.
+ * @apiSuccess {String[]} WantToRead       Gives the User the Book Ids of His Want to Read.
+ * @apiSuccess {String[]} Reading       Gives the User the Book Ids of His Currently Reading.
  * @apiSuccessExample {json} Success
  *     HTTP/1.1 200 OK
  *     {
