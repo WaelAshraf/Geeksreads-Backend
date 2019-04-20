@@ -8,6 +8,7 @@ module.exports = function (req, res, next) {
   try {
     const decoded = jwt.verify(token, config.get('jwtPrivateKey')); //Decodes token to the Current User that sent it
     req.user = decoded; // Forwards the User to other APIs
+  //  console.log(decoded);
     next();
   }
   catch (ex) {
