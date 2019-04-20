@@ -1,4 +1,5 @@
 const config = require('config');
+const isImageUrl = require('is-image-url');
 const crypto = require('crypto');
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
@@ -264,7 +265,12 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   const { error } = DateValidate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
   const user = await User.findById(req.user._id).select('-UserPassword');
-  if(req.body.NewUserPhoto!=null) user.Photo = req.body.NewUserPhoto;
+  if(req.body.NewUserPhoto!=null)
+  {
+    var piccheck=isImageUrl(req.body.NewUserPhoto);
+    if(!piccheck) return res.status(400).send({"ReturnMsg":"Invalid Image"});
+    user.Photo = req.body.NewUserPhoto;
+  }
   if(req.body.NewUserName!=null) user.UserName = req.body.NewUserName;
   if(req.body.NewUserBirthDate!=null) user.UserBirthDate = req.body.NewUserBirthDate;
   user.save();
