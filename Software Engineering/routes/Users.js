@@ -176,9 +176,10 @@ router.post('/SignUp', async (req, res) => {
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
   let user = await User.findOne({ UserEmail: req.body.UserEmail });
   if (user) return res.status(400).send({"ReturnMsg":"User already registered."});
+
 user = new User ({
   "UserName":req.body.UserName,
-  "UserEmail":req.body.UserEmail,
+  "UserEmail":req.body.UserEmail.toLowerCase(),
   "UserPassword":req.body.UserPassword
 });
 const salt = await bcrypt.genSalt(10);
