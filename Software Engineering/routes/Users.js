@@ -119,7 +119,8 @@ router.post('/verify', auth, async (req, res) => {
 
   let check = await User.findOne({ UserEmail: req.user.UserEmail });
   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-  const user = await User.findById(req.user.UserEmail).select('-UserPassword');
+  const user = await User.findOne({UserEmail: req.user.UserEmail }).select('-UserPassword');
+//  console.log(user);
   user.Confirmed = true;
   user.save();
 //  const token = user.generateAuthToken();
@@ -175,7 +176,7 @@ router.post('/verify', auth, async (req, res) => {
 router.post('/SignUp', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
-  let user = await User.findOne({ UserEmail: req.body.UserEmail });
+  let user = await User.findOne({ UserEmail: req.body.UserEmail.toLowerCase() });
   if (user) return res.status(400).send({"ReturnMsg":"User already registered."});
 
 user = new User ({
@@ -187,7 +188,7 @@ const salt = await bcrypt.genSalt(10);
 user.UserId = user._id;
 user.UserPassword = await bcrypt.hash(user.UserPassword, salt);
 await user.save();
-const token = jwt.sign({ UserEmail: this.UserEmail }, config.get('jwtPrivateKey'));;
+const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'));;
 let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
