@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const {User,validate,DateValidate} = require('../models/User');
+const {Notification}= require('../models/Notifications');
 const mongoose = require('mongoose');
 const nodeMailer = require('nodemailer');
 //const sgMail = require('@sendgrid/mail');
@@ -553,5 +554,118 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
 
           });
 
+  //Get User Notifications
+ 
+  /**
+ * @api{Get} /User/Notifications Get User Status
+ * @apiVersion 0.0.0
+ * @apiName Get User's Notification
+ * @apiGroup User
+ * @apiHeader {String} x-auth-token Authentication token
+ *
+ * @apiSuccess {string} NotificationType  Wheather  it is CommentLike or ReviewLike or Comment
+ * @apiSuccess {string} NotificationId status id
+ *
+ *@apiSuccess {string} UserId User id the user who must be notified
+ *@apiSuccess {string} UserPhoto photo of the user who must be notifed in case of Commentlike/reviewlike He will be the maker of the review or the comment in case of comment he would be the maker of the reviwe and the Maker is the maker of the commnet 
+ *@apiSuccess {string} UserName name of the same pervious User
+ *
+ * @apiSuccess {string} CommentId comment id if the type is comment <code>(optional)</code>
+ * @apiSuccess {string} CommentBody Comment the comment body 
+ * @apiSuccess {date} CommentDate The date of the comment
+ * @apiSuccess {Number}  CommentLikesCount number of people liked this comment
+ *  
+ * 
+ * @apiSuccess {string} BookId the Id of the book rated or reviewed
+ * @apiSuccess {string} BookName the name (title) of the book rated or reviewed
+ * @apiSuccess {string} BookPhoto the URL of the cover Photo of the book rated or revied
+ * 
+ * 
+ * @apiSuccess {string} ReviewId  review Id  alawys exisit weather the type is comment or review
+ * @apiSuccess {string} ReviewBody Review Body in case of comment on review or reviews a book 
+ * @apiSuccess {date}  ReviewDate the date of the review
+ * @apiSuccess {Number}  ReviewLikesCount numbr of the people who liked the the review
+ * 
+ * @apiSuccess {string} MakerId the id of the user who made the status( Commented or rated or reviewd)
+ * @apiSuccess {string} MakerPhoto the URL of the Photo of the User who did the thing ( Commented or rated or reviewd)
+ * @apiSuccess {string}  MakerName the Name of the User Who made the status ( Commented or rated or reviewd)
+ * 
+ *  @apiSuccessExample  Expected Data on Success
+ * {
+ *
+ *  StatusType : Review
+ * "StatusId" : "82978363763"
+ * "MakerId" : "shjfhghdsg"
+ * "UserId" : "82sdfd8363763"
+ * "ReviewId" : "82gf8363763"
+ * "ReviewLikesCount": 11,
+ *           "body": "Hello World !",
+ *           
+ *
+ * },
+ * {
+ *
+ * type : Comment
+ * CommentId : "hisadsfjhdld"
+ * StatusId : "82978363763"
+ * MakerId : "shjfhghdsg"
+ * UserId : "82sdfd8363763"
+ * ReviewId : "82gf8363763"
+ * .......
+ * },.....
+ * @apiErrorExample {json} NotFound statuses:
+ *     HTTP/1.1 400
+ *  {
+ *    "ReturnMsg":"No statuses were found"
+ *  }
+ *
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ * @apiError User-Not-Found The <code>User</code> was not found
+ * @apiError Status-Not-Found The <code>Status</code> was not found
+ */
 
+
+router.get("/show",auth ,(req,res)=>
+{
+     if(req.body.UserId==null)
+     {
+        return  res.status(400).send("Bad request no UserID  Id is there");
+    }
+
+      if (req.body.UserId.length == 0)
+     {
+       return  res.status(400).send("Bad request no Satatus Id is there");
+     }
+
+
+  Notification.find( {'UserId':req.body.UserId},(err,doc)=>
+
+   {
+    if(!doc)
+    {
+   return res.status(404).send("No statuses were found");
+    }
+    if(doc.lenght==0)
+    {
+   return res.status(404).send("No statuses were found");
+    }
+
+    res.status(200).send(
+        doc
+    )
+   }
+)
+
+
+});
 module.exports = router;

@@ -26,7 +26,6 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
     maxlength: 1024
-
   },
   Photo :{
     type: String,
@@ -40,6 +39,7 @@ const UserSchema = new mongoose.Schema({
       type:String
     }
   },
+
   FollowingUserId:{
     type:"array",
     "items":{
@@ -52,6 +52,26 @@ const UserSchema = new mongoose.Schema({
       type:String
     }
   },
+LikedComments:{
+  type:"array",
+  "items":{
+    type:String
+  }
+},
+LikedReviews:{
+  type:"array",
+  "items":{
+    type:String
+  }
+},
+
+RatedBooks:{
+  type:"array",
+  "items":{
+    type:String
+  }
+},
+
   OwnedBookId:{
     type:"array",
     "items":{
