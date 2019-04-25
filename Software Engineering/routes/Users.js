@@ -14,6 +14,7 @@ const nodeMailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
 const Author= require('../models/Author.model');
+const Joi = require('joi');
 
 //get current User
 
@@ -82,14 +83,14 @@ router.get('/me', auth, async (req, res) => {
 //////////get user by id////////////
 router.get('/getUser',async(req,res)=>{
 
-  const {error}=validateUserOnly(req.body);
+  const {error}=validateUserOnly(req.query);
   if (error) return res.status(400).send(error.details[0].message);
 
 const GettingUser=new User();
 
-GettingUser=User.findById({UserId: req.body.UserId},'UserName UserEmail UserBirthDate Photo FollowingAuthorId FollowingUserId FollowersUserId Read WantToRead Reading Confirmed',(err,doc)=>
+GettingUser=User.findById({UserId: req.query.UserId},'UserName UserEmail UserBirthDate Photo FollowingAuthorId FollowingUserId FollowersUserId Read WantToRead Reading Confirmed',(err,doc)=>
 {
-  if(err) { res.status(400).send("uset doesn't exist!")}
+  if(err) { res.status(400).send("user doesn't exist!")}
 
        if(!doc) { res.status(400).send("error while retrieving data!")}
        if(doc)
