@@ -42,12 +42,12 @@ Router.post('/add', async (req, res) => {
 ////////////////////// Get Review By ID /////////////////
 Router.get('/getReview',async(req,res)=>{
     
-    const {error} = validateget(req.body);
+    const {error} = validateget(req.query);
 
     if(error) return res.status(400).send(error.details[0].message);
 
    const gettingReview= new review();
-   gettingReview= review.findById( {reviewId : req.body.reviewId},'bookId rating reviewBody reviewDate shelf userId userName photo likesCount',(err,doc)=>
+   gettingReview= review.findById( {reviewId : req.query.ReviewId},'bookId rating reviewBody reviewDate shelf userId userName photo likesCount',(err,doc)=>
    {
        if(err) { res.status(400).send("review doesn't exist!")}
 
