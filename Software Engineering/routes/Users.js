@@ -70,12 +70,36 @@ const Author= require('../models/Author.model');
  */
 
 router.get('/me', auth, async (req, res) => {
+
   let check = await User.findOne({ UserId: req.user._id });
   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
   const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v ');
   if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
   res.status(200).send(user);
 });
+
+////////////////////////
+//////////get user by id////////////
+router.get('/getUser',async(req,res)=>{
+
+  const {error}=validateUserOnly(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+const GettingUser=new User();
+
+GettingUser=User.findById({UserId: req.body.UserId},'UserName UserEmail UserBirthDate Photo FollowingAuthorId FollowingUserId FollowersUserId Read WantToRead Reading Confirmed',(err,doc)=>
+{
+  if(err) { res.status(400).send("uset doesn't exist!")}
+
+       if(!doc) { res.status(400).send("error while retrieving data!")}
+       if(doc)
+       { res.status(200).send(doc)}
+
+})
+  
+})
+
+///////////////////////////////
 
 
 
@@ -668,4 +692,11 @@ router.get("/show",auth ,(req,res)=>
 
 
 });
+
+          function validateUserOnly(reqin) {
+            const schema = {
+            UserId:Joi.string().min(24).max(24),
+            };
+            return Joi.validate(reqin, schema);
+            }
 module.exports = router;
