@@ -589,7 +589,8 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  *
  * @apiSuccess {string} NotificationType  Wheather  it is CommentLike or ReviewLike or Comment
  * @apiSuccess {string} NotificationId status id
- *
+  *  @apiSuccess {boolean} Seen
+ * 
  *@apiSuccess {string} UserId User id the user who must be notified
  *@apiSuccess {string} UserPhoto photo of the user who must be notifed in case of Commentlike/reviewlike He will be the maker of the review or the comment in case of comment he would be the maker of the reviwe and the Maker is the maker of the commnet 
  *@apiSuccess {string} UserName name of the same pervious User
@@ -613,7 +614,6 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  * @apiSuccess {string} MakerId the id of the user who made the status( Commented or rated or reviewd)
  * @apiSuccess {string} MakerPhoto the URL of the Photo of the User who did the thing ( Commented or rated or reviewd)
  * @apiSuccess {string}  MakerName the Name of the User Who made the status ( Commented or rated or reviewd)
- * 
  *  @apiSuccessExample  Expected Data on Success
  * {
  *
@@ -659,29 +659,29 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  */
 
 
-router.get("/show",auth ,(req,res)=>
+router.get("/Notifications" ,(req,res)=>
 {
-     if(req.body.UserId==null)
+     if(req.query.UserId==null)
      {
         return  res.status(400).send("Bad request no UserID  Id is there");
     }
 
-      if (req.body.UserId.length == 0)
+      if (req.query.UserId.length == 0)
      {
        return  res.status(400).send("Bad request no Satatus Id is there");
      }
 
 
-  Notification.find( {'UserId':req.body.UserId},(err,doc)=>
+  Notification.find( {'UserId':req.query.UserId},(err,doc)=>
 
    {
     if(!doc)
     {
-   return res.status(404).send("No statuses were found");
+   return res.status(404).send("No Notifications were found");
     }
     if(doc.lenght==0)
     {
-   return res.status(404).send("No statuses were found");
+   return res.status(404).send("No Notifications were found");
     }
 
     res.status(200).send(
@@ -692,6 +692,54 @@ router.get("/show",auth ,(req,res)=>
 
 
 });
+  /**
+ * @api{Post} /User/Notification Get User Status
+ * @apiVersion 0.0.0
+ * @apiName Set the notification to seen
+ * @apiGroup User
+ * @apiHeader {String} x-auth-token Authentication token
+ * @apiParam {String} NotificationId  the id of the notification seen
+ *
+ *  @apiSuccess {Boolean}  SeenSuccess  wheather is was updated in the database or not 
+ *  
+ * @apiSuccessExample  Expected Data on Success
+ * {
+ *"SeenSucces": true
+ * }
+ * @apiError Notification-Not-Found The <code>Notification</code> was not found
+ *
+  */
+router.post("/Notification/seen" ,(req,res)=>
+{
+     if(req.body.NotificationId==null)
+     {
+        return  res.status(400).send("Bad request no UserID  Id is there");
+    }
+
+      if (req.body.NotificationId.length == 0)
+     {
+       return  res.status(400).send("Bad request no Satatus Id is there");
+     }
+
+
+  Notification.findOneAndUpdate( {'NotificationId':req.body.NotificationId},(err,doc)=>
+
+   {
+    if(!doc)
+    {
+   return res.status(404).send("No Notifications were found");
+    }
+    if(doc.lenght==0)
+    {
+   return res.status(404).send("No Notifications were found");
+    }
+
+    res.status(200).send(
+        doc
+    )
+   }
+)
+  });
 
           function validateUserOnly(reqin) {
             const schema = {
