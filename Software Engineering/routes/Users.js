@@ -14,7 +14,6 @@ const nodeMailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
 const Author= require('../models/Author.model');
-const Joi = require('joi');
 
 //get current User
 
@@ -83,14 +82,14 @@ router.get('/me', auth, async (req, res) => {
 //////////get user by id////////////
 router.get('/getUser',async(req,res)=>{
 
-  const {error}=validateUserOnly(req.query);
+  const {error}=validateUserOnly(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
 const GettingUser=new User();
 
-GettingUser=User.findById({UserId: req.query.UserId},'UserName UserEmail UserBirthDate Photo FollowingAuthorId FollowingUserId FollowersUserId Read WantToRead Reading Confirmed',(err,doc)=>
+GettingUser=User.findById({UserId: req.body.UserId},'UserName UserEmail UserBirthDate Photo FollowingAuthorId FollowingUserId FollowersUserId Read WantToRead Reading Confirmed',(err,doc)=>
 {
-  if(err) { res.status(400).send("user doesn't exist!")}
+  if(err) { res.status(400).send("uset doesn't exist!")}
 
        if(!doc) { res.status(400).send("error while retrieving data!")}
        if(doc)
@@ -694,7 +693,7 @@ router.get("/Notifications" ,(req,res)=>
 
 });
   /**
- * @api{Post} /User/Notification Get User Status
+ * @api{Post} /User/Notification/seen
  * @apiVersion 0.0.0
  * @apiName Set the notification to seen
  * @apiGroup User
@@ -723,7 +722,9 @@ router.post("/Notification/seen" ,(req,res)=>
      }
 
 
-  Notification.findOneAndUpdate( {'NotificationId':req.body.NotificationId},(err,doc)=>
+  Notification.findOneAndUpdate( {'NotificationId':req.body.NotificationId},
+  { $set : {'Seen' :true} },
+  (err,doc)=>
 
    {
     if(!doc)
@@ -732,12 +733,11 @@ router.post("/Notification/seen" ,(req,res)=>
     }
     if(doc.lenght==0)
     {
+      
    return res.status(404).send("No Notifications were found");
     }
 
-    res.status(200).send(
-        doc
-    )
+    res.status(200).send(" 'SeenSucces' : true " )
    }
 )
   });

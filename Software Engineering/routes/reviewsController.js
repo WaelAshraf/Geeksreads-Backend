@@ -46,12 +46,13 @@ Router.get('/getReview',async(req,res)=>{
 
     if(error) return res.status(400).send(error.details[0].message);
 
-   const gettingReview= new review();
-   gettingReview= review.findById( {reviewId : req.query.ReviewId},'bookId rating reviewBody reviewDate shelf userId userName photo likesCount',(err,doc)=>
+   review.findOne( {'reviewId':req.query.reviewId},(err,doc)=>
    {
        if(err) { res.status(400).send("review doesn't exist!")}
 
-       if(!doc) { res.status(400).send("error while retrieving data!")}
+       if(!doc) { 
+        console.log(doc); 
+        res.status(400).send("error while retrieving data!")}
        if(doc)
        { res.status(200).send(doc)}
    })
@@ -71,7 +72,7 @@ Router.post('/remove',async (req,res)=>{
 })
 function validateget(reqin) {
     const schema = {
-    ReviewId:Joi.string().min(24).max(24),
+    reviewId:Joi.string().min(24).max(24),
     };
     return Joi.validate(reqin, schema);
     }
