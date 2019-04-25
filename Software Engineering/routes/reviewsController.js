@@ -39,6 +39,25 @@ Router.post('/add', async (req, res) => {
     })
 });
 ///////////////////////////////////////////////
+////////////////////// Get Review By ID /////////////////
+Router.get('/getReview',async(req,res)=>{
+    
+    const {error} = validateget(req.body);
+
+    if(error) return res.status(400).send(error.details[0].message);
+
+   const gettingReview= new review();
+   gettingReview= review.findById( {reviewId : req.body.reviewId},'bookId rating reviewBody reviewDate shelf userId userName photo likesCount',(err,doc)=>
+   {
+       if(err) { res.status(400).send("review doesn't exist!")}
+
+       if(!doc) { res.status(400).send("error while retrieving data!")}
+       if(doc)
+       { res.status(200).send(doc)}
+   })
+
+})
+/////////////////////////////////////////
 ////Remove////
 Router.post('/remove',async (req,res)=>{
     const { error } = validateget(req.body);
