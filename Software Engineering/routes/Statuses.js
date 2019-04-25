@@ -81,21 +81,41 @@ router.post("/",(req,res)=>
  * @apiGroup Status
  * @apiHeader {String} x-auth-token Authentication token
  *
+ * @apiSuccess {string} StatusType  Wheather  it is Comment or Review or Rate
  * @apiSuccess {string} StatusId status id
  * @apiSuccess {string} UserId User id the user who is to see the status
- * @apiSuccess {datePicker} StatusDate the date when the status was written
+ *
  * @apiSuccess {string} CommentId comment id if the type is comment <code>(optional)</code>
+ * @apiSuccess {string} CommentBody Comment the comment body 
+ * @apiSuccess {date} CommentDate The date of the comment
+ * @apiSuccess {Number}  CommentLikesCount number of people liked this comment
+ *  
+ * 
+ * @apiSuccess {string} BookId the Id of the book rated or reviewed
+ * @apiSuccess {string} BookName the name (title) of the book rated or reviewed
+ * @apiSuccess {string} BookPhoto the URL of the cover Photo of the book rated or revied
+ * @apiSuccess {Number} NumberOfStars the number of stars in case of rating a book
+ * 
  * @apiSuccess {string} ReviewId  review Id  alawys exisit weather the type is comment or review
- * @apiSuccess {string} MakerId the id of the user who made the status
- * @apiSuccess {string} Type  Wheather  it is Comment or Review
- * @apiSuccessExample  Expected Data on Success
+ * @apiSuccess {string} ReviewBody Review Body in case of comment on review or reviews a book 
+ * @apiSuccess {date}  ReviewDate the date of the review
+ * @apiSuccess {Number}  ReviewLikesCount numbr of the people who liked the the review
+ * 
+ * @apiSuccess {string} MakerId the id of the user who made the status( Commented or rated or reviewd)
+ * @apiSuccess {string} MakerPhoto the URL of the Photo of the User who did the thing ( Commented or rated or reviewd)
+ * @apiSuccess {string}  MakerName the Name of the User Who made the status ( Commented or rated or reviewd)
+ * 
+ *  @apiSuccessExample  Expected Data on Success
  * {
  *
- * type : Review
- * StatusId : "82978363763"
- * MakerId : "shjfhghdsg"
- * UserId : "82sdfd8363763"
- * ReviewId : "82gf8363763"
+ *  StatusType : Review
+ * "StatusId" : "82978363763"
+ * "MakerId" : "shjfhghdsg"
+ * "UserId" : "82sdfd8363763"
+ * "ReviewId" : "82gf8363763"
+ * "ReviewLikesCount": 11,
+ *           "body": "Hello World !",
+ *           
  *
  * },
  * {
