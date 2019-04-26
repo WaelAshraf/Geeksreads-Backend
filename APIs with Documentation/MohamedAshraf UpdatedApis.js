@@ -608,7 +608,7 @@
    * }
    */
 
-   //Update Book Status Want to Read to Reading
+   //Update Book Status from Want to Read to Reading
 
 
    /**
@@ -642,7 +642,7 @@
     * }
     */
 
-    //Update Book Status Reading to Read
+    //Update Book Status From Reading to Read
 
 
     /**
