@@ -317,6 +317,7 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
  * @apiName SignIn
  * @apiGroup User
  *
+ * @apiHeader {String} x-auth-token Authentication token
  * @apiParam  {String} NewUserName New User Name
  * @apiParam  {String} NewUserPhoto New User Photo
  * @apiParam  {Date} NewUserBirthDate New User BirthDate
@@ -655,6 +656,120 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
       "ReturnMsg": "Book Removed"
     });
   });
+
+
+
+
+  //Update Book Status from Want to Read to Reading
+
+
+  /**
+   * @api {POST} /Shelf/UpdateWantToReading.json  Updates Book Status From Want to Read to Reading
+   * @apiName UpdateWantToReading
+   * @apiGroup Shelves
+   *
+   * @apiHeader {String} x-auth-token Authentication token
+   * @apiParam {String} BookId  The Book Id To Update.
+   * @apiSuccess {String} ReturnMsg        Notifies is Successfully updated.
+   * @apiSuccessExample {json} Success
+   *     HTTP/1.1 200 OK
+   *     {
+   *       "ReturnMsg":"Book Status Updated"
+   *     }
+   * @apiErrorExample {json} WrongBookId-Response:
+   *     HTTP/1.1 400
+   * {
+   *   "ReturnMsg": "Book Does't Exist"
+   * }
+   * @apiErrorExample {json} Invalidtoken-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":'Invalid token.'
+   *   }
+   *
+   * @apiErrorExample {json} NoTokenSent-Response:
+   *     HTTP/1.1 401
+   * {
+   *   "ReturnMsg":'Access denied. No token provided.'
+   * }
+   */
+
+
+
+   router.post('/UpdateWantToReading', auth, async (req, res) => {
+     let check = await User.findOne({ UserId: req.user._id });
+     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+     const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
+     if(!book) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
+     const wanttoread = await User.findOne({UserId: req.user._id, WantToRead:  req.body.BookId});
+     if(!wanttoread) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist in WantToRead."});
+     const user = await User.findById(req.user._id).select('-UserPassword');
+     user.WantToRead.splice( user.WantToRead.indexOf(req.body.BookId), 1 );
+     user.Reading.push(req.body.BookId);
+     await user.save();
+     res.status(200).send({
+       "ReturnMsg": "Book Status Updated"
+     });
+   });
+
+
+
+
+
+   //Update Book Status From Reading to Read
+
+
+   /**
+    * @api {POST} /Shelf/UpdateReadingToRead.json  Updates Book Status From Reading to Read
+    * @apiName UpdateReadingToRead
+    * @apiGroup Shelves
+    *
+    * @apiHeader {String} x-auth-token Authentication token
+    * @apiParam {String} BookId  The Book Id To Update.
+    * @apiSuccess {String} ReturnMsg        Notifies is Successfully updated.
+    * @apiSuccessExample {json} Success
+    *     HTTP/1.1 200 OK
+    *     {
+    *       "ReturnMsg":"Book Status Updated"
+    *     }
+    * @apiErrorExample {json} WrongBookId-Response:
+    *     HTTP/1.1 400
+    * {
+    *   "ReturnMsg": "Book Does't Exist"
+    * }
+    * @apiErrorExample {json} Invalidtoken-Response:
+    *     HTTP/1.1 400
+    *   {
+    *      "ReturnMsg":'Invalid token.'
+    *   }
+    *
+    * @apiErrorExample {json} NoTokenSent-Response:
+    *     HTTP/1.1 401
+    * {
+    *   "ReturnMsg":'Access denied. No token provided.'
+    * }
+    */
+
+
+
+
+    router.post('/UpdateReadingToRead', auth, async (req, res) => {
+      let check = await User.findOne({ UserId: req.user._id });
+      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+      const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
+      if(!book) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
+      const reading = await User.findOne({UserId: req.user._id, Reading:  req.body.BookId});
+      if(!reading) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist in Reading."});
+      const user = await User.findById(req.user._id).select('-UserPassword');
+      user.Reading.splice( user.Reading.indexOf(req.body.BookId), 1 );
+      user.Read.push(req.body.BookId);
+      await user.save();
+      res.status(200).send({
+        "ReturnMsg": "Book Status Updated"
+      });
+    });
+
+
 
 
 
