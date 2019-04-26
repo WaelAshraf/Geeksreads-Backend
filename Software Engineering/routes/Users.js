@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 //const sendgrid = require('sendgrid');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const {User,validate,DateValidate} = require('../models/User');
+const {User,validate,DateValidate,NewPassWordValidate} = require('../models/User');
 const {Notification}= require('../models/Notifications');
 const mongoose = require('mongoose');
 const nodeMailer = require('nodemailer');
@@ -239,6 +239,75 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
 });
 
 
+
+
+//Update User Password
+
+
+ /**
+  *
+  * @api {POST}  /user/UpdateUserPassword.json Update User Password.
+  * @apiName UpdateUserPassword
+  * @apiGroup User
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam  {String} NewUserPassword New User Password
+  * @apiParam  {String} OldUserPassword Old User Password
+  * @apiSuccess {String}   ReturnMsg   Return Message Update is Successful
+  * @apiSuccessExample {json}  Success
+  *     HTTP/1.1 200 OK
+  * {
+  *        "ReturnMsg": "Update Successful"
+  *   }
+  * @apiErrorExample {json} InvalidNewPassword-Response:
+  *     HTTP/1.1 400
+  *  {
+  *    "ReturnMsg":"Error Detail"
+  *  }
+  * @apiErrorExample {json} InvalidOldPassword-Response:
+  *     HTTP/1.1 400
+  *  {
+  *    "ReturnMsg":"Error Detail"
+  *  }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  *
+  *
+  */
+
+
+
+
+  router.post('/UpdateUserPassword', auth, async (req, res) => {
+    let check = await User.findOne({ UserId: req.user._id });
+    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    const { error } = NewPassWordValidate(req.body);
+    if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
+    const user = await User.findById(req.user._id);
+    const validPassword = await bcrypt.compare(req.body.OldUserPassword, user.UserPassword);
+    if (!validPassword) return res.status(400).send({"ReturnMsg":"Invalid Old password."});
+    const salt = await bcrypt.genSalt(10);
+    user.UserPassword = await bcrypt.hash(req.body.NewUserPassword, salt);
+    await user.save();
+    res.status(200).send({
+      "ReturnMsg": "Update Successful"
+    });
+  });
+
+
+
+
+
+
 //Update User Information (Name, Photo, Bithdate)
 
 
@@ -301,7 +370,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   }
   if(req.body.NewUserName!=null) user.UserName = req.body.NewUserName;
   if(req.body.NewUserBirthDate!=null) user.UserBirthDate = req.body.NewUserBirthDate;
-  user.save();
+  await user.save();
 //  const token = user.generateAuthToken();
 
   res.status(200).send({
@@ -526,12 +595,66 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      if(req.body.ShelfType == "Read") user.Read.push(req.body.BookId);
      if(req.body.ShelfType == "Reading") user.Reading.push(req.body.BookId);
      if(req.body.ShelfType == "WantToRead") user.WantToRead.push(req.body.BookId);
-     user.save();
+     await user.save();
      res.status(200).send({
        "ReturnMsg": "Book was added successfully."
      });
    });
 
+
+
+  //Remove Book From Shelf
+
+
+/**
+  * @api {POST} /Shelf/RemoveFromShelf.json  Removes a Books From User Shelves
+  * @apiName RemoveFromShelf
+  * @apiGroup Shelves
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam {String} BookId  The Book Id To Remove.
+  * @apiSuccess {String} ReturnMsg        Notifies is Successfully Removed.
+  * @apiSuccessExample {json} Success
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "ReturnMsg":"Book Removed"
+  *     }
+  * @apiErrorExample {json} WrongBookId-Response:
+  *     HTTP/1.1 400
+  * {
+  *   "ReturnMsg": "Book Does't Exist"
+  * }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  */
+
+  router.post('/RemoveFromShelf', auth, async (req, res) => {
+    let check = await User.findOne({ UserId: req.user._id });
+    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
+    if(!book) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
+    const read = await User.findOne({UserId: req.user._id, Read:  req.body.BookId});
+    const reading = await User.findOne({UserId: req.user._id, Reading:  req.body.BookId});
+    const wanttoread = await User.findOne({UserId: req.user._id, WantToRead:  req.body.BookId});
+    if(!read && !wanttoread && !reading) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist in Shelf."});
+    const user = await User.findById(req.user._id).select('-UserPassword');
+    if(read) user.Read.splice( user.Read.indexOf(req.body.BookId), 1 );
+    if(reading) user.Reading.splice( user.Reading.indexOf(req.body.BookId), 1 );
+    if(wanttoread) user.WantToRead.splice( user.WantToRead.indexOf(req.body.BookId), 1 );
+    await user.save();
+    res.status(200).send({
+      "ReturnMsg": "Book Removed"
+    });
+  });
 
 
 
