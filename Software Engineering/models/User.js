@@ -119,6 +119,14 @@ UserPassword: Joi.string().min(6).max(255).required()
 };
 return Joi.validate(User, schema);
 }
+function validateNewPassword(User) {
+const schema = {
+OldUserPassword: Joi.string().min(6).max(255).required(),
+NewUserPassword: Joi.string().min(6).max(255).required()
+};
+return Joi.validate(User, schema);
+}
+
 function validateDate(User) {
 const schema = {
 NewUserBirthDate: Joi.date(),
@@ -130,3 +138,4 @@ return Joi.validate(User, schema);
 exports.User = User;
 exports.validate= validateUser;
 exports.DateValidate= validateDate;
+exports.NewPassWordValidate=  validateNewPassword;
