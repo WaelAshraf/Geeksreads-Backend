@@ -7,6 +7,7 @@
  * @apiName SignIn
  * @apiGroup User
  *
+ * @apiHeader {String} x-auth-token Authentication token
  * @apiParam  {String} NewUserName New User Name
  * @apiParam  {String} NewUserPhoto New User Photo
  * @apiParam  {Date} NewUserBirthDate New User BirthDate
@@ -45,6 +46,53 @@
  *
  *
  */
+
+
+
+
+
+ //Update User Password
+
+
+ /**
+  *
+  * @api {POST}  /user/UpdateUserPassword.json Update User Password.
+  * @apiName UpdateUserPassword
+  * @apiGroup User
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam  {String} NewUserPassword New User Password
+  * @apiParam  {String} OldUserPassword Old User Password
+  * @apiSuccess {String}   ReturnMsg   Return Message Update is Successful
+  * @apiSuccessExample {json}  Success
+  *     HTTP/1.1 200 OK
+  * {
+  *        "ReturnMsg": "Update Successful"
+  *   }
+  * @apiErrorExample {json} InvalidNewPassword-Response:
+  *     HTTP/1.1 400
+  *  {
+  *    "ReturnMsg":"Error Detail"
+  *  }
+  * @apiErrorExample {json} InvalidOldPassword-Response:
+  *     HTTP/1.1 400
+  *  {
+  *    "ReturnMsg":"Error Detail"
+  *  }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  *
+  *
+  */
 
 
 
