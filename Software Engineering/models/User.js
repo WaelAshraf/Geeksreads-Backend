@@ -107,7 +107,7 @@ RatedBooks:{
   });
 
 UserSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'), {expiresIn: '1d'});
   return token;
 }
 const User = mongoose.model('User', UserSchema);
