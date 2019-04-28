@@ -2,6 +2,7 @@
 const Joi = require('joi');
 const express = require('express');
 const mongoose= require ('mongoose');
+const user= require('../models/User').User;
 const {review} = require('../models/reviews.model');
 const {comment}=require('../models/comments.model');
 const router = express.Router();
@@ -21,7 +22,10 @@ const router = express.Router();
  *              "Liked": true
  *          }
  */
+/*
+    
 
+*/
 router.post('/like',(req,res)=>{
 
     // input validation
@@ -50,8 +54,19 @@ router.post('/like',(req,res)=>{
        
         }
         if (doc)
-        {
-            return res.status(200).send("liked");
+        {    
+            user.findByIdAndUpdate(req.body.User_Id,
+                { "$push": { "LikedComment": req.body.resourceId } },
+                function (err, user1) {
+                    if (!err) {           
+                    console.log(req.body.resourceId);
+                        
+                        return res.status(200).send("liked");
+                    }
+                    else {
+                        return res.status(404).send("Not found");
+                        console.log('error during log insertion: ' + err);
+                    }});
        
         }
     });
@@ -65,13 +80,24 @@ router.post('/like',(req,res)=>{
        
            if (!doc)
            {
+               console.log(req.body);
                return res.status(404).send("Not found");
           
            }
            if (doc)
            {
-               return res.status(200).send("liked");
-          
+            user.findByIdAndUpdate(req.body.User_Id,
+                { "$push": { "LikedReview": req.body.resourceId } },
+                function (err, user1) {
+                    if (!err) {           
+                    
+                        
+                        return res.status(200).send("liked");
+                    }
+                    else {
+                        return res.status(404).send("Not found");
+                        console.log('error during log insertion: ' + err);
+                    }});
            }
        });
     }          
@@ -130,8 +156,18 @@ router.post('/unlike',(req,res)=>{
         }
         if (doc)
         {
-            return res.status(200).send("unliked");
-       
+            user.findByIdAndUpdate(req.body.User_Id,
+                { "$pull": { "LikedComment": req.body.resourceId } },
+                function (err, user1) {
+                    if (!err) {           
+                    
+                        
+                        return res.status(200).send("unliked");
+                    }
+                    else {
+                        return res.status(404).send("Not found");
+                        console.log('error during log insertion: ' + err);
+                    }});
         }
     });
 }
@@ -148,9 +184,18 @@ router.post('/unlike',(req,res)=>{
           
            }
            if (doc)
-           {
-               return res.status(200).send("unliked");
-          
+           {user.findByIdAndUpdate(req.body.User_Id,
+            { "$pull": { "LikedReview": req.body.resourceId } },
+            function (err, user1) {
+                if (!err) {           
+                
+                    
+                    return res.status(200).send("unliked");
+                }
+                else {
+                    return res.status(404).send("Not found");
+                    console.log('error during log insertion: ' + err);
+                }});
            }
        });
     }          
