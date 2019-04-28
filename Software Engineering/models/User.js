@@ -2,7 +2,7 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const mongoose = require('mongoose');
-
+ObjectId = mongoose.Schema.Types.ObjectId;
 const UserSchema = new mongoose.Schema({
   UserName: {
     type: String,
@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
     maxlength: 1024
+
   },
   Photo :{
     type: String,
@@ -39,7 +40,6 @@ const UserSchema = new mongoose.Schema({
       type:String
     }
   },
-
   FollowingUserId:{
     type:"array",
     "items":{
@@ -52,32 +52,39 @@ const UserSchema = new mongoose.Schema({
       type:String
     }
   },
-LikedComments:{
-  type:"array",
-  "items":{
-    type:String
-  }
-},
-LikedReviews:{
-  type:"array",
-  "items":{
-    type:String
-  }
-},
-
-RatedBooks:{
-  type:"array",
-  "items":{
-    type:String
-  }
-},
-
   OwnedBookId:{
     type:"array",
     "items":{
       type:String
     }
   },
+  LikedComment:{
+    type:"array",
+    "items":{
+      type:String
+    }
+  },
+  LikedReview:{
+    type:"array",
+    "items":{
+      type:String
+    }
+  },
+  RatedBooks:[{
+    bookId:{
+      type:ObjectId
+    },
+    rating:{
+      type:Number
+    }
+  }]
+  /*{
+    type:"array",
+    "items":{
+      type:String
+    }
+  }*/
+  ,
   Read:{
     type:"array",
     "items":{
