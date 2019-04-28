@@ -529,6 +529,583 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
 
 
 
+
+  //Number of Read Books
+
+
+  /**
+   * @api {GET} /Shelf/ShelvesCount.json  Number of Read Books
+   * @apiName ShelvesCount
+   * @apiGroup Shelves
+   *
+   * @apiHeader {String} x-auth-token Authentication token
+   *
+   * @apiSuccess {Number} NoOfRead        Gives the User the Number of Book Ids of His Read.
+   * @apiSuccessExample {json} Success
+   *     HTTP/1.1 200 OK
+   *     {
+   *       "NoOfRead": 3
+   *       "NoOfReading": 3,
+   *       "NoOfWantToRead": 3
+   *     }
+   *
+   * @apiErrorExample {json} NoShelvesExist-Response:
+   *     HTTP/1.1 400
+   * {
+   *   "ReturnMsg": "User has No Shelves"
+   * }
+   * @apiErrorExample {json} Invalidtoken-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":'Invalid token.'
+   *   }
+   *
+   * @apiErrorExample {json} NoTokenSent-Response:
+   *     HTTP/1.1 401
+   * {
+   *   "ReturnMsg":'Access denied. No token provided.'
+   * }
+   */
+
+
+   router.get('/ShelvesCount', auth, async (req, res) => {
+     let check = await User.findOne({ UserId: req.user._id });
+     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+
+     //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
+     const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+     var NoOfRead = user.Read.length;
+     var NoOfReading = user.Reading.length;
+     var NoOfWantToRead = user.WantToRead.length;
+     const Result =  {
+                       "NoOfRead":NoOfRead,
+                       "NoOfReading":NoOfReading,
+                       "NoOfWantToRead":NoOfWantToRead
+                     }
+     res.status(200).send(Result);
+   });
+
+
+
+
+
+// Get User Shelves Details
+
+
+/**
+ * @api {GET} /Shelf/GetUserShelvesDetails.json  Gets All User's Shelves Details
+ * @apiName GetUserShelvesDetails
+ * @apiGroup Shelves
+ *
+ * @apiHeader {String} x-auth-token Authentication token
+ *
+ * @apiSuccess {List} ReadData        Gives the User the Book Data of His Read.
+ * @apiSuccess {List} WantToReadData       Gives the User the Book Data of His Want to Read.
+ * @apiSuccess {List} Reading       Gives the User the Book Data of His Currently Reading.
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *     "ReadData": [
+ *        {
+ *            "BookId": "5c9114526f1439874b7cca1a",
+ *            "Title": "consequat",
+ *            "AuthorId": "5c911452938ffea87b4672d7",
+ *            "BookRating": {
+ *                "$numberDecimal": "2.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 340,
+ *            "Published": "2007-01-29T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c911452bbfd1717b8a7a169",
+ *            "Title": "sit",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "5.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 226,
+ *            "Published": "2001-05-03T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a012d11bb226399497",
+ *            "Title": "do",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "1.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 299,
+ *            "Published": "2004-01-10T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a01c049771a04cbce4",
+ *            "Title": "culpa",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "3.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 148,
+ *            "Published": "2018-12-16T22:00:00.000Z"
+ *        }
+ *      ],
+ *     "ReadingData": [],
+ *     "WantToReadData": []
+ *     }
+ *
+ * @apiErrorExample {json} NoShelvesExist-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "User has No Shelves"
+ * }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ */
+
+
+
+  router.get('/GetUserShelvesDetails', auth, async (req, res) => {
+    let check = await User.findOne({ UserId: req.user._id });
+    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+
+    //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
+    const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+    var Result = {
+                    "ReadData":[],
+                    "ReadingData":[],
+                    "WantToReadData":[]
+
+                 }
+    var NoOfRead = user.Read.length;
+    var NoOfReading = user.Reading.length;
+    var NoOfWantToRead = user.WantToRead.length;
+    for (var i=0; i<NoOfRead;i++)
+    {
+       const book = await mongoose.connection.collection("books").findOne({BookId:user.Read[i]});
+       const bookinfo =
+       {
+          "BookId":book.BookId,
+          "Title":book.Title,
+          "AuthorId": book.AuthorId,
+          "BookRating": book.BookRating,
+          "Cover":book.Cover,
+          "Pages": book.Pages,
+          "BookName": book.BookName,
+          "AuthorName": book.AuthorName,
+          "RateCount":book.RateCount,
+          "Published": book.Published
+       };
+       Result.ReadData.push(bookinfo);
+    }
+    for (var i=0;  i<NoOfReading;i++)
+    {
+       const book = await mongoose.connection.collection("books").findOne({BookId:user.Reading[i]});
+       const bookinfo =
+       {
+          "BookId":book.BookId,
+          "Title":book.Title,
+          "AuthorId": book.AuthorId,
+          "BookRating": book.BookRating,
+          "Cover":book.Cover,
+          "Pages": book.Pages,
+          "BookName": book.BookName,
+          "AuthorName": book.AuthorName,
+          "RateCount":book.RateCount,
+          "Published": book.Published
+       };
+       Result.ReadingData.push(bookinfo);
+    }
+    for (var i=0;  i<NoOfWantToRead;i++)
+    {
+       const book = await mongoose.connection.collection("books").findOne({BookId:user.WantToRead[i]});
+       const bookinfo =
+       {
+          "BookId":book.BookId,
+          "Title":book.Title,
+          "AuthorId": book.AuthorId,
+          "BookRating": book.BookRating,
+          "Cover":book.Cover,
+          "Pages": book.Pages,
+          "BookName": book.BookName,
+          "AuthorName": book.AuthorName,
+          "RateCount":book.RateCount,
+          "Published": book.Published
+       };
+       Result.WantToReadData.push(bookinfo);
+    }
+    res.status(200).send(Result);
+  });
+
+
+
+
+
+
+  // Get User Read shelf Details
+
+
+  /**
+   * @api {GET} /Shelf/GetUserReadDetails.json   Get User Read shelf Details
+   * @apiName GetUserReadDetails
+   * @apiGroup Shelves
+   *
+   * @apiHeader {String} x-auth-token Authentication token
+   *
+   * @apiSuccess {List} ReadData        Gives the User the Book Data of His Read.
+   * @apiSuccessExample {json} Success
+   *     HTTP/1.1 200 OK
+   *     {
+   *     "ReadData": [
+   *        {
+   *            "BookId": "5c9114526f1439874b7cca1a",
+   *            "Title": "consequat",
+   *            "AuthorId": "5c911452938ffea87b4672d7",
+   *            "BookRating": {
+   *                "$numberDecimal": "2.0"
+   *            },
+   *            "Cover": "http://placehold.it/32x32",
+   *            "Pages": 340,
+   *            "Published": "2007-01-29T22:00:00.000Z"
+   *        },
+   *        {
+   *            "BookId": "5c911452bbfd1717b8a7a169",
+   *            "Title": "sit",
+   *            "AuthorId": "5c911452a48b42bb84bc785c",
+   *            "BookRating": {
+   *                "$numberDecimal": "5.0"
+   *            },
+   *            "Cover": "http://placehold.it/32x32",
+   *            "Pages": 226,
+   *            "Published": "2001-05-03T22:00:00.000Z"
+   *        },
+   *        {
+   *            "BookId": "5c9114a012d11bb226399497",
+   *            "Title": "do",
+   *            "AuthorId": "5c911452a48b42bb84bc785c",
+   *            "BookRating": {
+   *                "$numberDecimal": "1.0"
+   *            },
+   *            "Cover": "http://placehold.it/32x32",
+   *            "Pages": 299,
+   *            "Published": "2004-01-10T22:00:00.000Z"
+   *        },
+   *        {
+   *            "BookId": "5c9114a01c049771a04cbce4",
+   *            "Title": "culpa",
+   *            "AuthorId": "5c911452a48b42bb84bc785c",
+   *            "BookRating": {
+   *                "$numberDecimal": "3.0"
+   *            },
+   *            "Cover": "http://placehold.it/32x32",
+   *            "Pages": 148,
+   *            "Published": "2018-12-16T22:00:00.000Z"
+   *        }
+   *      ]
+   *     }
+   *
+   * @apiErrorExample {json} NoShelvesExist-Response:
+   *     HTTP/1.1 400
+   * {
+   *   "ReturnMsg": "User has No Shelves"
+   * }
+   * @apiErrorExample {json} Invalidtoken-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":'Invalid token.'
+   *   }
+   *
+   * @apiErrorExample {json} NoTokenSent-Response:
+   *     HTTP/1.1 401
+   * {
+   *   "ReturnMsg":'Access denied. No token provided.'
+   * }
+   */
+
+
+
+    router.get('/GetUserReadDetails', auth, async (req, res) => {
+      let check = await User.findOne({ UserId: req.user._id });
+      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+
+      //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
+      const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+      var Result = {
+                      "ReadData":[]
+                   }
+      var NoOfRead = user.Read.length;
+      for (var i=0; i<NoOfRead;i++)
+      {
+         const book = await mongoose.connection.collection("books").findOne({BookId:user.Read[i]});
+         const bookinfo =
+         {
+            "BookId":book.BookId,
+            "Title":book.Title,
+            "AuthorId": book.AuthorId,
+            "BookRating": book.BookRating,
+            "Cover":book.Cover,
+            "Pages": book.Pages,
+            "BookName": book.BookName,
+            "AuthorName": book.AuthorName,
+            "RateCount":book.RateCount,
+            "Published": book.Published
+         };
+         Result.ReadData.push(bookinfo);
+      }
+      res.status(200).send(Result);
+    });
+
+
+
+
+
+
+    // Get User Reading shelf Details
+
+
+    /**
+     * @api {GET} /Shelf/GetUserReadingDetails.json   Get User Reading shelf Details
+     * @apiName GetUserReadingDetails
+     * @apiGroup Shelves
+     *
+     * @apiHeader {String} x-auth-token Authentication token
+     *
+     * @apiSuccess {List} ReadingData        Gives the User the Book Data of His Reading.
+     * @apiSuccessExample {json} Success
+     *     HTTP/1.1 200 OK
+     *     {
+     *     "ReadingData": [
+     *        {
+     *            "BookId": "5c9114526f1439874b7cca1a",
+     *            "Title": "consequat",
+     *            "AuthorId": "5c911452938ffea87b4672d7",
+     *            "BookRating": {
+     *                "$numberDecimal": "2.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 340,
+     *            "Published": "2007-01-29T22:00:00.000Z"
+     *        },
+     *        {
+     *            "BookId": "5c911452bbfd1717b8a7a169",
+     *            "Title": "sit",
+     *            "AuthorId": "5c911452a48b42bb84bc785c",
+     *            "BookRating": {
+     *                "$numberDecimal": "5.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 226,
+     *            "Published": "2001-05-03T22:00:00.000Z"
+     *        },
+     *        {
+     *            "BookId": "5c9114a012d11bb226399497",
+     *            "Title": "do",
+     *            "AuthorId": "5c911452a48b42bb84bc785c",
+     *            "BookRating": {
+     *                "$numberDecimal": "1.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 299,
+     *            "Published": "2004-01-10T22:00:00.000Z"
+     *        },
+     *        {
+     *            "BookId": "5c9114a01c049771a04cbce4",
+     *            "Title": "culpa",
+     *            "AuthorId": "5c911452a48b42bb84bc785c",
+     *            "BookRating": {
+     *                "$numberDecimal": "3.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 148,
+     *            "Published": "2018-12-16T22:00:00.000Z"
+     *        }
+     *      ]
+     *     }
+     *
+     * @apiErrorExample {json} NoShelvesExist-Response:
+     *     HTTP/1.1 400
+     * {
+     *   "ReturnMsg": "User has No Shelves"
+     * }
+     * @apiErrorExample {json} Invalidtoken-Response:
+     *     HTTP/1.1 400
+     *   {
+     *      "ReturnMsg":'Invalid token.'
+     *   }
+     *
+     * @apiErrorExample {json} NoTokenSent-Response:
+     *     HTTP/1.1 401
+     * {
+     *   "ReturnMsg":'Access denied. No token provided.'
+     * }
+     */
+
+
+
+      router.get('/GetUserReadingDetails', auth, async (req, res) => {
+        let check = await User.findOne({ UserId: req.user._id });
+        if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+
+        //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
+        const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+        var Result = {
+                        "ReadingData":[]
+                     }
+        var NoOfReading = user.Reading.length;
+        for (var i=0; i<NoOfReading;i++)
+        {
+           const book = await mongoose.connection.collection("books").findOne({BookId:user.Reading[i]});
+           const bookinfo =
+           {
+              "BookId":book.BookId,
+              "Title":book.Title,
+              "AuthorId": book.AuthorId,
+              "BookRating": book.BookRating,
+              "Cover":book.Cover,
+              "Pages": book.Pages,
+              "BookName": book.BookName,
+              "AuthorName": book.AuthorName,
+              "RateCount":book.RateCount,
+              "Published": book.Published
+           };
+           Result.ReadingData.push(bookinfo);
+        }
+        res.status(200).send(Result);
+      });
+
+
+
+
+
+
+      // Get User WantToRead shelf Details
+
+
+      /**
+       * @api {GET} /Shelf/GetUserWantToReadDetails.json   Get User WantToRead shelf Details
+       * @apiName GetUserWantToReadDetails
+       * @apiGroup Shelves
+       *
+       * @apiHeader {String} x-auth-token Authentication token
+       *
+       * @apiSuccess {List} ReadingData        Gives the User the Book Data of His WantToRead.
+       * @apiSuccessExample {json} Success
+       *     HTTP/1.1 200 OK
+       *     {
+       *     "WantToReadData": [
+       *        {
+       *            "BookId": "5c9114526f1439874b7cca1a",
+       *            "Title": "consequat",
+       *            "AuthorId": "5c911452938ffea87b4672d7",
+       *            "BookRating": {
+       *                "$numberDecimal": "2.0"
+       *            },
+       *            "Cover": "http://placehold.it/32x32",
+       *            "Pages": 340,
+       *            "Published": "2007-01-29T22:00:00.000Z"
+       *        },
+       *        {
+       *            "BookId": "5c911452bbfd1717b8a7a169",
+       *            "Title": "sit",
+       *            "AuthorId": "5c911452a48b42bb84bc785c",
+       *            "BookRating": {
+       *                "$numberDecimal": "5.0"
+       *            },
+       *            "Cover": "http://placehold.it/32x32",
+       *            "Pages": 226,
+       *            "Published": "2001-05-03T22:00:00.000Z"
+       *        },
+       *        {
+       *            "BookId": "5c9114a012d11bb226399497",
+       *            "Title": "do",
+       *            "AuthorId": "5c911452a48b42bb84bc785c",
+       *            "BookRating": {
+       *                "$numberDecimal": "1.0"
+       *            },
+       *            "Cover": "http://placehold.it/32x32",
+       *            "Pages": 299,
+       *            "Published": "2004-01-10T22:00:00.000Z"
+       *        },
+       *        {
+       *            "BookId": "5c9114a01c049771a04cbce4",
+       *            "Title": "culpa",
+       *            "AuthorId": "5c911452a48b42bb84bc785c",
+       *            "BookRating": {
+       *                "$numberDecimal": "3.0"
+       *            },
+       *            "Cover": "http://placehold.it/32x32",
+       *            "Pages": 148,
+       *            "Published": "2018-12-16T22:00:00.000Z"
+       *        }
+       *      ]
+       *     }
+       *
+       * @apiErrorExample {json} NoShelvesExist-Response:
+       *     HTTP/1.1 400
+       * {
+       *   "ReturnMsg": "User has No Shelves"
+       * }
+       * @apiErrorExample {json} Invalidtoken-Response:
+       *     HTTP/1.1 400
+       *   {
+       *      "ReturnMsg":'Invalid token.'
+       *   }
+       *
+       * @apiErrorExample {json} NoTokenSent-Response:
+       *     HTTP/1.1 401
+       * {
+       *   "ReturnMsg":'Access denied. No token provided.'
+       * }
+       */
+
+
+
+        router.get('/GetUserWantToReadDetails', auth, async (req, res) => {
+          let check = await User.findOne({ UserId: req.user._id });
+          if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+
+          //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
+          const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+          var Result = {
+                          "WantToReadData":[]
+                       }
+          var NoOfWantToRead = user.WantToRead.length;
+          for (var i=0; i<NoOfWantToRead;i++)
+          {
+             const book = await mongoose.connection.collection("books").findOne({BookId:user.WantToRead[i]});
+             const bookinfo =
+             {
+                "BookId":book.BookId,
+                "Title":book.Title,
+                "AuthorId": book.AuthorId,
+                "BookRating": book.BookRating,
+                "Cover":book.Cover,
+                "Pages": book.Pages,
+                "BookName": book.BookName,
+                "AuthorName": book.AuthorName,
+                "RateCount":book.RateCount,
+                "Published": book.Published
+             };
+             Result.WantToReadData.push(bookinfo);
+          }
+          res.status(200).send(Result);
+        });
+
+
+
+
+
+
   //Add Book to Shelf
 
 
@@ -880,7 +1457,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
     console.log(req.params.userId_tobefollowed);
     console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
     console.log("my"+req.query.myuserid);*/
-   
+
       mongoose.connection.collection("users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
 
         {
@@ -1098,9 +1675,9 @@ router.post("/Notification/seen" ,(req,res)=>
  /***************************
     //Get People a user is following
    /**
-    * @api{POST}/api/Users/getfollowing Get People a user is following 
+    * @api{POST}/api/Users/getfollowing Get People a user is following
     * @apiName Get People a user is following
-    * @apiGroup User 
+    * @apiGroup User
     * @apiError {404} id-not-found The<code>user_id</code> was not found.
     * @apiSuccess {200} Request  Successful or not
     * @apiParam  {String} user_id GoodReads User ID
@@ -1124,7 +1701,7 @@ router.post("/Notification/seen" ,(req,res)=>
  */
 
 
-//Get people a user is following 
+//Get people a user is following
 router.post('/getfollowing', async (req, res) => { //sends post request to /getfollowing End point through the router
   /* console.log(req.body.userId_tobefollowed);
   console.log(req.userId_tobefollowed);
@@ -1133,21 +1710,21 @@ router.post('/getfollowing', async (req, res) => { //sends post request to /getf
   console.log("my"+req.query.myuserid);*/
     mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
       (err,doc) =>{
-       
+
       //  console.log(doc);
 
         if(!doc || err)
         {
        //   console.log(doc);
           res.status(404).json({  // sends a json with 404 code
-            success: false ,  // user not retrieved  
+            success: false ,  // user not retrieved
              "Message":"User ID not  found !"});
         }
          else
          {
          //console.log(doc);
          res.status(200).json(doc.FollowingUserId);
-        
+
          }
         });
  });
@@ -1157,7 +1734,7 @@ router.post('/getfollowing', async (req, res) => { //sends post request to /getf
    /**
     * @api{POST}/api/Users/getfollowers Get User's Followers
     * @apiName Get User's Followers
-    * @apiGroup User 
+    * @apiGroup User
     * @apiError {404} id-not-found The<code>user_id</code> was not found.
     * @apiSuccess {200} Request  Successful or not
     * @apiParam  {String} user_id GoodReads User ID
@@ -1190,25 +1767,25 @@ router.post('/getfollowers', async (req, res) => { //sends post request to /getf
   console.log("my"+req.query.myuserid);*/
     mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
       (err,doc) =>{
-       
+
       //  console.log(doc);
 
         if(!doc || err)
         {
        //   console.log(doc);
           res.status(404).json({  // sends a json with 404 code
-            success: false ,  // user not retrieved  
+            success: false ,  // user not retrieved
              "Message":"User ID not  found !"});
         }
          else
          {
          //console.log(doc);
          res.status(200).json(doc.FollowersUserId);
-        
+
          }
         });
  });
 
 
-            
+
 module.exports = router;
