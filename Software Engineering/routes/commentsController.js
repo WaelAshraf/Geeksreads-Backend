@@ -1,9 +1,11 @@
 ///////////////////Required Modules//////////////////////////
 var express = require('express');
+const {CreatStatuses,CreatNotification} = require('../routes/Statuses');
 var Router = express.Router();
 const mongoose = require('mongoose');
 const {validate,comment} = require('../models/comments.model');
 const user = require("../models/User").User;
+const {review} = require("../models/reviews.model");
 const resource =mongoose.model('Resources');
 const Joi = require('joi');
 ///////////////////Req and Res Logic////////////////////////
@@ -36,16 +38,17 @@ const Joi = require('joi');
  * @apiParam{Number} pageNumber Number of current page default is <code>1</code>
  */
 Router.get('/', async (req, res) => {
-    const { error } = validateget(req.body);
+    const { error } = validateget(req.query);
   if (error) return res.status(400).send(error.details[0].message);
 
-  comment.find({"ReviewId" : req.body.ReviewId}).then(commArr => {
+  comment.find({"ReviewId" : req.query.ReviewId}).then(commArr => {
       if(commArr.length==0) return res.status(404).json({ success: false });
-      res.status(200).json(commArr);
+      res.status(200).json(Getliked(commArr,req.query.UserId));
   }).catch(err => res.status(404).json({ success: false }));
   
       
 });
+
 ////post////
 /**
  * @apiSuccess  {Boolean} AddedCommentSuc comment was added successfully
@@ -58,9 +61,8 @@ Router.get('/', async (req, res) => {
  * @apiName creatComment
  * @apiGroup Comments
  * @apiParam{String} Body The body of the comment  
- * @apiParam{String} type Subject Type Commented On; book,review,etc
- * @apiParam{Number} ID  Id of resource given as type Parameter
- * @apiParam{String} userName Name of user who wrote the comment
+ * @apiParam{ObjectID} reviewId   Id of resource given as type Parameter
+ * @apiParam{ObjectID} BookId   Id of resource given as type Parameter
  * @apiParam{Number} userID  Id of user who wrote the comment
  * @apiParam{datePicker} date the date the comment was written on
  * @apiError EmptyComment Must Have At Least <code>1</code> Character In Comment
@@ -84,26 +86,63 @@ Router.post('/', async (req, res) => {
     comment1.CommentId=comment1._id;  //7
     comment1.Photo= user1.Photo; //8
     comment1.LikesCount= 0; //9
+    comment1.liked= false;
     console.log(user1.UserName);
     console.log(user1.UserId);
     console.log(comment1);
     comment1.save((err, doc) => {
         if (!err) {           
             
+        /*     // review.findOne({reviewId :req.body.ReviewId},(err,doc)=>
+            // {
+            //     console.log(doc);
+            //      if(doc)
+            //     {
+            //         var NotifiedUserId = doc.userI
+            //         console.log(doc.userId); 
+
+            //      CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment", comment1.userId,null);
+            //     }
+ */
+         //   });
             res.json({ "AddedCommentSuc": true });
-        }
-        else {
+    
+        }   
+            else {
             res.json({ "AddedCommentSuc": false });
             console.log('error during log insertion: ' + err);
         }
     });
 });
+
+/////////////////////////////////////////
 function validateget(reqin) {
     const schema = {
     ReviewId:Joi.string().min(24),
     };
     return Joi.validate(reqin, schema);
     }
-
-
+/////////////////////////////////////////
+    function Getliked(commArr,UserId)
+    {
+        var likedArr = new Array(new Array());
+       User.find( {'UserId': UserId}.select(LikedComment),(err,result)=>{
+            
+          if(result.length==0) return res.status(404).json({ success: false });
+          else  if (!err) {           
+                 for (var i = 0, len = commArr.length; i < len; i++) {
+                     liked=false;
+                    for (var k = 0, len = result.length; i < len; i++){
+                        if(commarr[i]==result[k])
+                        {
+                            liked=true;
+                            break;
+                        }
+                    }
+                    commarr[i].liked=liked;
+                }
+            }
+        })
+        return commarr;
+    };
 module.exports = Router;
