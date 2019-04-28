@@ -1,3 +1,389 @@
+// Get User WantToRead shelf Details
+
+
+/**
+ * @api {GET} /Shelf/GetUserWantToReadDetails.json   Get User WantToRead shelf Details
+ * @apiName GetUserWantToReadDetails
+ * @apiGroup Shelves
+ *
+ * @apiHeader {String} x-auth-token Authentication token
+ *
+ * @apiSuccess {List} ReadingData        Gives the User the Book Data of His WantToRead.
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *     "WantToReadData": [
+ *        {
+ *            "BookId": "5c9114526f1439874b7cca1a",
+ *            "Title": "consequat",
+ *            "AuthorId": "5c911452938ffea87b4672d7",
+ *            "BookRating": {
+ *                "$numberDecimal": "2.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 340,
+ *            "Published": "2007-01-29T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c911452bbfd1717b8a7a169",
+ *            "Title": "sit",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "5.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 226,
+ *            "Published": "2001-05-03T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a012d11bb226399497",
+ *            "Title": "do",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "1.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 299,
+ *            "Published": "2004-01-10T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a01c049771a04cbce4",
+ *            "Title": "culpa",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "3.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 148,
+ *            "Published": "2018-12-16T22:00:00.000Z"
+ *        }
+ *      ]
+ *     }
+ *
+ * @apiErrorExample {json} NoShelvesExist-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "User has No Shelves"
+ * }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ */
+
+
+
+
+
+
+
+    // Get User Reading shelf Details
+
+
+    /**
+     * @api {GET} /Shelf/GetUserReadingDetails.json   Get User Reading shelf Details
+     * @apiName GetUserReadingDetails
+     * @apiGroup Shelves
+     *
+     * @apiHeader {String} x-auth-token Authentication token
+     *
+     * @apiSuccess {List} ReadingData        Gives the User the Book Data of His Reading.
+     * @apiSuccessExample {json} Success
+     *     HTTP/1.1 200 OK
+     *     {
+     *     "ReadingData": [
+     *        {
+     *            "BookId": "5c9114526f1439874b7cca1a",
+     *            "Title": "consequat",
+     *            "AuthorId": "5c911452938ffea87b4672d7",
+     *            "BookRating": {
+     *                "$numberDecimal": "2.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 340,
+     *            "Published": "2007-01-29T22:00:00.000Z"
+     *        },
+     *        {
+     *            "BookId": "5c911452bbfd1717b8a7a169",
+     *            "Title": "sit",
+     *            "AuthorId": "5c911452a48b42bb84bc785c",
+     *            "BookRating": {
+     *                "$numberDecimal": "5.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 226,
+     *            "Published": "2001-05-03T22:00:00.000Z"
+     *        },
+     *        {
+     *            "BookId": "5c9114a012d11bb226399497",
+     *            "Title": "do",
+     *            "AuthorId": "5c911452a48b42bb84bc785c",
+     *            "BookRating": {
+     *                "$numberDecimal": "1.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 299,
+     *            "Published": "2004-01-10T22:00:00.000Z"
+     *        },
+     *        {
+     *            "BookId": "5c9114a01c049771a04cbce4",
+     *            "Title": "culpa",
+     *            "AuthorId": "5c911452a48b42bb84bc785c",
+     *            "BookRating": {
+     *                "$numberDecimal": "3.0"
+     *            },
+     *            "Cover": "http://placehold.it/32x32",
+     *            "Pages": 148,
+     *            "Published": "2018-12-16T22:00:00.000Z"
+     *        }
+     *      ]
+     *     }
+     *
+     * @apiErrorExample {json} NoShelvesExist-Response:
+     *     HTTP/1.1 400
+     * {
+     *   "ReturnMsg": "User has No Shelves"
+     * }
+     * @apiErrorExample {json} Invalidtoken-Response:
+     *     HTTP/1.1 400
+     *   {
+     *      "ReturnMsg":'Invalid token.'
+     *   }
+     *
+     * @apiErrorExample {json} NoTokenSent-Response:
+     *     HTTP/1.1 401
+     * {
+     *   "ReturnMsg":'Access denied. No token provided.'
+     * }
+     */
+
+
+
+
+
+//Number of Read Books
+
+
+/**
+ * @api {GET} /Shelf/ShelvesCount.json  Number of Read Books
+ * @apiName ShelvesCount
+ * @apiGroup Shelves
+ *
+ * @apiHeader {String} x-auth-token Authentication token
+ *
+ * @apiSuccess {Number} NoOfRead        Gives the User the Number of Book Ids of His Read.
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "NoOfRead": 3
+ *       "NoOfReading": 3,
+ *       "NoOfWantToRead": 3
+ *     }
+ *
+ * @apiErrorExample {json} NoShelvesExist-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "User has No Shelves"
+ * }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ */
+
+
+
+
+
+
+  // Get User Read shelf Details
+
+
+/**
+ * @api {GET} /Shelf/GetUserReadDetails.json   Get User Read shelf Details
+ * @apiName GetUserReadDetails
+ * @apiGroup Shelves
+ *
+ * @apiHeader {String} x-auth-token Authentication token
+ *
+ * @apiSuccess {List} ReadData        Gives the User the Book Data of His Read.
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *     "ReadData": [
+ *        {
+ *            "BookId": "5c9114526f1439874b7cca1a",
+ *            "Title": "consequat",
+ *            "AuthorId": "5c911452938ffea87b4672d7",
+ *            "BookRating": {
+ *                "$numberDecimal": "2.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 340,
+ *            "Published": "2007-01-29T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c911452bbfd1717b8a7a169",
+ *            "Title": "sit",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "5.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 226,
+ *            "Published": "2001-05-03T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a012d11bb226399497",
+ *            "Title": "do",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "1.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 299,
+ *            "Published": "2004-01-10T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a01c049771a04cbce4",
+ *            "Title": "culpa",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "3.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 148,
+ *            "Published": "2018-12-16T22:00:00.000Z"
+ *        }
+ *      ]
+ *     }
+ *
+ * @apiErrorExample {json} NoShelvesExist-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "User has No Shelves"
+ * }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ */
+
+
+
+
+
+
+// Get User Shelves Details
+
+
+/**
+ * @api {GET} /Shelf/GetUserShelvesDetails.json  Gets All User's Shelves Details
+ * @apiName GetUserShelvesDetails
+ * @apiGroup Shelves
+ *
+ * @apiHeader {String} x-auth-token Authentication token
+ *
+ * @apiSuccess {List} ReadData        Gives the User the Book Data of His Read.
+ * @apiSuccess {List} WantToReadData       Gives the User the Book Data of His Want to Read.
+ * @apiSuccess {List} Reading       Gives the User the Book Data of His Currently Reading.
+ * @apiSuccessExample {json} Success
+ *     HTTP/1.1 200 OK
+ *     {
+ *     "ReadData": [
+ *        {
+ *            "BookId": "5c9114526f1439874b7cca1a",
+ *            "Title": "consequat",
+ *            "AuthorId": "5c911452938ffea87b4672d7",
+ *            "BookRating": {
+ *                "$numberDecimal": "2.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 340,
+ *            "Published": "2007-01-29T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c911452bbfd1717b8a7a169",
+ *            "Title": "sit",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "5.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 226,
+ *            "Published": "2001-05-03T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a012d11bb226399497",
+ *            "Title": "do",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "1.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 299,
+ *            "Published": "2004-01-10T22:00:00.000Z"
+ *        },
+ *        {
+ *            "BookId": "5c9114a01c049771a04cbce4",
+ *            "Title": "culpa",
+ *            "AuthorId": "5c911452a48b42bb84bc785c",
+ *            "BookRating": {
+ *                "$numberDecimal": "3.0"
+ *            },
+ *            "Cover": "http://placehold.it/32x32",
+ *            "Pages": 148,
+ *            "Published": "2018-12-16T22:00:00.000Z"
+ *        }
+ *      ],
+ *     "ReadingData": [],
+ *     "WantToReadData": []
+ *     }
+ *
+ * @apiErrorExample {json} NoShelvesExist-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg": "User has No Shelves"
+ * }
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ */
+
+
+
+
+
+
 //Update User Information (Name, Photo, Date)
 
 

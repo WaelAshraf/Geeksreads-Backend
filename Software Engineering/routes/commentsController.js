@@ -39,12 +39,12 @@ const Joi = require('joi');
  * @apiParam{Number} pageNumber Number of current page default is <code>1</code>
  */
 Router.get('/', async (req, res) => {
-    const { error } = validateget(req.query);
+    const { error } = validateget(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  comment.find({"ReviewId" : req.query.ReviewId}).then(commArr => {
+  comment.find({"ReviewId" : req.body.ReviewId}).then(commArr => {
       if(commArr.length==0) return res.status(404).json({ success: false });
-      res.status(200).json(Getliked(commArr,req.query.UserId));
+      res.status(200).json(commArr);
   }).catch(err => res.status(404).json({ success: false }));
   
       
@@ -126,26 +126,4 @@ function validateget(reqin) {
     return Joi.validate(reqin, schema);
     }
 /////////////////////////////////////////
-    function Getliked(commArr,UserId)
-    {
-        var likedArr = new Array(new Array());
-       User.find( {'UserId': UserId}.select(LikedComment),(err,result)=>{
-            
-          if(result.length==0) return res.status(404).json({ success: false });
-          else  if (!err) {           
-                 for (var i = 0, len = commArr.length; i < len; i++) {
-                     liked=false;
-                    for (var k = 0, len = result.length; i < len; i++){
-                        if(commarr[i]==result[k])
-                        {
-                            liked=true;
-                            break;
-                        }
-                    }
-                    commarr[i].liked=liked;
-                }
-            }
-        })
-        return commarr;
-    };
 module.exports = Router;

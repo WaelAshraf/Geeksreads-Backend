@@ -37,10 +37,6 @@ var reviewSchema = new mongoose.Schema({
     reviewDate: {
         type: Date//5 / to validate done
     },
-    shelf:
-    {
-        type: String //6 /done
-    },
     userId: {
         type: ObjectId//7 /done
 
@@ -65,7 +61,6 @@ function validateReview(Review) {
     const schema = {
     reviewBody: Joi.string().min(6).max(255).required(),
     reviewDate: Joi.date().iso(),
-    shelf: Joi.string(),
     photo: Joi.string(),
     bookId: Joi.string(),
     userId: Joi.string(),
