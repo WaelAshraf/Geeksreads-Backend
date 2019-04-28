@@ -21,7 +21,6 @@ const Joi = require('joi');
  *}
  * @apiParam{String} reviewBody body of the review written on the book
  * @apiParam{Date} reviewDate the date the review where written at the date is in iso format
- * @apiParam{String} shelf one of three shelves Read, Reading, WantToRead
  * @apiParam{ObjectID} bookId the id of the book reviewed by the user
  * @apiParam{ObjectID} userId the id of the user
 
@@ -40,7 +39,6 @@ Router.post('/add', async (req, res) => {
         review1.bookId=req.body.bookId; //2 
         review1.reviewBody=req.body.reviewBody; //4
         review1.reviewDate=req.body.reviewDate; //5
-        review1.shelf=req.body.shelf; //6
         review1.userId=user1.UserId; //7
         review1.liked=false;
         review1.userName=user1.UserName; //8
@@ -201,8 +199,9 @@ Router.post('/rate', async (req, res) => {
 Router.get('/getrevbybookid', async (req, res) => {
     const { error } = validateget(req.query);
    if (error) return res.status(400).send(error.details[0].message);
-        await res.status(200).json(Getliked(req));
-       
+   var allReviews=review.findById(req.query.bookId).toArray();
+       console.log(allReviews);
+       res.json(allReviews);
   
       
 });
@@ -245,26 +244,29 @@ function validateget(reqin) {
     return Joi.validate(reqin, schema);
     }
 //////////////////////////////////
-function Getliked(req)
-    {   var likedArr = new Array(new Array());
-        result=user.find( {'UserId': req.query.UserId}).select('LikedReview');
-        if(result.length==0) return res.status(404).json({ success: false });
-        n=result.length;
-        for(var i=0;i<n;i++)
-        {
-            var result1=review.find({"bookId" : req.query.bookId,'reviewId':result[i].reviewId}); 
-            if(result1)
-            {
-                result.liked=true;
-                likedArr.push(result);
-            }   
-            else
-            {
-                result.liked=false;
-                likedArr.push(result);
-            }
-        }
-        return likedArr;
-    };
+
+   Router.get('/getrev',async(req,res)=>{
+    const { error } = validateget(req.query);
+    if (error) return res.status(400).send(error.details[0].message);
+    var likedArr =Array();
+    let Review = await review.find({bookId:req.query.bookId});
+    var n=Review.length;
+    for (var i = 0; i < n; i++) {
+        console.log(i);
+        let Result = await user.find({ 'UserId': req.query.UserId, 'LikedReview[0]': Review[i].reviewId });
+        console.log(Result);
+                if (Result) {
+                    Review[i].liked = true;
+                    likedArr.push(Review[i]);
+                }
+                else {
+                    Review[i].liked = false;
+                    likedArr.push(Review[i]);
+                }
+    
+    }
+ console.log(likedArr);
+ res.status(200).json(likedArr);
+   })    
 
 module.exports = Router;

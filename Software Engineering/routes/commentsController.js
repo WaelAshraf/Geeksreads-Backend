@@ -41,7 +41,7 @@ Router.get('/', async (req, res) => {
 
   comment.find({"ReviewId" : req.query.ReviewId}).then(commArr => {
       if(commArr.length==0) return res.status(404).json({ success: false });
-      res.status(200).json(Getliked(commArr,req.query.UserId));
+      res.status(200).json(commArr);
   }).catch(err => res.status(404).json({ success: false }));
   
       
@@ -108,26 +108,4 @@ function validateget(reqin) {
     return Joi.validate(reqin, schema);
     }
 /////////////////////////////////////////
-    function Getliked(commArr,UserId)
-    {
-        var likedArr = new Array(new Array());
-       User.find( {'UserId': UserId}.select(LikedComment),(err,result)=>{
-            
-          if(result.length==0) return res.status(404).json({ success: false });
-          else  if (!err) {           
-                 for (var i = 0, len = commArr.length; i < len; i++) {
-                     liked=false;
-                    for (var k = 0, len = result.length; i < len; i++){
-                        if(commarr[i]==result[k])
-                        {
-                            liked=true;
-                            break;
-                        }
-                    }
-                    commarr[i].liked=liked;
-                }
-            }
-        })
-        return commarr;
-    };
 module.exports = Router;
