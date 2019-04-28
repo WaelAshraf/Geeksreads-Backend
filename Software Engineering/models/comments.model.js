@@ -40,7 +40,6 @@
 comment=mongoose.model('comment', commentSchema);
 function validateComment(Comment) {
     const schema = {
-    userName: Joi.string().min(3).max(50).required(),
     Body: Joi.string().min(6).max(255).required(),
     date: Joi.date().iso(),
     BookId:Joi.string().min(24),
