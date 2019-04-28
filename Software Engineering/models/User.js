@@ -114,7 +114,7 @@ const UserSchema = new mongoose.Schema({
   });
 
 UserSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'), {expiresIn: '1d'});
   return token;
 }
 const User = mongoose.model('User', UserSchema);
@@ -126,6 +126,14 @@ UserPassword: Joi.string().min(6).max(255).required()
 };
 return Joi.validate(User, schema);
 }
+function validateNewPassword(User) {
+const schema = {
+OldUserPassword: Joi.string().min(6).max(255).required(),
+NewUserPassword: Joi.string().min(6).max(255).required()
+};
+return Joi.validate(User, schema);
+}
+
 function validateDate(User) {
 const schema = {
 NewUserBirthDate: Joi.date(),
@@ -137,3 +145,4 @@ return Joi.validate(User, schema);
 exports.User = User;
 exports.validate= validateUser;
 exports.DateValidate= validateDate;
+exports.NewPassWordValidate=  validateNewPassword;

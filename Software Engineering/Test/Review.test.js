@@ -96,7 +96,7 @@ it("Valid Remove review request",  (done) => {
     request(app)
      .post('/api/review/getReview')
      .send({
-        "ReviewId":"5cb2086172e13a2aec72f68c"
+        "reviewId":"5cb2086172e13a2aec72f68c"
    })
     .expect(200,done);
 });
@@ -104,7 +104,7 @@ it("Invalid Remove review request",  (done) => {
     request(app)
      .post('/api/review/getReview')
      .send({
-        "ReviewId":"5cb2086172e13a2aec72f68cpewpewpew"
+        "reviewId":"5cb2086172e13a2aec72f68cpewpewpew"
    })
     .expect(400,done);
 });

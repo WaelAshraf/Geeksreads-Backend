@@ -1,22 +1,28 @@
+ /***************************
+    //Get People a user is following
+   /**
+    * @api{POST}/api/Users/getfollowing Get People a user is following 
+    * @apiName Get People a user is following
+    * @apiGroup User 
+    * @apiError {404} id-not-found The<code>user_id</code> was not found.
+    * @apiSuccess {200} Request  Successful or not
+    * @apiParam  {String} user_id GoodReads User ID
 
-/**
- * @api {get} /user/USER_ID/following.json Get people a user is following
-
- * @apiVersion 0.0.0
- * @apiName GetUserfollowings
- * @apiGroup User
+ * @apiSuccessExample {JSON}
+ * HTTP/1.1 200 OK
+   {
+   [
+    "5c9132dd2b1afd02f4f8c909",
+    "5c9132dd3bd70fb83625a86a"
+    ]
+   }
+ *  @apiErrorExample {JSON}
+ *HTTP/1.1 404 Not Found
+ * {
+ * "success": false,
+ * "Message":"User Id not  found !"
+ * }
  *
  *
- * @apiParam {Number} User-ID User ID to get his/her Followers.
- * @apiParam {Number} Page=1 page to preview results.
- *
- * @apiSuccess {Number[]} UserIDs     IDs of the people the User is Following(List).
- * @apiSuccessExample {json} Success
- *     HTTP/1.1 200 OK
- *     {
- *       "UserIDs": [2,3,4]
- *     }
- *
- *
- * @apiError UserID-not-found   The <code>User-ID</code> was not found.
  */
+

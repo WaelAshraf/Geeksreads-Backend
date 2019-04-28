@@ -368,7 +368,7 @@ comment.findOne({CommentId:Comment1Id},(err,doc) =>
 newStatus.save();
 }
 
-function CreatNotification( NotifiedUserId ,ReviewId , Comment1Id, Type, MakerId, NumberOfStars, Book1Id )
+function CreatNotification( NotifiedUserId ,ReviewId , Comment1Id, Type, MakerId, Book1Id )
 {
 // basic infos
   var  newNotification = new Notification(

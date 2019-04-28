@@ -7,6 +7,7 @@
  * @apiName SignIn
  * @apiGroup User
  *
+ * @apiHeader {String} x-auth-token Authentication token
  * @apiParam  {String} NewUserName New User Name
  * @apiParam  {String} NewUserPhoto New User Photo
  * @apiParam  {Date} NewUserBirthDate New User BirthDate
@@ -45,6 +46,53 @@
  *
  *
  */
+
+
+
+
+
+ //Update User Password
+
+
+ /**
+  *
+  * @api {POST}  /user/UpdateUserPassword.json Update User Password.
+  * @apiName UpdateUserPassword
+  * @apiGroup User
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam  {String} NewUserPassword New User Password
+  * @apiParam  {String} OldUserPassword Old User Password
+  * @apiSuccess {String}   ReturnMsg   Return Message Update is Successful
+  * @apiSuccessExample {json}  Success
+  *     HTTP/1.1 200 OK
+  * {
+  *        "ReturnMsg": "Update Successful"
+  *   }
+  * @apiErrorExample {json} InvalidNewPassword-Response:
+  *     HTTP/1.1 400
+  *  {
+  *    "ReturnMsg":"Error Detail"
+  *  }
+  * @apiErrorExample {json} InvalidOldPassword-Response:
+  *     HTTP/1.1 400
+  *  {
+  *    "ReturnMsg":"Error Detail"
+  *  }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  *
+  *
+  */
 
 
 
@@ -323,45 +371,50 @@
 
 
    /**
-    * @api {POST} /Shelf/AddToShelf.json  Add a Book to a Shelf
-    * @apiName AddToShelf
-    * @apiGroup Shelves
-    *
-    * @apiHeader {String} x-auth-token Authentication token
-    * @apiParam {String} ShelfType Shelf Type to add book to.
-    * @apiParam {String} BookId Book id to add to shelf.
-    *
-    * @apiSuccess {String} ReturnMsg         Notifies User that the Book was added successfully.
-    * @apiSuccessExample {json} Success
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "ReturnMsg": "Book was added successfully."
-    *     }
-    *
-    *
-    * @apiErrorExample {json} NoBook-Response:
-    *     HTTP/1.1 400
-    *   {
-    *      "ReturnMsg":"Book Doesn't Exist."
-    *   }
-    *
-    * @apiErrorExample {json} BookExist-Response:
-    *     HTTP/1.1 400
-    * {
-    *   "ReturnMsg": "Book Already in Shelf."
-    * }
-    * @apiErrorExample {json} Invalidtoken-Response:
-    *     HTTP/1.1 400
-    *   {
-    *      "ReturnMsg":'Invalid token.'
-    *   }
-    *
-    * @apiErrorExample {json} NoTokenSent-Response:
-    *     HTTP/1.1 401
-    * {
-    *   "ReturnMsg":'Access denied. No token provided.'
-    * }
-    */
+   * @api {POST} /Shelf/AddToShelf.json  Add a Book to a Shelf
+   * @apiName AddToShelf
+   * @apiGroup Shelves
+   *
+   * @apiHeader {String} x-auth-token Authentication token
+   * @apiParam {String} ShelfType Shelf Type to add book to.
+   * @apiParam {String} BookId Book id to add to shelf.
+   *
+   * @apiSuccess {String} ReturnMsg         Notifies User that the Book was added successfully.
+   * @apiSuccessExample {json} Success
+   *     HTTP/1.1 200 OK
+   *     {
+   *       "ReturnMsg": "Book was added successfully."
+   *     }
+   *
+   *
+   * @apiErrorExample {json} NoShelf-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":"Invalid Shelf"
+   *   }
+   * @apiErrorExample {json} NoBook-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":"Book Doesn't Exist."
+   *   }
+   *
+   * @apiErrorExample {json} BookExist-Response:
+   *     HTTP/1.1 400
+   * {
+   *   "ReturnMsg": "Book Already in Shelf."
+   * }
+   * @apiErrorExample {json} Invalidtoken-Response:
+   *     HTTP/1.1 400
+   *   {
+   *      "ReturnMsg":'Invalid token.'
+   *   }
+   *
+   * @apiErrorExample {json} NoTokenSent-Response:
+   *     HTTP/1.1 401
+   * {
+   *   "ReturnMsg":'Access denied. No token provided.'
+   * }
+   */
 
 
 
@@ -419,52 +472,58 @@
 
 
 /**
- * @api {GET} /Shelf/GetUserShelves.json  Gets All User's Shelves
- * @apiName GetUserShelves
- * @apiGroup Shelves
- *
- * @apiHeader {String} x-auth-token Authentication token
- *
- * @apiSuccess {String[]} Read        Gives the User the Book Ids of His Read.
- * @apiSuccess {String[]} WantToRead       Gives the User the Book Ids of His Want to Read.
- * @apiSuccess {String[]} Reading       Gives the User the Book Ids of His Currently Reading.
- * @apiSuccessExample {json} Success
- *     HTTP/1.1 200 OK
- *     {
- *       "Read": [
- *                          "Book1",
- *                          "Book2",
- *                          "Book3"
- *                     ],
- *       "WantToRead": [
- *                          "Book4",
- *                          "Book5",
- *                          "Book6"
- *                     ],
- *       "Reading": [
- *                          "Book7",
- *                          "Book8",
- *                          "Book9"
- *                     ]
- *     }
- *
- * @apiErrorExample {json} NoShelvesExist-Response:
- *     HTTP/1.1 400
- * {
- *   "ReturnMsg": "User has No Shelves"
- * }
- * @apiErrorExample {json} Invalidtoken-Response:
- *     HTTP/1.1 400
- *   {
- *      "ReturnMsg":'Invalid token.'
- *   }
- *
- * @apiErrorExample {json} NoTokenSent-Response:
- *     HTTP/1.1 401
- * {
- *   "ReturnMsg":'Access denied. No token provided.'
- * }
- */
+  * @api {GET} /Shelf/GetUserShelves.json  Gets All User's Shelves
+  * @apiName GetUserShelves
+  * @apiGroup Shelves
+  *
+  * @apiHeader {String} x-auth-token Authentication token
+  *
+  * @apiSuccess {String[]} Read        Gives the User the Book Ids of His Read.
+  * @apiSuccess {Number} NoOfRead        Gives the User the Number of Book Ids of His Read.
+  * @apiSuccess {String[]} WantToRead       Gives the User the Book Ids of His Want to Read.
+  * @apiSuccess {Number} NoOfWantToRead        Gives the User the Number of Book Ids of His Want to Read.
+  * @apiSuccess {String[]} Reading       Gives the User the Book Ids of His Currently Reading.
+  * @apiSuccess {Number} NoOfReading        Gives the User the Number of Book Ids of His Currently Reading.
+  * @apiSuccessExample {json} Success
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "Read": [
+  *                          "Book1",
+  *                          "Book2",
+  *                          "Book3"
+  *                     ],
+  *       "NoOfRead": 3,
+  *       "Reading": [
+  *                          "Book4",
+  *                          "Book5",
+  *                          "Book6"
+  *                     ],
+  *       "NoOfReading": 3,
+  *       "WantToRead": [
+  *                          "Book7",
+  *                          "Book8",
+  *                          "Book9"
+  *                     ],
+  *       "NoOfWantToRead": 3
+  *     }
+  *
+  * @apiErrorExample {json} NoShelvesExist-Response:
+  *     HTTP/1.1 400
+  * {
+  *   "ReturnMsg": "User has No Shelves"
+  * }
+  * @apiErrorExample {json} Invalidtoken-Response:
+  *     HTTP/1.1 400
+  *   {
+  *      "ReturnMsg":'Invalid token.'
+  *   }
+  *
+  * @apiErrorExample {json} NoTokenSent-Response:
+  *     HTTP/1.1 401
+  * {
+  *   "ReturnMsg":'Access denied. No token provided.'
+  * }
+  */
 
 
 
@@ -549,7 +608,7 @@
    * }
    */
 
-   //Update Book Status Want to Read to Reading
+   //Update Book Status from Want to Read to Reading
 
 
    /**
@@ -583,7 +642,7 @@
     * }
     */
 
-    //Update Book Status Reading to Read
+    //Update Book Status From Reading to Read
 
 
     /**

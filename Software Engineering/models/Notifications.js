@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 
 const NotificationSchema = new mongoose.Schema({
 
-    NotificationId:
+
+    NotificationId: 
+
     {
         type:String
     },
@@ -13,7 +15,10 @@ NotificationType:
 {
     type:String // wheather a comment or rate or review 
 },
-
+Seen:
+{
+    type: Boolean
+},
 //////////////////////////////////////////
 /////////////USER///////////////////
 UserId:

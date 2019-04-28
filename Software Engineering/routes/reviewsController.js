@@ -68,6 +68,26 @@ Router.post('/add', async (req, res) => {
     })
 });
 ///////////////////////////////////////////////
+////////////////////// Get Review By ID /////////////////
+Router.get('/getReview',async(req,res)=>{
+    
+    const {error} = validateget(req.query);
+
+    if(error) return res.status(400).send(error.details[0].message);
+
+   review.findOne( {'reviewId':req.query.reviewId},(err,doc)=>
+   {
+       if(err) { res.status(400).send("review doesn't exist!")}
+
+       if(!doc) { 
+        console.log(doc); 
+        res.status(400).send("error while retrieving data!")}
+       if(doc)
+       { res.status(200).send(doc)}
+   })
+
+})
+/////////////////////////////////////////
 ////Remove////
 /**
  * @api{POST}/review/remove remove and review on a book using the reviewId 
