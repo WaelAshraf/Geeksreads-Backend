@@ -1,9 +1,11 @@
 ///////////////////Required Modules//////////////////////////
 var express = require('express');
+const {CreatStatuses,CreatNotification} = require('../routes/Statuses');
 var Router = express.Router();
 const mongoose = require('mongoose');
 const {validate,comment} = require('../models/comments.model');
 const user = require("../models/User").User;
+const {review} = require("../models/reviews.model");
 const resource =mongoose.model('Resources');
 const Joi = require('joi');
 ///////////////////Req and Res Logic////////////////////////
@@ -84,15 +86,28 @@ Router.post('/', async (req, res) => {
     comment1.CommentId=comment1._id;  //7
     comment1.Photo= user1.Photo; //8
     comment1.LikesCount= 0; //9
-    console.log(user1.UserName);
-    console.log(user1.UserId);
-    console.log(comment1);
+   // console.log(user1.UserName);
+   // console.log(user1.UserId);
+   // console.log(comment1);
     comment1.save((err, doc) => {
         if (!err) {           
             
+        /*     // review.findOne({reviewId :req.body.ReviewId},(err,doc)=>
+            // {
+            //     console.log(doc);
+            //      if(doc)
+            //     {
+            //         var NotifiedUserId = doc.userI
+            //         console.log(doc.userId); 
+
+            //      CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment", comment1.userId,null);
+            //     }
+ */
+         //   });
             res.json({ "AddedCommentSuc": true });
-        }
-        else {
+    
+        }   
+            else {
             res.json({ "AddedCommentSuc": false });
             console.log('error during log insertion: ' + err);
         }

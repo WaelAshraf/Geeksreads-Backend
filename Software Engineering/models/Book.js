@@ -44,6 +44,11 @@ const BookSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
+  AuthorName:
+  {
+    type: String,
+
+  },
   ISBN:{
     type: String,
     unique: true
