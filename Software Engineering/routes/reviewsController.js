@@ -69,11 +69,11 @@ Router.post('/add', async (req, res) => {
 ////////////////////// Get Review By ID /////////////////
 Router.get('/getReview',async(req,res)=>{
     
-    const {error} = validateget(req.query);
+    const {error} = validateget(req.body);
 
     if(error) return res.status(400).send(error.details[0].message);
 
-   review.findOne( {'reviewId':req.query.reviewId},(err,doc)=>
+   review.findOne( {'reviewId':req.body.reviewId},(err,doc)=>
    {
        if(err) { res.status(400).send("review doesn't exist!")}
 
@@ -197,9 +197,9 @@ Router.post('/rate', async (req, res) => {
  */
 ////////////////////////////////////////////
 Router.get('/getrevbybookid', async (req, res) => {
-    const { error } = validateget(req.query);
+    const { error } = validateget(req.body);
    if (error) return res.status(400).send(error.details[0].message);
-   var allReviews=review.findById(req.query.bookId).toArray();
+   var allReviews=review.findById(req.body.bookId).toArray();
        console.log(allReviews);
        res.json(allReviews);
   
@@ -246,14 +246,14 @@ function validateget(reqin) {
 //////////////////////////////////
 
    Router.get('/getrev',async(req,res)=>{
-    const { error } = validateget(req.query);
+    const { error } = validateget(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     var likedArr =Array();
-    let Review = await review.find({bookId:req.query.bookId});
+    let Review = await review.find({bookId:req.body.bookId});
     var n=Review.length;
     for (var i = 0; i < n; i++) {
         console.log(i);
-        let Result = await user.find({ 'UserId': req.query.UserId, 'LikedReview[0]': Review[i].reviewId });
+        let Result = await user.find({ 'UserId': req.body.UserId, 'LikedReview[0]': Review[i].reviewId });
         console.log(Result);
                 if (Result) {
                     Review[i].liked = true;

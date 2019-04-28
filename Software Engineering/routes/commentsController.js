@@ -38,10 +38,10 @@ const Joi = require('joi');
  * @apiParam{Number} pageNumber Number of current page default is <code>1</code>
  */
 Router.get('/', async (req, res) => {
-    const { error } = validateget(req.query);
+    const { error } = validateget(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  comment.find({"ReviewId" : req.query.ReviewId}).then(commArr => {
+  comment.find({"ReviewId" : req.body.ReviewId}).then(commArr => {
       if(commArr.length==0) return res.status(404).json({ success: false });
       res.status(200).json(commArr);
   }).catch(err => res.status(404).json({ success: false }));
