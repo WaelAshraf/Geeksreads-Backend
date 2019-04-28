@@ -1627,25 +1627,25 @@ router.get("/Notifications" ,(req,res)=>
   */
 router.post("/Notification/seen" ,(req,res)=>
 {
-     if(req.body.NotificationId==null)
+     if(req.query.NotificationId==null)
      {
-        return  res.status(400).send("Bad request no UserID  Id is there");
+        return  res.status(400).send("Bad request no .NotificationId  Id is there");
     }
 
-      if (req.body.NotificationId.length == 0)
+      if (req.query.NotificationId.length == 0)
      {
-       return  res.status(400).send("Bad request no Satatus Id is there");
+       return  res.status(400).send("Bad request .NotificationId Id is there");
      }
 
 
-  Notification.findOneAndUpdate( {'NotificationId':req.body.NotificationId},
+  Notification.findOneAndUpdate( {'NotificationId':req.query.NotificationId},
   { $set : {'Seen' :true} },
   (err,doc)=>
 
    {
     if(!doc)
     {
-   return res.status(404).send("No Notifications were found");
+    return res.status(404).send("No Notifications were found");
     }
     if(doc.lenght==0)
     {

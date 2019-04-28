@@ -1,6 +1,7 @@
 ///////////////////Required Modules//////////////////////////
 var express = require('express');
-const {CreatStatuses,CreatNotification} = require('../routes/Statuses');
+const{CreatNotification} = require('../models/Notifications');
+const {CreatStatuses} = require("../models/Statuses")
 var Router = express.Router();
 const mongoose = require('mongoose');
 const {validate,comment} = require('../models/comments.model');
@@ -133,6 +134,27 @@ Router.post('/', async (req, res) => {
          
          */
     
+  //  console.log(user1.UserName);
+   // console.log(user1.UserId);
+    //console.log(comment1);
+    comment1.save((err, doc) => {
+        if (!err) {           
+            console.log(req.body.ReviewId);
+           review.findOne({"reviewId": req.body.ReviewId},(err,doc)=>
+            {
+                console.log(doc);
+                 if(doc)
+                {
+                    var NotifiedUserId = doc.userId;
+                    console.log(doc.userId); 
+
+                  CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment", comment1.userId,null);
+                  CreatStatuses(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment",comment1.userId,null,null);
+                }
+
+ 
+            });
+            res.json({ "AddedCommentSuc": true });
     
         }   
             else {

@@ -5,6 +5,9 @@ const mongoose= require ('mongoose');
 const user= require('../models/User').User;
 const {review} = require('../models/reviews.model');
 const {comment}=require('../models/comments.model');
+const{CreatNotification} = require('../models/Notifications');
+const {CreatStatuses} = require("../models/Statuses")
+
 const router = express.Router();
 /**
  * @api {Post} /like Like a resource 
@@ -59,9 +62,27 @@ router.post('/like',(req,res)=>{
                 { "$push": { "LikedComment": req.body.resourceId } },
                 function (err, user1) {
                     if (!err) {           
-                    console.log(req.body.resourceId);
                         
-                        return res.status(200).send("liked");
+                   
+                        comment.findOne({"CommentId": req.body.resourceId},(err,doc)=>
+                        {
+                            //console.log(doc);
+                             if(doc)
+                            {
+                                var NotifiedUserId = doc.userId;
+                              //  console.log(doc.userId);
+                                var ReviewId = doc.reviewId;
+                                
+            
+                              CreatNotification (NotifiedUserId,ReviewId,req.body.resourceId,"CommentLike", req.body.User_Id,null);
+                      
+                            }
+                        });
+
+
+                    return res.status(200).send("liked");
+                   
+                   
                     }
                     else {
                         return res.status(404).send("Not found");
@@ -90,8 +111,19 @@ router.post('/like',(req,res)=>{
                 { "$push": { "LikedReview": req.body.resourceId } },
                 function (err, user1) {
                     if (!err) {           
-                    
-                        
+                        review.findOne({"reviewId": req.body.resourceId},(err,doc)=>
+            {
+                 
+                if(doc)
+                {
+                    var NotifiedUserId = doc.userId;
+                    var BookID = doc.bookId
+                 
+                  CreatNotification(NotifiedUserId, doc.reviewId, null,"ReviewLike", req.body.User_Id,BookID);
+                }
+ 
+            });
+           
                         return res.status(200).send("liked");
                     }
                     else {
