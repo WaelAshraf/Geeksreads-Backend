@@ -6,7 +6,7 @@
  * @apiGroup User
  * @apiError {404} id-not-found The<code>userId_tobefollowed</code> was not found.
  * @apiSuccess {200} UNFollow Successful 
- * @apiParam  {String} myuserId GoodReads User ID
+ * @apiParam  {String} myuserid GoodReads User ID
  * @apiParam  {String} userId_tobefollowed GoodReads User ID
   
  * @apiSuccessExample {JSON}
