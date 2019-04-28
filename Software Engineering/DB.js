@@ -26,7 +26,7 @@ const app = express();
 } */
 
 // connecting to the database
-mongoose.connect('mongodb+srv://admin:admin@geeksreads-kjyxb.gcp.mongodb.net/geeksreaders?retryWrites=true',{ useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect('mongodb://localhost:27017/GreekReaders',{ useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error(err));
 
