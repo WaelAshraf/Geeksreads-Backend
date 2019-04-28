@@ -82,6 +82,7 @@ const StatusesSchema = new mongoose.Schema({
         type: String
     },
     
+    
     NumberOfStars:// for rating
     {
         type: Number

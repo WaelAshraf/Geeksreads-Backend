@@ -494,51 +494,29 @@ router.get('/byisbn', async (req,res) => {
  *
  * @apiError genre-not-found   The <code>genre</code> was not found.
  */
-router.get('/bygenre', async (req,res) => {
+
+  router.get('/bygenre', async (req,res) => {
   
         
       
-  mongoose.connection.collection("books").findOne({'Genre':req.query.Genre},
-  (err,doc) =>{
-   
-    if(!doc || err)
-    {
-      res.status(404).json({  // sends a json with 404 code
-        success: false ,  // book not retrieved  
-        "Message":"No books with this Genre was Found"});
-    }
-     else
-     {
-     res.status(200).json(doc);
-    
-     }
-    }
-
-
-  )}); 
-
-  /*router.get('/bygenre', async (req,res) => {
-  
-        
-      
-    Books.find({"Genre" : req.body.Genre}).then
+    Books.find({'Genre':req.query.Genre}).then
     (bookArr =>{
      
       if(bookArr.length==0)
       {
         res.status(404).json({  // sends a json with 404 code
-          success: false ,  // book not retrieved  
+          success: false ,  // book not retrieved 
           "Message":"No books with this Genre was Found"});
         }
        else
        {
-       res.status(200).json(doc);
+       res.status(200).json(bookArr);
       
        }
       }).catch(err => res.status(404).json({ success: false }));
   
   
-    });*/ 
+    });
  
   
 
