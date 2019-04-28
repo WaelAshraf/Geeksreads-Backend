@@ -782,7 +782,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
  * @apiGroup User
  * @apiError {404} id-not-found The<code>userId_tobefollowed</code> was not found.
  * @apiSuccess {200} Follow Successful or not
- * @apiParam  {String} myuserId GoodReads User ID
+ * @apiParam  {String} myuserid GoodReads User ID
  * @apiParam  {String} userId_tobefollowed GoodReads User ID
  * @apiSuccessExample {JSON}
  * HTTP/1.1 200 OK
@@ -808,6 +808,8 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
   console.log(req.params.userId_tobefollowed);
   console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
   console.log("my"+req.query.myuserid);*/
+ // console.log("my"+req.query.myuserid);
+  //console.log(req.query.userId_tobefollowed);
     mongoose.connection.collection("users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
       {
           UserId :  req.query.userId_tobefollowed //access document of user i want to follow
@@ -851,7 +853,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  * @apiGroup User
  * @apiError {404} id-not-found The<code>userId_tobefollowed</code> was not found.
  * @apiSuccess {200} UNFollow Successful
- * @apiParam  {String} myuserId GoodReads User ID
+ * @apiParam  {String} myuserid GoodReads User ID
  * @apiParam  {String} userId_tobefollowed GoodReads User ID
 
  * @apiSuccessExample {JSON}
@@ -878,6 +880,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
     console.log(req.params.userId_tobefollowed);
     console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
     console.log("my"+req.query.myuserid);*/
+   
       mongoose.connection.collection("users").updateOne( // accesses basic mongodb driver to update one document of Users Collection
 
         {
@@ -1084,4 +1087,128 @@ router.post("/Notification/seen" ,(req,res)=>
             };
             return Joi.validate(reqin, schema);
             }
+
+
+
+
+
+
+
+
+ /***************************
+    //Get People a user is following
+   /**
+    * @api{POST}/api/Users/getfollowing Get People a user is following 
+    * @apiName Get People a user is following
+    * @apiGroup User 
+    * @apiError {404} id-not-found The<code>user_id</code> was not found.
+    * @apiSuccess {200} Request  Successful or not
+    * @apiParam  {String} user_id GoodReads User ID
+
+ * @apiSuccessExample {JSON}
+ * HTTP/1.1 200 OK
+   {
+   [
+    "5c9132dd2b1afd02f4f8c909",
+    "5c9132dd3bd70fb83625a86a"
+    ]
+   }
+ *  @apiErrorExample {JSON}
+ *HTTP/1.1 404 Not Found
+ * {
+ * "success": false,
+ * "Message":"User Id not  found !"
+ * }
+ *
+ *
+ */
+
+
+//Get people a user is following 
+router.post('/getfollowing', async (req, res) => { //sends post request to /getfollowing End point through the router
+  /* console.log(req.body.userId_tobefollowed);
+  console.log(req.userId_tobefollowed);
+  console.log(req.params.userId_tobefollowed);
+  console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
+  console.log("my"+req.query.myuserid);*/
+    mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
+      (err,doc) =>{
+       
+      //  console.log(doc);
+
+        if(!doc || err)
+        {
+       //   console.log(doc);
+          res.status(404).json({  // sends a json with 404 code
+            success: false ,  // user not retrieved  
+             "Message":"User ID not  found !"});
+        }
+         else
+         {
+         //console.log(doc);
+         res.status(200).json(doc.FollowingUserId);
+        
+         }
+        });
+ });
+
+  /***************************
+    //Get User's Followers
+   /**
+    * @api{POST}/api/Users/getfollowers Get User's Followers
+    * @apiName Get User's Followers
+    * @apiGroup User 
+    * @apiError {404} id-not-found The<code>user_id</code> was not found.
+    * @apiSuccess {200} Request  Successful or not
+    * @apiParam  {String} user_id GoodReads User ID
+
+ * @apiSuccessExample {JSON}
+ * HTTP/1.1 200 OK
+   {
+   [
+    "5c9132dd2b1afd02f4f8c909",
+    "5c9132dd3bd70fb83625a86a"
+    ]
+   }
+ *  @apiErrorExample {JSON}
+ *HTTP/1.1 404 Not Found
+ * {
+ * "success": false,
+ * "Message":"User Id not  found !"
+ * }
+ *
+ *
+ */
+
+
+//Get User's Followers
+router.post('/getfollowers', async (req, res) => { //sends post request to /getfollowers End point through the router
+  /* console.log(req.body.userId_tobefollowed);
+  console.log(req.userId_tobefollowed);
+  console.log(req.params.userId_tobefollowed);
+  console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
+  console.log("my"+req.query.myuserid);*/
+    mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
+      (err,doc) =>{
+       
+      //  console.log(doc);
+
+        if(!doc || err)
+        {
+       //   console.log(doc);
+          res.status(404).json({  // sends a json with 404 code
+            success: false ,  // user not retrieved  
+             "Message":"User ID not  found !"});
+        }
+         else
+         {
+         //console.log(doc);
+         res.status(200).json(doc.FollowersUserId);
+        
+         }
+        });
+ });
+
+
+            
 module.exports = router;
