@@ -40,6 +40,12 @@ var reviewSchema = new mongoose.Schema({
     userId: {
         type: ObjectId//7 /done
 
+    },
+    bookCover:{
+        type: String
+    },
+    commCount:{
+        type: Number
     }
     ,
     userName: {

@@ -77,6 +77,10 @@ Router.post('/', async (req, res) => {
     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
     const user1 = await user.findById(req.body.userId);
     //////////////////////////////////////////////////////////////
+    let check1 = await review.findOne({ reviewId: req.body.ReviewId });
+    if (!check1) return res.status(400).send({"ReturnMsg":"review Doesn't Exist"});
+    const review1 = await review.findById(req.body.ReviewId);
+    /////////////////////////////////////////////////////////////
     comment1.Body = req.body.Body;//1
     comment1.userId=req.body.userId;//2
     comment1.userName = user1.UserName; //3
@@ -87,12 +91,19 @@ Router.post('/', async (req, res) => {
     comment1.Photo= user1.Photo; //8
     comment1.LikesCount= 0; //9
     comment1.liked= false;
-    console.log(user1.UserName);
+    /* console.log(user1.UserName);
     console.log(user1.UserId);
-    console.log(comment1);
+    console.log(comment1); */
     comment1.save((err, doc) => {
         if (!err) {           
-            
+            review.findOneAndUpdate({"reviewId":req.body.ReviewId},{$inc:{commCount:1}},function (err, user1) {
+                if (!err) {             
+                    return res.status(200).send({ "AddedCommentSuc": true });
+                }
+                else {
+                    return res.status(404).send("Not found");
+                    console.log('error during log insertion: ' + err);}
+            });
         /*     // review.findOne({reviewId :req.body.ReviewId},(err,doc)=>
             // {
             //     console.log(doc);
@@ -105,7 +116,23 @@ Router.post('/', async (req, res) => {
             //     }
  */
          //   });
-            res.json({ "AddedCommentSuc": true });
+
+
+         /*review1
+         
+          review.findOneAndUpdate({"reviewId":review1._id},{$inc:{commCount:1}},function (err, user1) {
+                if (!err) {             
+                    return res.status(200).send({ "AddedCommentSuc": true });
+                }
+                else {
+                    return res.status(404).send("Not found");
+                    console.log('error during log insertion: ' + err);}
+            });
+         
+         
+         
+         */
+    
     
         }   
             else {
