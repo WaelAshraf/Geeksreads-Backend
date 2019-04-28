@@ -1,6 +1,6 @@
 ///////////////////Required Modules//////////////////////////
 var express = require('express');
-
+const {CreatStatuses} = require("../models/Statuses")
 var Router = express.Router();
 const mongoose = require('mongoose');
 const {validate,review} = require('../models/reviews.model');
@@ -9,7 +9,7 @@ const Joi = require('joi');
 ///////////////////Req and Res Logic////////////////////////
 
 /**
- * @api{POST}/review/add Add new review on a book 
+ * @api{POST} api/reviews/add Add new review on a book 
  * @apiName addNewReviewOnBook 
  * @apiGroup Reviews
  * @apiError {400} Bad request
@@ -21,7 +21,6 @@ const Joi = require('joi');
  *}
  * @apiParam{String} reviewBody body of the review written on the book
  * @apiParam{Date} reviewDate the date the review where written at the date is in iso format
- * @apiParam{String} shelf one of three shelves Read, Reading, WantToRead
  * @apiParam{ObjectID} bookId the id of the book reviewed by the user
  * @apiParam{ObjectID} userId the id of the user
 
@@ -51,8 +50,17 @@ Router.post('/add', async (req, res) => {
         console.log(review1.userName);
     review1.save((err,doc)=>{
         if (!err) {           
-            {        review.findOneAndUpdate({"reviewId":review1._id},{$push:{rating:0}},function (err, user1) {
+            {      
+                  review.findOneAndUpdate({"reviewId":review1._id},{$push:{rating:0}},function (err, user1) {
                 if (!err) {             
+
+                    console.log ("we  saving")
+
+
+                CreatStatuses( req.body.userId ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
+
+
+
                     return res.status(200).send({ "AddedReviewSuc": true });
                 }
                 else {
@@ -174,11 +182,11 @@ Router.post('/rate', async (req, res) => {
 * @apiSuccess {String} reviewBody the body of the review
 * @apiSuccess {String} reviewDate the date the review was written
 * @apiSuccess {String} reviewBody the body of the review
-* @apiSuccess{ObjectId} bookId the id of the book rated by the user
-* @apiSuccess{ObjectId} userId the id of the user rating the book
-* @apiSuccess{String} userName the name of the user who wrote the review
-* @apiSuccess{Number} LikesCount the number of likes on this review
-*@apiSuccess{Bool} Liked is the comment liked or not by the current user
+* @apiSuccess {ObjectId} bookId the id of the book rated by the user
+* @apiSuccess {ObjectId} userId the id of the user rating the book
+* @apiSuccess {String} userName the name of the user who wrote the review
+* @apiSuccess {Number} LikesCount the number of likes on this review
+* @apiSuccess {Bool} Liked is the comment liked or not by the current user
  * @apiSuccessExample
  * [
 *[{_id : "5c9620083a3c692cd445a32a",
@@ -191,9 +199,9 @@ Router.post('/rate', async (req, res) => {
  *userName:"saad" ,
  *LikesCount : 2 }, true ],......
  *]
-   * @apiParam{ObjectId} UserId the id of the book rated by the user
-  * @apiParam{ObjectId} bookId the id of the user rating the book
-  * @apiParam{Number} rating the rating of the book by the user
+   * @apiParam {ObjectId} UserId the id of the book rated by the user
+  * @apiParam {ObjectId} bookId the id of the user rating the book
+  * @apiParam {Number} rating the rating of the book by the user
 
 
  */
