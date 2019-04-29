@@ -70,6 +70,11 @@ MakerName:
       ReviewLikesCount: {
           type: Number 
       },
+      
+    ReviewIsLiked:
+    {
+      type: Boolean 
+    },
       //////////////////////////////////
       ////////////Comment//////////////
       CommentId:
@@ -87,6 +92,12 @@ MakerName:
       CommentLikesCount: {
           type: Number //9 /done
       },
+      
+    CommentIsLiked:
+    {
+      type: Boolean 
+    },
+    
       ////////////////////////////////////////
       //////////BOook/////////////////////
       BookId:
@@ -102,6 +113,10 @@ MakerName:
           type: String
       },
 
+      BookStatus: // Read WantToRead Reading 
+      {
+      type: String
+      },
 });
 const Notification = mongoose.model('Notification', NotificationSchema);
 
@@ -109,29 +124,31 @@ async function CreatNotification( NotifiedUserId ,ReviewId , Comment1Id, Type, M
 {
   console.log( NotifiedUserId ,ReviewId , Comment1Id, Type, MakerId, Book1Id )
 // basic infos
+if ( NotifiedUserId ==MakerId)
+{
+return   console.log(" no notification will be added for the same user")
+}
   var  newNotification = new Notification(
     {
       "UserId":NotifiedUserId,
       "NotificationType":Type, 
+      "ReviewIsLiked": false,
+      "BookStatus": null
+    
     });
     newNotification.NotificationId=newNotification._id;
 //get the Maker Infos//
-console.log(newNotification);
-
    await User.findOne({ "UserId" : MakerId},(err,doc )=>
     {
-      console.log("im in the user mother fucker");
-        
+
       if (!doc)
       {
         return console.log("Wrong Maker Id")
       }
       else{
-        console.log("im in the user mother fucker");
         newNotification.MakerId=doc.UserId;
         newNotification.MakerPhoto=doc.Photo;
         newNotification.MakerName =doc.UserName; 
-        console.log(newNotification);   
   
       }
 
@@ -150,7 +167,6 @@ if ( Type == "ReviewLike")
   }
   else
   {
-    console.log("im in the review in case of like mother fucker");
     newNotification.ReviewId=doc.reviewId;
     newNotification.ReviewBody=doc.reviewBody;
     newNotification.ReviewDate=doc.reviewDate;
@@ -170,6 +186,7 @@ await Books.findOne({"BookId":Book1Id},(err,doc) =>
     }
     else
     {
+      console.log (doc);
       newNotification.BookId=doc.BookId;
       newNotification.BookName=doc.Title;
       newNotification.BookPhoto=doc.Cover;    
