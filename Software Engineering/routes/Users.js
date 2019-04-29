@@ -1766,7 +1766,7 @@ router.post('/getfollowers', async (req, res) => { //sends post request to /getf
   console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
   console.log("my"+req.query.myuserid);*/
     mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
-      (err,doc) =>{
+      async (err,doc) =>{
 
       //  console.log(doc);
 
@@ -1780,7 +1780,16 @@ router.post('/getfollowers', async (req, res) => { //sends post request to /getf
          else
          {
          //console.log(doc);
-         res.status(200).json(doc.FollowersUserId);
+         FollowersUserId=doc.FollowersUserId;
+         var FollowersData = Array();
+         n=FollowersUserId.length;
+         for(i=0;i<n;i++)
+         {
+          let X= await User.findById(FollowersUserId[i]).select('-UserPassword');
+          FollowersData.push(X);
+         }
+         res.status(200).json(FollowersData);
+
 
          }
         });
