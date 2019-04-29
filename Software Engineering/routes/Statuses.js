@@ -4,6 +4,8 @@ const {Status,validate} = require('../models/Statuses');
 const auth = require('../middleware/auth');
 const Joi = require('joi');
 const {Notification}= require('../models/Notifications');
+const User= require('../models/User').User;
+
 //const auth = require('../middleware/auth');
 const router = express.Router();
 
@@ -147,66 +149,74 @@ router.post("/",(req,res)=>
  */
 
 
-router.get("/show",auth ,(req,res)=>
-{
-     if(req.body.UserId==null)
-     {
-        return  res.status(400).send("Bad request no UserID  Id is there");
-    }
+router.get("/show" ,auth,async(req,res)=>
+ {
+//      if(req.query.UserId==null)
+//      {
+//         return  res.status(400).send("Bad request no UserID  Id is there");
+//     }
 
-      if (req.body.UserId.length == 0)
-     {
-       return  res.status(400).send("Bad request no Satatus Id is there");
-     }
+//       if (req.query.UserId.length == 0)
+//      {
+//        return  res.status(400).send("Bad request no Satatus Id is there");
+//      }
 
 
-  Status.find( {'UserId':req.body.UserId},(err,doc)=>
+  await Status.find( {'UserId':req.user._id},async(err,doc)=>
 
    {
     if(!doc)
-    {
-   return res.status(404).send("No statuses were found");
-    }
+    {  return res.status(404).send("No statuses were found"); }
     if(doc.lenght==0)
-    {
-   return res.status(404).send("No statuses were found");
-    }
-
+    {return res.status(404).send("No statuses were found");}
+   
+   
     var n = doc.length;
-    for (var i=0 ;i<n;i++)
-    {
-      if (doc[i].StatusType == "Comment")
-      {
-        if (doc[i].CommentId == !null)
-        {
- 
-        }
-      };
-
-     if (doc[i].StatusType == "Review")
-     {
-       if (doc[i].BookId == !null)
-       {
-
-       }
+    console.log (n);
+    let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Read Reading');
+       console.log(Result);
       
-     }
-     if (doc[i].ReviewId == !null)
-       {
+    for (var i=0 ;i<n;i++)
+   {
+     if (doc[i].ReviewId)
+     {
+       var exsist = Result[0].LikedReview.indexOf(doc[i].ReviewId);
+               if (exsist>=0) {
+               
+                 doc[i].ReviewIsLiked =true;  
+                 }
+               else
+                {
+                   doc[i].ReviewIsLiked =false;  
+               
+                 }
+            if (doc[i].BookId) // in case of review thats mean we have book so we have to check is is reading or want to read ....     
+                 {
+                  var exsist = Result[0].WantToRead.indexOf(doc[i].BookId);
+                  if (exsist>=0) {doc[i].BookStatus ="WantToRead";}
+                  else
+                   {
+                    exsist = Result[0].Read.indexOf(doc[i].BookId);
+                    if (exsist>=0) {doc[i].BookStatus ="Read";}
+                    else
+                    {
+                      exsist = Result[0].Reading.indexOf(doc[i].BookId);
+                    if (exsist>=0) {doc[i].BookStatus ="Reading";}
+                    else{doc[i].BookStatus =null;}
+                    }
+                    }
+     
 
-       }
-
+                 }
+      }    
+  
+  
+   
     }
-
-
-    res.status(200).send(
-        doc
-    )
-   }
-)
-
-
-});/**
+    res.status(200).send(doc )
+   });
+  });
+   /**
 * @api{Post} /user_status/delete Delete User Status
 * @apiVersion 0.0.0
 * @apiName DeleteStatus
