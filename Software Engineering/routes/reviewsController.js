@@ -66,15 +66,22 @@ Router.post('/add', async (req, res) => {
                 if (!err) {             
 
                     console.log ("we  saving")
+                   var n = user1.FollowersUserId.length; 
+                   console.log(n);
+                     for (i=0;i<n;i++)
+                   {
 
+                    CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
 
-                CreatStatuses( req.body.userId ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
+                   }  
+
 
 
 
                     return res.status(200).send({ "AddedReviewSuc": true });
                 }
                 else {
+                    console.log('error during log insertion: ' + err);
                     return res.status(404).send("Not found");
                     console.log('error during log insertion: ' + err);}
             });

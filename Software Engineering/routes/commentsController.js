@@ -149,7 +149,11 @@ Router.post('/', async (req, res) => {
                     console.log(doc.userId); 
 
                   CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment", comment1.userId,null);
-                  CreatStatuses(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment",comment1.userId,null,null);
+                  var n = user1.FollowersUserId.length;  
+                  for (i=0;i<n;i++)
+                  {
+                  CreatStatuses(user1.FollowersUserId[i],req.body.ReviewId,comment1.CommentId,"Comment",comment1.userId,null,null);
+                  }               
                 }
 
  
