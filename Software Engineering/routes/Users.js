@@ -1746,14 +1746,14 @@ router.post("/Notification/seen" ,(req,res)=>
 
 
 //Get people a user is following
-router.post('/getfollowing', async (req, res) => { //sends post request to /getfollowing End point through the router
+router.post('/getfollowing', async (req, res) => { //sends post request to /getfollowers End point through the router
   /* console.log(req.body.userId_tobefollowed);
   console.log(req.userId_tobefollowed);
   console.log(req.params.userId_tobefollowed);
   console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
   console.log("my"+req.query.myuserid);*/
     mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
-      (err,doc) =>{
+      async (err,doc) =>{
 
       //  console.log(doc);
 
@@ -1767,7 +1767,17 @@ router.post('/getfollowing', async (req, res) => { //sends post request to /getf
          else
          {
          //console.log(doc);
-         res.status(200).json(doc.FollowingUserId);
+         FollowingUserId=doc.FollowingUserId;
+         var followingData = Array();
+         //console.log(FollowingUserId);
+         n=FollowingUserId.length;
+         for(i=0;i<n;i++)
+         {
+          let X= await User.findById(FollowingUserId[i]).select('-UserPassword');
+          followingData.push(X);
+         }
+         res.status(200).json(followingData);
+
 
          }
         });
@@ -1810,7 +1820,7 @@ router.post('/getfollowers', async (req, res) => { //sends post request to /getf
   console.log(req.query.userId_tobefollowed);  //ONLY WORKINGGGGGGGGGGGG
   console.log("my"+req.query.myuserid);*/
     mongoose.connection.collection("users").findOne({UserId:req.query.user_id},
-      (err,doc) =>{
+      async (err,doc) =>{
 
       //  console.log(doc);
 
@@ -1824,7 +1834,16 @@ router.post('/getfollowers', async (req, res) => { //sends post request to /getf
          else
          {
          //console.log(doc);
-         res.status(200).json(doc.FollowersUserId);
+         FollowersUserId=doc.FollowersUserId;
+         var FollowersData = Array();
+         n=FollowersUserId.length;
+         for(i=0;i<n;i++)
+         {
+          let X= await User.findById(FollowersUserId[i]).select('-UserPassword');
+          FollowersData.push(X);
+         }
+         res.status(200).json(FollowersData);
+
 
          }
         });

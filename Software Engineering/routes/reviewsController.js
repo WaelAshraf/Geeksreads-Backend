@@ -30,6 +30,14 @@ const Joi = require('joi');
 
 ////post////
 Router.post('/add', async (req, res) => {
+        if(req.body.rating!=null)
+        {
+            rate = req.body.rating;
+        }
+        else{
+            rate = 0;
+            req.body.rating=0;
+        }
      const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     var review1= new review();
@@ -53,11 +61,6 @@ Router.post('/add', async (req, res) => {
         review1.userName=user1.UserName; //8
         review1.photo=user1.Photo; //9 Users Photo 
         review1.likesCount=0; //10
-        var rate=0;
-        if(req.body.rating!=null)
-        {
-            rate = req.body.rating;
-        }
         console.log(user1.UserName);
         console.log(user1.UserId);
         console.log(review1.userName);
