@@ -98,49 +98,8 @@ Router.post('/', async (req, res) => {
     comment1.save((err, doc) => {
         if (!err) {           
             review.findOneAndUpdate({"reviewId":req.body.ReviewId},{$inc:{commCount:1}},function (err, user1) {
-                if (!err) {             
-                    return res.status(200).send({ "AddedCommentSuc": true });
-                }
-                else {
-                    return res.status(404).send("Not found");
-                    console.log('error during log insertion: ' + err);}
-            });
-        /*     // review.findOne({reviewId :req.body.ReviewId},(err,doc)=>
-            // {
-            //     console.log(doc);
-            //      if(doc)
-            //     {
-            //         var NotifiedUserId = doc.userI
-            //         console.log(doc.userId); 
-
-            //      CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment", comment1.userId,null);
-            //     }
- */
-         //   });
-
-
-         /*review1
-         
-          review.findOneAndUpdate({"reviewId":review1._id},{$inc:{commCount:1}},function (err, user1) {
-                if (!err) {             
-                    return res.status(200).send({ "AddedCommentSuc": true });
-                }
-                else {
-                    return res.status(404).send("Not found");
-                    console.log('error during log insertion: ' + err);}
-            });
-         
-         
-         
-         */
-    
-  //  console.log(user1.UserName);
-   // console.log(user1.UserId);
-    //console.log(comment1);
-    comment1.save((err, doc) => {
-        if (!err) {           
-            console.log(req.body.ReviewId);
-           review.findOne({"reviewId": req.body.ReviewId},(err,doc)=>
+                if (!err) {
+                    review.findOne({"reviewId": req.body.ReviewId},(err,doc)=>
             {
                 console.log(doc);
                  if(doc)
@@ -157,8 +116,17 @@ Router.post('/', async (req, res) => {
                 }
 
  
+            });             
+                    return res.status(200).send({ "AddedCommentSuc": true });
+                }
+                else {
+                    return res.status(404).send("Not found");
+                    console.log('error during log insertion: ' + err);}
             });
-            res.json({ "AddedCommentSuc": true });
+        
+  //  console.log(user1.UserName);
+   // console.log(user1.UserId);
+    //console.log(comment1);
     
         }   
             else {
