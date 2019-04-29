@@ -50,19 +50,26 @@ Router.post('/add', async (req, res) => {
     review1.save((err,doc)=>{
         if (!err) {           
             {      
-                  review.findOneAndUpdate({"reviewId":review1._id},{$push:{rating:0}},function (err, user1) {
+                  review.findOneAndUpdate({"reviewId":review1._id},{$set:{rating:0}},function (err, doc) {
                 if (!err) {             
 
                     console.log ("we  saving")
+                   var n = user1.FollowersUserId.length; 
+                   console.log(n);
+                     for (i=0;i<n;i++)
+                   {
 
+                    CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
 
-                CreatStatuses( req.body.userId ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
+                   }  
+
 
 
 
                     return res.status(200).send({ "AddedReviewSuc": true });
                 }
                 else {
+                    console.log('error during log insertion: ' + err);
                     return res.status(404).send("Not found");
                     console.log('error during log insertion: ' + err);}
             });

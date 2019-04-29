@@ -54,6 +54,10 @@ const StatusesSchema = new mongoose.Schema({
     ReviewLikesCount: {
         type: Number 
     },
+    ReviewIsLiked:
+    {
+      type: Boolean 
+    },
     //////////////////////////////////
     ////////////Comment//////////////
     CommentId:
@@ -71,6 +75,11 @@ const StatusesSchema = new mongoose.Schema({
     CommentLikesCount: {
         type: Number //9 /done
     },
+    
+    CommentIsLiked:
+    {
+      type: Boolean 
+    },
     ////////////////////////////////////////
     //////////BOook/////////////////////
     BookId:
@@ -86,7 +95,10 @@ const StatusesSchema = new mongoose.Schema({
         type: String
     },
     
-    
+    BookStatus: // Read WantToRead Reading 
+    {
+    type: String
+    },
     NumberOfStars:// for rating
     {
         type: Number
@@ -128,6 +140,9 @@ console.log(FollowerId ,ReviewId , Comment1Id, Type, MakerId, NumberOfStars, Boo
     {
       "UserId":FollowerId,
       "StatusType":Type, 
+      "CommentIsLiked" : false,
+      "ReviewIsLiked": false,
+      "BookStatus": null
     });
     newStatus.StatusId=newStatus._id;
 //get the Maker Infos//

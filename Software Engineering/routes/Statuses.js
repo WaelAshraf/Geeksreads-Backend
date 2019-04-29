@@ -172,6 +172,33 @@ router.get("/show",auth ,(req,res)=>
    return res.status(404).send("No statuses were found");
     }
 
+    var n = doc.length;
+    for (var i=0 ;i<n;i++)
+    {
+      if (doc[i].StatusType == "Comment")
+      {
+        if (doc[i].CommentId == !null)
+        {
+ 
+        }
+      };
+
+     if (doc[i].StatusType == "Review")
+     {
+       if (doc[i].BookId == !null)
+       {
+
+       }
+      
+     }
+     if (doc[i].ReviewId == !null)
+       {
+
+       }
+
+    }
+
+
     res.status(200).send(
         doc
     )
