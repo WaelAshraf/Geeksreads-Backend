@@ -68,6 +68,17 @@ res.status(200).send({
 
 });
 
+router.post('/SignOut', auth, async (req, res) => {
+
+  let check = await User.findOne({ UserId: req.user._id });
+  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  res.status(200).send({
+  "ReturnMsg": "Signed out Successfully"
+  });
+
+});
+
+
 
 
 
@@ -311,7 +322,7 @@ const salt = await bcrypt.genSalt(10);
 user.UserId = user._id;
 user.UserPassword = await bcrypt.hash(user.UserPassword, salt);
 await user.save();
-const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'), {expiresIn: '1h'});
+const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'));
 let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
@@ -1701,7 +1712,7 @@ router.get("/Notifications" ,auth ,async(req,res)=>
       console.log (n);
       let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Reading Read');
          console.log(Result);
-        
+
       for (var i=0 ;i<n;i++)
      {
        if (doc[i].ReviewId)
@@ -1711,15 +1722,15 @@ router.get("/Notifications" ,auth ,async(req,res)=>
          console.log(exsist);
 
                  if (exsist>=0) {
-                 
-                   doc[i].ReviewIsLiked =true;  
+
+                   doc[i].ReviewIsLiked =true;
                    }
                  else
                   {
-                     doc[i].ReviewIsLiked =false;  
+                     doc[i].ReviewIsLiked =false;
                    }
-                  
-               if (doc[i].BookId) // in case of review thats mean we have book so we have to check is is reading or want to read ....     
+
+               if (doc[i].BookId) // in case of review thats mean we have book so we have to check is is reading or want to read ....
                    {
                     var exsist = Result[0].WantToRead.indexOf(doc[i].BookId);
                     if (exsist>=0) {doc[i].BookStatus ="WantToRead";}
@@ -1735,13 +1746,13 @@ router.get("/Notifications" ,auth ,async(req,res)=>
                       }
                       }
                     }
-  
-  
-   
-        }    
-    
+
+
+
+        }
+
      }
-     
+
     res.status(200).send(
         doc
     )
