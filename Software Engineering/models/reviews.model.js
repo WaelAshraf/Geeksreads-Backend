@@ -67,6 +67,7 @@ function validateReview(Review) {
     const schema = {
     reviewBody: Joi.string().min(6).max(255).required(),
     reviewDate: Joi.date().iso(),
+    rating: Joi.number().min(0),
     photo: Joi.string(),
     bookId: Joi.string(),
     userId: Joi.string(),

@@ -1673,20 +1673,20 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  */
 
 
-router.get("/Notifications" ,(req,res)=>
+router.get("/Notifications" ,auth ,async(req,res)=>
 {
-     if(req.query.UserId==null)
-     {
-        return  res.status(400).send("Bad request no UserID  Id is there");
-    }
+//      if(req.user._id==null)
+//      {
+//         return  res.status(400).send("Bad request no UserID  Id is there");
+//     }
 
-      if (req.query.UserId.length == 0)
-     {
-       return  res.status(400).send("Bad request no Satatus Id is there");
-     }
+//       if (req.user._id.length == 0)
+//      {
+//        return  res.status(400).send("Bad request no Satatus Id is there");
+//      }
 
 
-  Notification.find( {'UserId':req.query.UserId},(err,doc)=>
+  Notification.find( {'UserId':req.user._id},async (err,doc)=>
 
    {
     if(!doc)
@@ -1697,7 +1697,51 @@ router.get("/Notifications" ,(req,res)=>
     {
    return res.status(404).send("No Notifications were found");
     }
+      var n = doc.length;
+      console.log (n);
+      let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Reading Read');
+         console.log(Result);
+        
+      for (var i=0 ;i<n;i++)
+     {
+       if (doc[i].ReviewId)
+       {
+        console.log(doc[i].ReviewId);
+         var exsist = Result[0].LikedReview.indexOf(doc[i].ReviewId);
+         console.log(exsist);
 
+                 if (exsist>=0) {
+                 
+                   doc[i].ReviewIsLiked =true;  
+                   }
+                 else
+                  {
+                     doc[i].ReviewIsLiked =false;  
+                   }
+                  
+               if (doc[i].BookId) // in case of review thats mean we have book so we have to check is is reading or want to read ....     
+                   {
+                    var exsist = Result[0].WantToRead.indexOf(doc[i].BookId);
+                    if (exsist>=0) {doc[i].BookStatus ="WantToRead";}
+                    else
+                     {
+                      exsist = Result[0].Read.indexOf(doc[i].BookId);
+                      if (exsist>=0) {doc[i].BookStatus ="Read";}
+                      else
+                      {
+                        exsist = Result[0].Reading.indexOf(doc[i].BookId);
+                      if (exsist>=0) {doc[i].BookStatus ="Reading";}
+                      else{doc[i].BookStatus =null;}
+                      }
+                      }
+                    }
+  
+  
+   
+        }    
+    
+     }
+     
     res.status(200).send(
         doc
     )

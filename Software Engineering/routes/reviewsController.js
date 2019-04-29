@@ -30,6 +30,14 @@ const Joi = require('joi');
 
 ////post////
 Router.post('/add', async (req, res) => {
+        if(req.body.rating!=null)
+        {
+            rate = req.body.rating;
+        }
+        else{
+            rate = 0;
+            req.body.rating=0;
+        }
      const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     var review1= new review();
@@ -39,11 +47,12 @@ Router.post('/add', async (req, res) => {
     let check1 = await book.findOne({ BookId: req.body.bookId });
     console.log(check1);
     if (!check1) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
-    const book1 = await book.findById(req.body.bookId); 
+    
+    const book1 =check1;
     console.log(book1);
         review1.reviewId=review1._id; //1  
         review1.bookId=req.body.bookId; //2
-        review1.bookCover=book1.Cover; 
+        review1.bookCover=  book1.Cover; 
         review1.reviewBody=req.body.reviewBody; //4
         review1.reviewDate=req.body.reviewDate; //5
         review1.userId=user1.UserId; //7
@@ -52,29 +61,27 @@ Router.post('/add', async (req, res) => {
         review1.userName=user1.UserName; //8
         review1.photo=user1.Photo; //9 Users Photo 
         review1.likesCount=0; //10
-        var rate=0;
-        if(req.body.rating!=null)
-        {
-            rate = req.body.rating;
-        }
         console.log(user1.UserName);
         console.log(user1.UserId);
         console.log(review1.userName);
-    review1.save((err,doc)=>{
+    review1.save(async(err,doc)=>{
         if (!err) {           
-            {        review.findOneAndUpdate({"reviewId":review1._id},{$set:{rating:rate}},function (err, user1) {
+            {       await review.findOneAndUpdate({"reviewId":review1._id},{$set:{rating:rate}},function (err, user1) {
                 if (!err) {             
 
                     console.log ("we  saving")
-                   var n = user1.FollowersUserId.length; 
+                  
+                  if (user1.FollowersUserId)
+                  {  
+                  var n = user1.FollowersUserId.length; 
                    console.log(n);
                      for (i=0;i<n;i++)
                    {
 
-                    CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
+                         CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
 
                    }  
-
+                }
 
 
 
