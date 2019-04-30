@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 //const sendgrid = require('sendgrid');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const {User,validate,DateValidate,NewPassWordValidate} = require('../models/User');
+const {User,validate,DateValidate,NewPassWordValidate,Mailvalidate,NewPasswordOnlyValidate} = require('../models/User');
 const {Notification}= require('../models/Notifications');
 const mongoose = require('mongoose');
 const nodeMailer = require('nodemailer');
@@ -14,6 +14,75 @@ const nodeMailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
 const Author= require('../models/Author.model');
+
+
+router.post('/ForgotPassword', async (req, res) => {
+  const { error } = Mailvalidate(req.body);
+  if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
+  let user = await User.findOne({ UserEmail: req.body.UserEmail.toLowerCase() });
+  if(!user)  return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'), {expiresIn: '1h'});
+let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'geeksreads@gmail.com',
+              pass: 'AaBb1234'
+          }
+      });
+  let mailOptions = {
+     from: 'no-reply@codemoto.io',
+to: user.UserEmail,
+subject: 'Assign New Password',
+text: 'Hello,\n\n' + 'Please Click on this link to change your Password: \nhttp:\/\/' + req.headers.host + '/api/users/ChangeForgottenPassword/.\n Copy And Paste this Verification Code to change your password :\n' +token+'\n' };
+let info = await transporter.sendMail(mailOptions);
+transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+res.status(200).send({"ReturnMsg":"An Email has been Sent to change your Forgotten Password " + req.body.UserEmail.toLowerCase() + "."});
+//res.header('x-auth-token', token).send(_.pick(user, ['_id', 'UserName', 'UserEmail']));
+});
+});
+
+
+
+
+
+
+router.post('/ChangeForgotPassword', auth, async (req, res) => {
+
+  let check = await User.findOne({ UserEmail: req.user.UserEmail });
+  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  const user = await User.findOne({UserEmail: req.user.UserEmail }).select('-UserPassword');
+  const { error } = NewPasswordOnlyValidate(req.body);
+  if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
+//  console.log(user);
+const salt = await bcrypt.genSalt(10);
+user.UserPassword = await bcrypt.hash(req.body.NewUserPassword, salt);
+await user.save();
+res.status(200).send({
+  "ReturnMsg": "Update Successful"
+});
+
+});
+
+router.post('/SignOut', auth, async (req, res) => {
+
+  let check = await User.findOne({ UserId: req.user._id });
+  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  res.status(200).send({
+  "ReturnMsg": "Signed out Successfully"
+  });
+
+});
+
+
+
+
+
+
 
 //get current User
 
@@ -69,14 +138,54 @@ const Author= require('../models/Author.model');
  *
  */
 
-router.get('/me', auth, async (req, res) => {
+ router.all('/me', auth, async (req, res) => {
+   let check = await User.findOne({ UserId: req.user._id });
+   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+   const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v ');
+   if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
+   var NoOfFollowings = user.FollowingUserId.length;
+   var NoOfFollowers = user.FollowersUserId.length;
+   var Result={
+     "NoOfFollowings":NoOfFollowings,
+     "NoOfFollowers":NoOfFollowers,
+     "UserEmail":user.UserEmail,
+     "UserName":user.UserName,
+     "Photo":user.Photo,
+     "UserBirthDate":user.UserBirthDate
+   }
+   res.status(200).send(Result);
+ });
 
+
+
+
+router.all('/GetUserById', auth, async (req, res) => {////////////////////other profile
   let check = await User.findOne({ UserId: req.user._id });
   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  const userdisplay = await User.findById(req.body.UserId).select('-UserPassword  -_id  -__v ');
   const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v ');
   if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
-  res.status(200).send(user);
+  var NoOfFollowings = userdisplay.FollowingUserId.length;
+  var NoOfFollowers = userdisplay.FollowersUserId.length;
+  var x;
+  let finding = await User.findOne({ UserId: req.user._id, FollowingUserId:req.body.UserId  });
+  if (finding) x= "True";
+  if(!finding) x= "False";
+  var Result={
+    "NoOfFollowings":NoOfFollowings,
+    "NoOfFollowers":NoOfFollowers,
+    "UserEmail":userdisplay.UserEmail,
+    "UserName":userdisplay.UserName,
+    "Photo":userdisplay.Photo,
+    "UserBirthDate":userdisplay.UserBirthDate,
+    "IsFollowing":x
+  }
+  res.status(200).send(Result);
 });
+
+
+
+
 
 ////////////////////////
 //////////get user by id////////////
@@ -213,7 +322,7 @@ const salt = await bcrypt.genSalt(10);
 user.UserId = user._id;
 user.UserPassword = await bcrypt.hash(user.UserPassword, salt);
 await user.save();
-const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'));;
+const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'));
 let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
@@ -698,7 +807,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           "BookId":book.BookId,
           "Title":book.Title,
           "AuthorId": book.AuthorId,
-          "BookRating": book.BookRating,
+          "BookRating": String(book.BookRating),
           "Cover":book.Cover,
           "Pages": book.Pages,
           "BookName": book.BookName,
@@ -716,7 +825,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           "BookId":book.BookId,
           "Title":book.Title,
           "AuthorId": book.AuthorId,
-          "BookRating": book.BookRating,
+          "BookRating": String(book.BookRating),
           "Cover":book.Cover,
           "Pages": book.Pages,
           "BookName": book.BookName,
@@ -734,7 +843,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           "BookId":book.BookId,
           "Title":book.Title,
           "AuthorId": book.AuthorId,
-          "BookRating": book.BookRating,
+          "BookRating": String(book.BookRating),
           "Cover":book.Cover,
           "Pages": book.Pages,
           "BookName": book.BookName,
@@ -852,7 +961,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
             "BookId":book.BookId,
             "Title":book.Title,
             "AuthorId": book.AuthorId,
-            "BookRating": book.BookRating,
+            "BookRating": String(book.BookRating),
             "Cover":book.Cover,
             "Pages": book.Pages,
             "BookName": book.BookName,
@@ -970,7 +1079,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
               "BookId":book.BookId,
               "Title":book.Title,
               "AuthorId": book.AuthorId,
-              "BookRating": book.BookRating,
+              "BookRating": String(book.BookRating),
               "Cover":book.Cover,
               "Pages": book.Pages,
               "BookName": book.BookName,
@@ -1088,7 +1197,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
                 "BookId":book.BookId,
                 "Title":book.Title,
                 "AuthorId": book.AuthorId,
-                "BookRating": book.BookRating,
+                "BookRating": String(book.BookRating),
                 "Cover":book.Cover,
                 "Pages": book.Pages,
                 "BookName": book.BookName,
@@ -1603,7 +1712,7 @@ router.get("/Notifications" ,auth ,async(req,res)=>
       console.log (n);
       let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Reading Read');
          console.log(Result);
-        
+
       for (var i=0 ;i<n;i++)
      {
        if (doc[i].ReviewId)
@@ -1613,15 +1722,15 @@ router.get("/Notifications" ,auth ,async(req,res)=>
          console.log(exsist);
 
                  if (exsist>=0) {
-                 
-                   doc[i].ReviewIsLiked =true;  
+
+                   doc[i].ReviewIsLiked =true;
                    }
                  else
                   {
-                     doc[i].ReviewIsLiked =false;  
+                     doc[i].ReviewIsLiked =false;
                    }
-                  
-               if (doc[i].BookId) // in case of review thats mean we have book so we have to check is is reading or want to read ....     
+
+               if (doc[i].BookId) // in case of review thats mean we have book so we have to check is is reading or want to read ....
                    {
                     var exsist = Result[0].WantToRead.indexOf(doc[i].BookId);
                     if (exsist>=0) {doc[i].BookStatus ="WantToRead";}
@@ -1637,13 +1746,13 @@ router.get("/Notifications" ,auth ,async(req,res)=>
                       }
                       }
                     }
-  
-  
-   
-        }    
-    
+
+
+
+        }
+
      }
-     
+
     res.status(200).send(
         doc
     )
