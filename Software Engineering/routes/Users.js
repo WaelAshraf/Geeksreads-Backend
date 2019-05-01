@@ -16,6 +16,36 @@ const router = express.Router();
 const Author= require('../models/Author.model');
 
 
+
+//Forgot Password
+/**
+ *
+ * @api {POST}  /user/ForgotPassword/ Sends email to change forgotten password
+ * @apiName ForgotPassword
+ * @apiGroup User
+ * @apiParam {String} UserEmail User Email to Sign Up.
+ * @apiSuccess {String}   ReturnMsg   Notifies the User an Email to change his password was sent
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *     "ReturnMsg":"ReturnMsg":"An Email has been Sent to change your Forgotten Password UserEmail"
+ *   }
+ * @apiErrorExample {json} InvalidEmail-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg": "\"UserEmail\" must be a valid email"
+ *   }
+ *
+ * @apiErrorExample {json} NonExistingEmail-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg":"User Doesn't Exist"
+ * }
+ *
+ */
+
+
+
 router.post('/ForgotPassword', async (req, res) => {
   const { error } = Mailvalidate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
@@ -46,11 +76,33 @@ res.status(200).send({"ReturnMsg":"An Email has been Sent to change your Forgott
 });
 });
 
-
-
-
-
-
+//Change Forgotten Password From Email token
+/**
+ *
+ * @api {POST}  /user/ChangeForgotPassword/ Change Forgotten Password From Email token
+ * @apiName ChangeForgotPassword
+ * @apiGroup User
+ * @apiParam {String} token token from mail sent to change password.
+ * @apiParam {String} NewUserPassword New Password to replace forgotten password.
+ * @apiSuccess {String}   ReturnMsg   Notifies the User that his password is changed
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *     "ReturnMsg": "Update Successful"
+ *   }
+ * @apiErrorExample {json} InvalidNewPassword-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg": "\"NewUserPassword\" length must be at least 6 characters long"
+ *   }
+ *
+ * @apiErrorExample {json} NonExistingEmail-Response:
+ *     HTTP/1.1 400
+ * {
+ *   "ReturnMsg":"User Doesn't Exist"
+ * }
+ *
+ */
 router.post('/ChangeForgotPassword', auth, async (req, res) => {
 
   let check = await User.findOne({ UserEmail: req.user.UserEmail });
@@ -68,6 +120,39 @@ res.status(200).send({
 
 });
 
+
+
+//Signs Out Users
+/**
+ *
+ * @api {POST}  /user/SignOut Signs User Out
+ * @apiName SignOut
+ * @apiGroup User
+ * @apiParam {String} token Authentication token
+ * @apiSuccess {String}   ReturnMsg   Notifies the User that he signed out
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *     "ReturnMsg": "Signed out Successfully"
+ * }
+ * @apiErrorExample {json} NoTokenMatch-Response:
+ *     HTTP/1.1 400
+ *   {
+ *    "ReturnMsg":"User Doesn't Exist"
+ *   }
+ *
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ */
 router.post('/SignOut', auth, async (req, res) => {
 
   let check = await User.findOne({ UserId: req.user._id });
@@ -85,32 +170,29 @@ router.post('/SignOut', auth, async (req, res) => {
 
 
 //get current User
-
 /**
  *
- * @api {GET}  /user/me/GetUser Gets Information of Current User
+ * @api {GET}  /user/me Gets Information of Current User
  * @apiName GetUser
  * @apiGroup User
- * @apiHeader {String} x-auth-token Authentication token
+ * @apiParam {String} token Authentication token
  * @apiSuccess {String}   UserName   UserName of Current User
  * @apiSuccess {String} UserId Id of Current User
  * @apiSuccess {String} UserEmail Email of Current User
- * @apiSuccess {String[]} FollowingAuthorId Ids of Authors Current User is Following
- * @apiSuccess {String[]} FollowingUserId Ids of Users Current User is Following
- * @apiSuccess {String[]} FollowersUserId Ids of Users Following Current User
- * @apiSuccess {String[]} OwnedBookId Ids of Books Owned by Current User
+ * @apiSuccess {Number} NoOfFollowings No. of Followings
+ * @apiSuccess {Number} NoOfFollowers No. of Followers
+ * @apiSuccess {String} Photo Profile Photo
+ * @apiSuccess {Date} UserBirthDate User Birth Date
  * @apiSuccessExample {json}  Success
  *     HTTP/1.1 200 OK
  *   {
- *     "FollowingAuthorId": [],
- *     "FollowingUserId": [],
- *     "FollowersUserId": [],
- *     "OwnedBookId": [],
- *     "ShelfId": [],
- *     "Confirmed": true,
- *     "UserName": "Ahmed1913",
- *     "UserEmail": "AhmedAmrKhaled@gmail.com",
- *     "UserId": "5ca23e81783e981f88e1618c"
+ *       "NoOfFollowings": 1,
+ *       "NoOfFollowers": 0,
+ *       "UserId":"5cc5df8c2e9c5800172864c9",
+ *       "UserEmail": "samersosta@gmail.com",
+ *       "UserName": "Ashraaaaaaaaaaaaaf",
+ *       "Photo": "",
+ *       "UserBirthDate": "2000-01-01T00:00:00.000Z"
  * }
  * @apiErrorExample {json} NoTokenMatch-Response:
  *     HTTP/1.1 400
@@ -148,6 +230,7 @@ router.post('/SignOut', auth, async (req, res) => {
    var Result={
      "NoOfFollowings":NoOfFollowings,
      "NoOfFollowers":NoOfFollowers,
+     "UserId":user.UserId,
      "UserEmail":user.UserEmail,
      "UserName":user.UserName,
      "Photo":user.Photo,
@@ -156,15 +239,63 @@ router.post('/SignOut', auth, async (req, res) => {
    res.status(200).send(Result);
  });
 
-
-
-
-router.all('/GetUserById', auth, async (req, res) => {////////////////////other profile
+//Get Info by UserID
+/**
+ *
+ * @api {GET}  /user/GetUserById Gets Information of  User by Id
+ * @apiName GetUserById
+ * @apiGroup User
+ * @apiParam {String} token Authentication token
+ * @apiSuccess {String}   UserName   UserName of Current User
+ * @apiSuccess {String} UserId Id of Current User
+ * @apiSuccess {String} UserEmail Email of Current User
+ * @apiSuccess {Number} NoOfFollowings No. of Followings
+ * @apiSuccess {Number} NoOfFollowers No. of Followers
+ * @apiSuccess {String} Photo Profile Photo
+ * @apiSuccess {Date} UserBirthDate User Birth Date
+ * @apiSuccess {String} IsFollowing tells if Current User is Following this User
+ * @apiSuccessExample {json}  Success
+ *     HTTP/1.1 200 OK
+ *   {
+ *       "NoOfFollowings": 1,
+ *       "NoOfFollowers": 0,
+ *       "UserId":"5cc5df8c2e9c5800172864c9",
+ *       "UserEmail": "samersosta@gmail.com",
+ *       "UserName": "Ashraaaaaaaaaaaaaf",
+ *       "Photo": "",
+ *       "UserBirthDate": "2000-01-01T00:00:00.000Z",
+ *       "IsFollowing": "True"
+ * }
+ * @apiErrorExample {json} NoTokenMatch-Response:
+ *     HTTP/1.1 400
+ *   {
+ *    "ReturnMsg":"User Doesn't Exist"
+ *   }
+ *
+ * @apiErrorExample {json} InvalidUserId-Response:
+ *     HTTP/1.1 401
+ *  {
+ *     "ReturnMsg":"User Doesn't Exist"
+ *  }
+ *
+ * @apiErrorExample {json} Invalidtoken-Response:
+ *     HTTP/1.1 400
+ *   {
+ *      "ReturnMsg":'Invalid token.'
+ *   }
+ *
+ * @apiErrorExample {json} NoTokenSent-Response:
+ *     HTTP/1.1 401
+ * {
+ *   "ReturnMsg":'Access denied. No token provided.'
+ * }
+ *
+ */
+router.all('/GetUserById', auth, async (req, res) => {
   let check = await User.findOne({ UserId: req.user._id });
   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-  const userdisplay = await User.findById(req.body.UserId).select('-UserPassword  -_id  -__v ');
-  const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v ');
-  if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
+  const userdisplay = await User.findOne({ UserId: req.body.UserId }).select('-UserPassword  -_id  -__v ');
+  if (!userdisplay) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
   var NoOfFollowings = userdisplay.FollowingUserId.length;
   var NoOfFollowers = userdisplay.FollowersUserId.length;
   var x;
@@ -174,6 +305,7 @@ router.all('/GetUserById', auth, async (req, res) => {////////////////////other 
   var Result={
     "NoOfFollowings":NoOfFollowings,
     "NoOfFollowers":NoOfFollowers,
+    "UserId":userdisplay.UserId,
     "UserEmail":userdisplay.UserEmail,
     "UserName":userdisplay.UserName,
     "Photo":userdisplay.Photo,
@@ -305,8 +437,6 @@ router.post('/verify', auth, async (req, res) => {
  * }
  *
  */
-
-
 router.post('/SignUp', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
@@ -351,15 +481,13 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
 
 
 //Update User Password
-
-
  /**
   *
   * @api {POST}  /user/UpdateUserPassword.json Update User Password.
   * @apiName UpdateUserPassword
   * @apiGroup User
   *
-  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam {String} token Authentication token
   * @apiParam  {String} NewUserPassword New User Password
   * @apiParam  {String} OldUserPassword Old User Password
   * @apiSuccess {String}   ReturnMsg   Return Message Update is Successful
@@ -371,12 +499,12 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
   * @apiErrorExample {json} InvalidNewPassword-Response:
   *     HTTP/1.1 400
   *  {
-  *    "ReturnMsg":"Error Detail"
+  *    "ReturnMsg": "\"NewUserPassword\" length must be at least 6 characters long"
   *  }
   * @apiErrorExample {json} InvalidOldPassword-Response:
   *     HTTP/1.1 400
   *  {
-  *    "ReturnMsg":"Error Detail"
+  *    "ReturnMsg": "\"OldUserPassword\" length must be at least 6 characters long"
   *  }
   * @apiErrorExample {json} Invalidtoken-Response:
   *     HTTP/1.1 400
@@ -392,10 +520,6 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
   *
   *
   */
-
-
-
-
   router.post('/UpdateUserPassword', auth, async (req, res) => {
     let check = await User.findOne({ UserId: req.user._id });
     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
@@ -413,20 +537,14 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
   });
 
 
-
-
-
-
 //Update User Information (Name, Photo, Bithdate)
-
-
 /**
  *
  * @api {POST}  /user/UpdateUserInfo.json Update User Information (UserName, Photo, Date).
  * @apiName SignIn
  * @apiGroup User
  *
- * @apiHeader {String} x-auth-token Authentication token
+ * @apiParam {String} token Authentication token
  * @apiParam  {String} NewUserName New User Name
  * @apiParam  {String} NewUserPhoto New User Photo
  * @apiParam  {Date} NewUserBirthDate New User BirthDate
@@ -439,17 +557,17 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
  * @apiErrorExample {json} InvalidName-Response:
  *     HTTP/1.1 400
  *  {
- *    "ReturnMsg":"Error Detail"
+ *    "ReturnMsg": "\"NewUserName\" length must be at least 3 characters long"
  *  }
  * @apiErrorExample {json} InvalidPhoto-Response:
  *     HTTP/1.1 400
  *  {
- *    "ReturnMsg":"Error Detail"
+ *    "ReturnMsg": "Invalid Image"
  *  }
  * @apiErrorExample {json} InvalidDate-Response:
  *     HTTP/1.1 400
  *  {
- *    "ReturnMsg":"Error Detail"
+ *    "ReturnMsg": "\"NewUserBirthDate\" must be a number of milliseconds or valid date string"
  *  }
  * @apiErrorExample {json} Invalidtoken-Response:
  *     HTTP/1.1 400
@@ -462,10 +580,7 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
  * {
  *   "ReturnMsg":'Access denied. No token provided.'
  * }
- *
- *
  */
-
 router.post('/UpdateUserInfo', auth, async (req, res) => {
   let check = await User.findOne({ UserId: req.user._id });
   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
@@ -481,23 +596,17 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   if(req.body.NewUserName!=null) user.UserName = req.body.NewUserName;
   if(req.body.NewUserBirthDate!=null) user.UserBirthDate = req.body.NewUserBirthDate;
   await user.save();
-//  const token = user.generateAuthToken();
-
   res.status(200).send({
     "ReturnMsg": "Update Successful"
   });
 });
-
-
-
-
 
 /**
  * @api {GET} /Shelf/GetUserReadStatus.json  Gets information about a book's read Status
  * @apiName GetUserReadStatus
  * @apiGroup Shelves
  *
- * @apiHeader {String} x-auth-token Authentication token
+ * @apiParam {String} token Authentication token
  * @apiParam {String} BookId  The Book Id To Get Status for.
  * @apiSuccess {String} ReturnMsg        Book Status.
  * @apiSuccessExample {json} Success
@@ -539,9 +648,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
  *   }
  *
  */
-
-
-
  router.get('/GetBookReadStatus', auth, async (req, res) => {
    let check = await User.findOne({ UserId: req.user._id });
    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
@@ -549,7 +655,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    let WantToRead = await User.findOne({ UserId: req.user._id, WantToRead:req.body.BookId });
    let Reading =  await User.findOne({ UserId: req.user._id, Reading:req.body.BookId });
    if(!Read && !WantToRead && !Reading) return res.status(400).send({"ReturnMsg": "Invalid Book Id"});
-
   if (Read) res.status(200).send({"ReturnMsg": "Read"});
   else if (WantToRead) {res.status(200).send({"ReturnMsg": "Want To Read"});}
   else if (Reading) {res.status(200).send({"ReturnMsg": "Currently Reading"});}
@@ -558,14 +663,12 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
 
 
  //Get User's Shelves
-
-
  /**
   * @api {GET} /Shelf/GetUserShelves.json  Gets All User's Shelves
   * @apiName GetUserShelves
   * @apiGroup Shelves
   *
-  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam {String} token Authentication token
   *
   * @apiSuccess {String[]} Read        Gives the User the Book Ids of His Read.
   * @apiSuccess {Number} NoOfRead        Gives the User the Number of Book Ids of His Read.
@@ -595,12 +698,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   *                     ],
   *       "NoOfWantToRead": 3
   *     }
-  *
-  * @apiErrorExample {json} NoShelvesExist-Response:
-  *     HTTP/1.1 400
-  * {
-  *   "ReturnMsg": "User has No Shelves"
-  * }
   * @apiErrorExample {json} Invalidtoken-Response:
   *     HTTP/1.1 400
   *   {
@@ -613,13 +710,9 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   *   "ReturnMsg":'Access denied. No token provided.'
   * }
   */
-
-
   router.get('/GetUserShelves', auth, async (req, res) => {
     let check = await User.findOne({ UserId: req.user._id });
     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-
-    //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
     const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
     var NoOfRead = user.Read.length;
     var NoOfReading = user.Reading.length;
@@ -636,20 +729,17 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   });
 
 
-
-
-
-  //Number of Read Books
-
-
+  //Number of Books in Shelves
   /**
-   * @api {GET} /Shelf/ShelvesCount.json  Number of Read Books
+   * @api {GET} /Shelf/ShelvesCount.json  Number of Books in Shelves
    * @apiName ShelvesCount
    * @apiGroup Shelves
    *
-   * @apiHeader {String} x-auth-token Authentication token
-   *
+   * @apiParam {String} token Authentication token
+   * @apiParam {String} UserId User to get his No. of Books.
    * @apiSuccess {Number} NoOfRead        Gives the User the Number of Book Ids of His Read.
+   * @apiSuccess {Number} NoOfReading        Gives the User the Number of Book Ids of His Reading.
+   * @apiSuccess {Number} NoOfWantToRead        Gives the User the Number of Book Ids of His WantToRead.
    * @apiSuccessExample {json} Success
    *     HTTP/1.1 200 OK
    *     {
@@ -658,11 +748,11 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    *       "NoOfWantToRead": 3
    *     }
    *
-   * @apiErrorExample {json} NoShelvesExist-Response:
+   * @apiErrorExample {json} InvalidUserId-Response:
    *     HTTP/1.1 400
-   * {
-   *   "ReturnMsg": "User has No Shelves"
-   * }
+   *   {
+   *      "ReturnMsg":"User Doesn't Exist"
+   *   }
    * @apiErrorExample {json} Invalidtoken-Response:
    *     HTTP/1.1 400
    *   {
@@ -675,14 +765,11 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    *   "ReturnMsg":'Access denied. No token provided.'
    * }
    */
-
-
    router.get('/ShelvesCount', auth, async (req, res) => {
      let check = await User.findOne({ UserId: req.user._id });
      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-
-     //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-     const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
+     const user = await User.findOne({ UserId: req.body.UserId}).select('-_id Read WantToRead Reading');
+     if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
      var NoOfRead = user.Read.length;
      var NoOfReading = user.Reading.length;
      var NoOfWantToRead = user.WantToRead.length;
@@ -694,19 +781,13 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      res.status(200).send(Result);
    });
 
-
-
-
-
 // Get User Shelves Details
-
-
 /**
  * @api {GET} /Shelf/GetUserShelvesDetails.json  Gets All User's Shelves Details
  * @apiName GetUserShelvesDetails
  * @apiGroup Shelves
  *
- * @apiHeader {String} x-auth-token Authentication token
+ * @apiParam {String} token Authentication token
  *
  * @apiSuccess {List} ReadData        Gives the User the Book Data of His Read.
  * @apiSuccess {List} WantToReadData       Gives the User the Book Data of His Want to Read.
@@ -764,11 +845,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
  *     "WantToReadData": []
  *     }
  *
- * @apiErrorExample {json} NoShelvesExist-Response:
- *     HTTP/1.1 400
- * {
- *   "ReturnMsg": "User has No Shelves"
- * }
  * @apiErrorExample {json} Invalidtoken-Response:
  *     HTTP/1.1 400
  *   {
@@ -856,21 +932,14 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
     res.status(200).send(Result);
   });
 
-
-
-
-
-
   // Get User Read shelf Details
-
-
   /**
    * @api {GET} /Shelf/GetUserReadDetails.json   Get User Read shelf Details
    * @apiName GetUserReadDetails
    * @apiGroup Shelves
    *
-   * @apiHeader {String} x-auth-token Authentication token
-   *
+   * @apiParam {String} token Authentication token
+   * @apiParam {String} UserId User to get his Read Shelf Data
    * @apiSuccess {List} ReadData        Gives the User the Book Data of His Read.
    * @apiSuccessExample {json} Success
    *     HTTP/1.1 200 OK
@@ -923,10 +992,10 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    *      ]
    *     }
    *
-   * @apiErrorExample {json} NoShelvesExist-Response:
+   * @apiErrorExample {json} NoUser-Response:
    *     HTTP/1.1 400
    * {
-   *   "ReturnMsg": "User has No Shelves"
+   *   "ReturnMsg": "User Doesn't Exist"
    * }
    * @apiErrorExample {json} Invalidtoken-Response:
    *     HTTP/1.1 400
@@ -940,15 +1009,11 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    *   "ReturnMsg":'Access denied. No token provided.'
    * }
    */
-
-
-
     router.get('/GetUserReadDetails', auth, async (req, res) => {
       let check = await User.findOne({ UserId: req.user._id });
       if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-
-      //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-      const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
+      const user = await User.findOne({UserId:req.body.UserId}).select('-_id Read WantToRead Reading');
+      if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
       var Result = {
                       "ReadData":[]
                    }
@@ -973,22 +1038,14 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
       }
       res.status(200).send(Result);
     });
-
-
-
-
-
-
     // Get User Reading shelf Details
-
-
     /**
      * @api {GET} /Shelf/GetUserReadingDetails.json   Get User Reading shelf Details
      * @apiName GetUserReadingDetails
      * @apiGroup Shelves
      *
-     * @apiHeader {String} x-auth-token Authentication token
-     *
+     * @apiParam {String} token Authentication token
+     * @apiParam {String} UserId User to get his Shelf Details
      * @apiSuccess {List} ReadingData        Gives the User the Book Data of His Reading.
      * @apiSuccessExample {json} Success
      *     HTTP/1.1 200 OK
@@ -1041,10 +1098,10 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      *      ]
      *     }
      *
-     * @apiErrorExample {json} NoShelvesExist-Response:
+     * @apiErrorExample {json} NoUser-Response:
      *     HTTP/1.1 400
      * {
-     *   "ReturnMsg": "User has No Shelves"
+     *   "ReturnMsg": "User Doesn't Exist"
      * }
      * @apiErrorExample {json} Invalidtoken-Response:
      *     HTTP/1.1 400
@@ -1058,15 +1115,11 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      *   "ReturnMsg":'Access denied. No token provided.'
      * }
      */
-
-
-
       router.get('/GetUserReadingDetails', auth, async (req, res) => {
         let check = await User.findOne({ UserId: req.user._id });
         if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-
-        //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-        const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
+        const user = await User.findOne({UserId:req.body.UserId}).select('-_id Read WantToRead Reading');
+        if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
         var Result = {
                         "ReadingData":[]
                      }
@@ -1092,21 +1145,14 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
         res.status(200).send(Result);
       });
 
-
-
-
-
-
       // Get User WantToRead shelf Details
-
-
       /**
        * @api {GET} /Shelf/GetUserWantToReadDetails.json   Get User WantToRead shelf Details
        * @apiName GetUserWantToReadDetails
        * @apiGroup Shelves
        *
-       * @apiHeader {String} x-auth-token Authentication token
-       *
+       * @apiParam {String} token Authentication token
+       * @apiParam {String} UserId User to get his Shelf Details
        * @apiSuccess {List} ReadingData        Gives the User the Book Data of His WantToRead.
        * @apiSuccessExample {json} Success
        *     HTTP/1.1 200 OK
@@ -1176,15 +1222,11 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
        *   "ReturnMsg":'Access denied. No token provided.'
        * }
        */
-
-
-
         router.get('/GetUserWantToReadDetails', auth, async (req, res) => {
           let check = await User.findOne({ UserId: req.user._id });
           if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
-
-          //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-          const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
+          const user = await User.findOne({UserId:req.body.UserId}).select('-_id Read WantToRead Reading');
+          if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
           var Result = {
                           "WantToReadData":[]
                        }
@@ -1210,21 +1252,13 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           res.status(200).send(Result);
         });
 
-
-
-
-
-
   //Add Book to Shelf
-
-
-
   /**
    * @api {POST} /Shelf/AddToShelf.json  Add a Book to a Shelf
    * @apiName AddToShelf
    * @apiGroup Shelves
    *
-   * @apiHeader {String} x-auth-token Authentication token
+   * @apiParam {String} token Authentication token
    * @apiParam {String} ShelfType Shelf Type to add book to.
    * @apiParam {String} BookId Book id to add to shelf.
    *
@@ -1264,9 +1298,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    *   "ReturnMsg":'Access denied. No token provided.'
    * }
    */
-
-
-
    router.post('/AddToShelf', auth, async (req, res) => {
      let check = await User.findOne({ UserId: req.user._id });
      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
@@ -1287,18 +1318,13 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
        "ReturnMsg": "Book was added successfully."
      });
    });
-
-
-
   //Remove Book From Shelf
-
-
 /**
   * @api {POST} /Shelf/RemoveFromShelf.json  Removes a Books From User Shelves
   * @apiName RemoveFromShelf
   * @apiGroup Shelves
   *
-  * @apiHeader {String} x-auth-token Authentication token
+  * @apiParam {String} token Authentication token
   * @apiParam {String} BookId  The Book Id To Remove.
   * @apiSuccess {String} ReturnMsg        Notifies is Successfully Removed.
   * @apiSuccessExample {json} Success
@@ -1323,7 +1349,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   *   "ReturnMsg":'Access denied. No token provided.'
   * }
   */
-
   router.post('/RemoveFromShelf', auth, async (req, res) => {
     let check = await User.findOne({ UserId: req.user._id });
     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
@@ -1342,19 +1367,13 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
       "ReturnMsg": "Book Removed"
     });
   });
-
-
-
-
   //Update Book Status from Want to Read to Reading
-
-
   /**
    * @api {POST} /Shelf/UpdateWantToReading.json  Updates Book Status From Want to Read to Reading
    * @apiName UpdateWantToReading
    * @apiGroup Shelves
    *
-   * @apiHeader {String} x-auth-token Authentication token
+   * @apiParam {String} token Authentication token
    * @apiParam {String} BookId  The Book Id To Update.
    * @apiSuccess {String} ReturnMsg        Notifies is Successfully updated.
    * @apiSuccessExample {json} Success
@@ -1379,9 +1398,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    *   "ReturnMsg":'Access denied. No token provided.'
    * }
    */
-
-
-
    router.post('/UpdateWantToReading', auth, async (req, res) => {
      let check = await User.findOne({ UserId: req.user._id });
      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
@@ -1398,19 +1414,13 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      });
    });
 
-
-
-
-
    //Update Book Status From Reading to Read
-
-
    /**
     * @api {POST} /Shelf/UpdateReadingToRead.json  Updates Book Status From Reading to Read
     * @apiName UpdateReadingToRead
     * @apiGroup Shelves
     *
-    * @apiHeader {String} x-auth-token Authentication token
+    * @apiParam {String} token Authentication token
     * @apiParam {String} BookId  The Book Id To Update.
     * @apiSuccess {String} ReturnMsg        Notifies is Successfully updated.
     * @apiSuccessExample {json} Success
@@ -1435,10 +1445,6 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
     *   "ReturnMsg":'Access denied. No token provided.'
     * }
     */
-
-
-
-
     router.post('/UpdateReadingToRead', auth, async (req, res) => {
       let check = await User.findOne({ UserId: req.user._id });
       if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
