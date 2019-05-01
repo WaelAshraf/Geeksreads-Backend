@@ -682,7 +682,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
 
      //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-     const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+     const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
      var NoOfRead = user.Read.length;
      var NoOfReading = user.Reading.length;
      var NoOfWantToRead = user.WantToRead.length;
@@ -948,7 +948,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
       if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
 
       //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-      const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+      const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
       var Result = {
                       "ReadData":[]
                    }
@@ -1066,7 +1066,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
         if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
 
         //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-        const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+        const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
         var Result = {
                         "ReadingData":[]
                      }
@@ -1184,7 +1184,7 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
 
           //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
-          const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
+          const user = await User.findById(req.body.UserId).select('-_id Read WantToRead Reading');
           var Result = {
                           "WantToReadData":[]
                        }
