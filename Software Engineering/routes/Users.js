@@ -589,9 +589,9 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   const user = await User.findById(req.user._id).select('-UserPassword');
   if(req.body.NewUserPhoto!=null)
   {
-    var piccheck=isImageUrl(req.body.NewUserPhoto);
+    var piccheck=await isImageUrl(req.body.NewUserPhoto);
     if(!piccheck) return res.status(400).send({"ReturnMsg":"Invalid Image"});
-    user.Photo = req.body.NewUserPhoto;
+    user.Photo= req.body.NewUserPhoto;
   }
   if(req.body.NewUserName!=null) user.UserName = req.body.NewUserName;
   if(req.body.NewUserBirthDate!=null) user.UserBirthDate = req.body.NewUserBirthDate;
