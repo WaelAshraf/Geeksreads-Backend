@@ -94,7 +94,14 @@ const StatusesSchema = new mongoose.Schema({
     {
         type: String
     },
-    
+    AutorName:
+    {
+
+    },
+    AutorId:
+    {
+
+    },
     BookStatus: // Read WantToRead Reading 
     {
     type: String
@@ -193,7 +200,11 @@ await review.findOne({"reviewId":ReviewId},(err,doc) =>
       newStatus.BookId=doc.BookId;
       newStatus.BookName=doc.Title;
       newStatus.BookPhoto=doc.Cover;    
+      newStatus.AuthorName= doc.AuthorName;
+      newStatus.AuthorId= doc.AuthorId;
+
     }
+
 
 
 });
@@ -210,6 +221,9 @@ else if ( Type == "Rate")
       newStatus.BookId=doc.BookId;
       newStatus.BookName=doc.Title;
       newStatus.BookPhoto=doc.Cover;    
+      newStatus.AuthorName= doc.AuthorName;
+      newStatus.AuthorId= doc.AuthorId;
+
     }
   });
 newStatus.NumberOfStars =NumberOfStars;
