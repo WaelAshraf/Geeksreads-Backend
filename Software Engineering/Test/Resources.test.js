@@ -1,45 +1,50 @@
 const request = require('supertest');
 var app = require('../DB').app;
-it("Not Found ResourceID",  (done) => {
+it("Comment Not Found ",  (done) => {
     request(app)
-     .put('/Resource.json')
+     .put('/api/Resources/like')
      .send({
-        "ResourceID":"!"
+        "resourceId":"!",
+        "Type":"Comment"
         })
     .expect(404,done); 
 });
 
-it("Not Found ResourceID",  (done) => {
+it("Review Not Found ",  (done) => {
     request(app)
-     .put('/Resource.json')
+     .put('/api/Resources/like')
      .send({
-        "ResourceID":" "
+        "resourceId":" ",
+        "Type":"Rev"
         })
     .expect(404,done);
 });
-it("Not Found ResourceID",  (done) => {
+it("Comment Not Found",  (done) => {
     request(app)
-     .put('/Resource.json')
+     .put('/api/Resources/like')
      .send({
-        "ResourceID":"21"
-        })
-    .expect(404,done);
-});
-
-it("NotFound ResourceID",  (done) => {
-    request(app)
-     .put('/Resource.json')
-     .send({
-        "ResourceID":"7c9243a5beb4101160e30fdd"
+        "resourceId":"21",
+        "Type":"Commt"
         })
     .expect(404,done);
 });
 
-it("Not Found ResourceID",  (done) => {
+it("valid Request",  (done) => {
     request(app)
-     .put('/Resource.json')
+     .put('/api/Resources/like')
      .send({
-        "ResourceID":"5c9275cf1215a31756b4a6ab"
+        "resourceId":"5c9243a5311a20ca08d1844d",
+        "Type":"Review"
         })
-    .expect(404,done);
+    .expect(200,done);
+});
+
+it("valid Request",  (done) => {
+    request(app)
+     .put('/api/Resources/like')
+     .send({
+        "resourceId":"5c924677ea0068fca04580ec",
+        "Type":"Comment"
+        })
+    .expect(200,done);
 });
