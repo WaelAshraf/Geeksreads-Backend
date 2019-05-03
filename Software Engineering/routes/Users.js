@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const {User,validate,DateValidate,NewPassWordValidate,Mailvalidate,NewPasswordOnlyValidate} = require('../models/User');
-const {Notification}= require('../models/Notifications');
+const {Notification,CreatNotification}= require('../models/Notifications');
 const mongoose = require('mongoose');
 const nodeMailer = require('nodemailer');
 //const sgMail = require('@sendgrid/mail');
@@ -1561,6 +1561,9 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
                      }
                    else
                    {
+                    CreatNotification(userId_tobefollowed,null,null,"Follow",req.query.myuserid,null)
+                    
+                    
                    res.status(200).json({ //sends a json with 200 code
                      success: true ,//Follow Done
                       "Message":"Sucessfully done"});
@@ -1857,7 +1860,7 @@ router.get("/Notifications" ,auth ,async(req,res)=>
   */
 router.post("/Notification/seen" ,(req,res)=>
 {
-     if(req.query.NotificationId==null)
+     if(req.query.NotificationId == null)
      {
         return  res.status(400).send("Bad request no .NotificationId  Id is there");
     }

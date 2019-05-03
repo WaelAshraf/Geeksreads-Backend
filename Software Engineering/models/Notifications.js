@@ -163,6 +163,10 @@ if (MakerId)
   });
 
 }
+if (Type =="Follow")
+{
+  return;
+}
 await review.findOne({ "reviewId": ReviewId},(err,doc) =>
 {   if (!doc)
   {
