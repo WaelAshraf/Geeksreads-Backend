@@ -6,6 +6,7 @@ const request = require("supertest");
 //check the validations of the requests  
 describe('Statuses',()=>{
 
+    describe('Update Statuses',()=>{
 it("can't accept requests with missing required argument",(done)=>
  {
      request(app)
@@ -37,6 +38,7 @@ it("can't accept requests with missing required argument",(done)=>
      .expect(200)
      .end(done)
  });
+});
 ////////////////////////////////////////////////////////////////////
 //get statuses request Tests
 ////////////////////////////////////////////////////////////////////
