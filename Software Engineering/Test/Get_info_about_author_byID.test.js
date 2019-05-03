@@ -16,7 +16,7 @@ it("Get info about author by ID  (valid)",  (done) => { //Test for an valid  Req
     request(app)// imports server app
      .get('/api/Authors/byid')//Define request as post 
      .query({ //sends request to server
-        auth_id:"5c91157301d63f812a141932"
+        auth_id:"5c911452938ffea87b4672d7"
         })
     .expect(200,done);//expects status 200 to pass test 
 });

@@ -13,12 +13,12 @@ it("Following a User(invalid)",  (done) => { //Test for an invalid user ID to fo
 
 
 
-it("Following a user(Successfull)",  (done) => { //Test for an valid Follow Request
+it("Following a user(already followed)",  (done) => { //Test for an valid Follow Request
     request(app)// imports server app
      .post('/api/Users/Follow')//Define request as post 
      .query({ //sends request to server
-        userId_tobefollowed:"5c9132dd04ea424bf938e8f8",
-        myuserid:"5c9132dd0a604ca6b1f34117"
+        userId_tobefollowed:"5cb60a0ad42e9b00173fa1fd",
+        myuserid:"5cb6067bd42e9b00173fa1fc"
         })
     .expect(200,done);//expects status 200 to pass test 
 });

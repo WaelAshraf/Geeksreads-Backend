@@ -5,8 +5,8 @@ it("unFollowing an Author(Successfull)",  (done) => {//Test for  valid unfollow 
     request(app)//sends request to server
      .post('/api/Authors/unFollow') //Define request as post to specific end point
      .query({ //adds Request Paramters 
-        auth_id:"5c91157301d63f812a141932",
-        myuserId:"5c9132dd1c3703bfad757ce4"
+        auth_id:"5c911452938ffea87b4672d7",
+        myuserId:"5cb6067bd42e9b00173fa1fc"
         })
     .expect(200,done);//expects status 200 to pass test 
 });

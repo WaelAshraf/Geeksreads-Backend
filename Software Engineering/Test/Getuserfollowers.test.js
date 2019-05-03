@@ -16,7 +16,7 @@ it("Getting User's Followers (successfull)",  (done) => { //Test for an valid  R
     request(app)// imports server app
      .post('/api/Users/getfollowers')//Define request as post 
      .query({ //sends request to server
-        user_id:"5c9132dd979e3e03f3f6c10a"
+        user_id:"5cb6067bd42e9b00173fa1fc"
         })
     .expect(200,done);//expects status 200 to pass test 
 });

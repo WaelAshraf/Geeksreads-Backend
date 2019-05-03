@@ -16,7 +16,7 @@ it("Getting an Authors Number of books(successfull)",  (done) => { //Test for an
     request(app)// imports server app
      .post('/api/Authors/numbooks')//Define request as post 
      .query({ //sends request to server
-        auth_id:"5c9115731d3c81c7075b6577"
+        auth_id:"5c911452a48b42bb84bc785c"
         })
     .expect(200,done);//expects status 200 to pass test 
 });

@@ -5,8 +5,8 @@ it("unFollowing a User(Successfull)",  (done) => {//Test for  valid unfollow req
     request(app)//sends request to server
      .post('/api/Users/unFollow') //Define request as post to specific end point
      .query({ //adds Request Paramters 
-        userId_tobefollowed:"5c9132dd04ea424bf938e8f8",
-        myuserid:"5c9132dd0a604ca6b1f34117"
+        userId_tobefollowed:"5cb60a0ad42e9b00173fa1fd",
+        myuserid:"5cb6067bd42e9b00173fa1fc"
         })
     .expect(200,done);//expects status 200 to pass test 
 });

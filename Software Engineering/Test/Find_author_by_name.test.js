@@ -16,7 +16,7 @@ it("Find Author by name(valid)",  (done) => { //Test for an valid  Request
     request(app)// imports server app
      .get('/api/Authors')//Define request as post 
      .query({ //sends request to server
-        auth_name:"Alberta Bean"
+        auth_name:"Deena Craig"
         })
     .expect(200,done);//expects status 200 to pass test 
 });
