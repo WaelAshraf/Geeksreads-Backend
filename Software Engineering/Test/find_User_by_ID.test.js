@@ -1,6 +1,6 @@
 const request = require('supertest');
 var app = require('../DB').app;
-it("Valid Get User request",  (done) => {
+it("Valid Get User by id request",  (done) => {
     request(app)
      .post('/api/Users/getUser')
      .send({
@@ -8,7 +8,7 @@ it("Valid Get User request",  (done) => {
    })
     .expect(200,done);
 });
-it("Invalid Remove review request",  (done) => {
+it("Invalid Get user by id request",  (done) => {
     request(app)
      .post('/api/Users/getUser')
      .send({

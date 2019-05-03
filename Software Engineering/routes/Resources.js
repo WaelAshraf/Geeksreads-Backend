@@ -118,7 +118,7 @@ router.post('/like',(req,res)=>{
                 {
                     var NotifiedUserId = doc.userId;
                     var BookID = doc.bookId
-                 
+                 console.log (" i liked  a comment ");
                   CreatNotification(NotifiedUserId, doc.reviewId, null,"ReviewLike", req.body.User_Id,BookID);
                 }
  

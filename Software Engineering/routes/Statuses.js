@@ -154,15 +154,15 @@ router.post("/",(req,res)=>
 
 router.get("/show" ,auth,async(req,res)=>
  {
-//      if(req.query.UserId==null)
-//      {
-//         return  res.status(400).send("Bad request no UserID  Id is there");
-//     }
+      if(req.query.UserId==null)
+      {
+         return  res.status(400).send("Bad request no UserID  Id is there");
+     }
 
-//       if (req.query.UserId.length == 0)
-//      {
-//        return  res.status(400).send("Bad request no Satatus Id is there");
-//      }
+       if (req.query.UserId.length == 0)
+      {
+        return  res.status(400).send("Bad request no Satatus Id is there");
+      }
 
 
   await Status.find( {'UserId':req.user._id},async(err,doc)=>
