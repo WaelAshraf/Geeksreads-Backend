@@ -4,6 +4,8 @@ const request = require("supertest");
 //Update statuses request Tests
 ////////////////////////////////////////////////////////////////////
 //check the validations of the requests  
+describe('Statuses',()=>{
+
 it("can't accept requests with missing required argument",(done)=>
  {
      request(app)
@@ -114,3 +116,5 @@ it("Normal acceptance for delete",(done)=>
     .expect(200)
     .end(done)
 }); 
+
+})

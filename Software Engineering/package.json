@@ -33,6 +33,7 @@
   },
   "scripts": {
     "test": "nyc mocha --timeout 15000"
+    
   },
   "author": "",
   "license": "ISC"
