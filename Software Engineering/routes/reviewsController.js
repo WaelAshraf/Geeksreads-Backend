@@ -78,7 +78,7 @@ Router.post('/add', async (req, res) => {
                      for (i=0;i<n;i++)
                    {
 
-                         CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , req.body.userId, null, review1.bookId);
+                         CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , null, review1.bookId);
 
                    }  
                 }

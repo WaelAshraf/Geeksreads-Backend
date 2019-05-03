@@ -107,14 +107,16 @@ Router.post('/', async (req, res) => {
                     var NotifiedUserId = doc.userId;
                     console.log(doc.userId); 
 
-                  CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment", comment1.userId,null);
+                  CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment",comment1.userId,null);
+             if ( user1.FollowersUserId)
+             {
                   var n = user1.FollowersUserId.length;  
                   for (i=0;i<n;i++)
                   {
-                  CreatStatuses(user1.FollowersUserId[i],req.body.ReviewId,comment1.CommentId,"Comment",comment1.userId,null,null);
+                  CreatStatuses(user1.FollowersUserId[i],req.body.ReviewId,comment1.CommentId,"Comment",null,null);
                   }               
                 }
-
+            }
  
             });             
                     return res.status(200).send({ "AddedCommentSuc": true });

@@ -125,18 +125,22 @@ router.get('/byid', async (req,res) => {
 router.get('/find', async (req,res) => {
   
  
-  mongoose.connection.collection("books").findOne({ISBN:req.query.search_param},
+  Books.find({ISBN:req.query.search_param},
   (err,doc) =>{
    
-    if(!doc)
+    console.log(doc);
+      
+    if(!doc|| doc.length ==0)
     {
-      mongoose.connection.collection("books").findOne({AuthorId:req.query.search_param},
+      console.log(doc);
+      Books.find({AuthorId:req.query.search_param},
         (err,doc) =>{
-          if(!doc)
+          if(!doc|| doc.length ==0)
           {
-            mongoose.connection.collection("books").findOne({Title:req.query.search_param},
+            console.log(doc);
+            Books.find({Title:req.query.search_param},
               (err,doc) =>{
-                if(!doc)
+                if(!doc|| doc.length ==0)
                 {
                   res.status(404).json({  // sends a json with 404 code
                     success: false ,  // book not retrieved  
@@ -150,6 +154,7 @@ router.get('/find', async (req,res) => {
                 }
                 else
                 {
+                  console.log(doc);
                   res.status(200).json(doc);
                 }
 

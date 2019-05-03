@@ -100,10 +100,13 @@ router.post("/",(req,res)=>
  * @apiSuccess {date}  ReviewDate the date of the review
  * @apiSuccess {Number}  ReviewLikesCount numbr of the people who liked the the review
  * 
- * @apiSuccess {string} MakerId the id of the user who made the status( Commented or rated or reviewd)
- * @apiSuccess {string} MakerPhoto the URL of the Photo of the User who did the thing ( Commented or rated or reviewd)
- * @apiSuccess {string}  MakerName the Name of the User Who made the status ( Commented or rated or reviewd)
+ * @apiSuccess {string} ReviewMakerId the id of the user who made the  review
+ * @apiSuccess {string} ReviewMakerPhoto the URL of the Photo of the User who review
+ * @apiSuccess {string}  ReviewMakerName the Name of the User Who made the  review
  * 
+ * @apiSuccess {string} CommentMakerId the id of the user who made the comment
+ * @apiSuccess {string} CommentMakerPhoto the URL of the Photo of the User who did Comment
+ * @apiSuccess {string}  CommentMakerName the Name of the User Who made the  Commented 
  *  @apiSuccessExample  Expected Data on Success
  * {
  *
