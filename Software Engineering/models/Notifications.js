@@ -128,7 +128,7 @@ const Notification = mongoose.model('Notification', NotificationSchema);
 async function CreatNotification( NotifiedUserId ,ReviewId , Comment1Id, Type, MakerId, Book1Id )
 {
 // basic infos
-if (Type != "Comment" ||Type != "ReviewLike"||Type != "Follow" )
+if (Type != "Comment" && Type != "ReviewLike" && Type != "Follow" )
 {
   return "wrongType";
 }
