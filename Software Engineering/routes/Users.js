@@ -1860,18 +1860,18 @@ router.get("/Notifications" ,auth ,async(req,res)=>
   */
 router.post("/Notification/seen" ,(req,res)=>
 {
-     if(req.query.NotificationId == null)
+     if(req.body.NotificationId == null)
      {
         return  res.status(400).send("Bad request no .NotificationId  Id is there");
     }
 
-      if (req.query.NotificationId.length == 0)
+      if (req.body.NotificationId.length == 0)
      {
        return  res.status(400).send("Bad request .NotificationId Id is there");
      }
 
 
-  Notification.findOneAndUpdate( {'NotificationId':req.query.NotificationId},
+  Notification.findOneAndUpdate( {'NotificationId':req.body.NotificationId},
   { $set : {'Seen' :true} },
   (err,doc)=>
 
