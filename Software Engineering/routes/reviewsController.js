@@ -45,11 +45,10 @@ Router.post('/add', async (req, res) => {
     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
     const user1 = await user.findById(req.body.userId);
     let check1 = await book.findOne({ BookId: req.body.bookId });
-    console.log(check1);
     if (!check1) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
     
     const book1 =check1;
-    console.log(book1);
+    
         review1.reviewId=review1._id; //1  
         review1.bookId=req.body.bookId; //2
         review1.bookCover=  book1.Cover; 
@@ -61,24 +60,18 @@ Router.post('/add', async (req, res) => {
         review1.userName=user1.UserName; //8
         review1.photo=user1.Photo; //9 Users Photo 
         review1.likesCount=0; //10
-        console.log(user1.UserName);
-        console.log(user1.UserId);
-        console.log(review1.userName);
     review1.save(async(err,doc)=>{
         if (!err) {           
-            {       await review.findOneAndUpdate({"reviewId":review1._id},{$set:{rating:rate}},function (err, user1) {
+            {       await review.findOneAndUpdate({"reviewId":review1._id},{$set:{rating:rate}},function (err, doc) {
                 if (!err) {             
-
-                    console.log ("we  saving")
-                  
                   if (user1.FollowersUserId)
                   {  
                   var n = user1.FollowersUserId.length; 
-                   console.log(n);
+                   
                      for (i=0;i<n;i++)
                    {
-
-                         CreatStatuses( FollowersUserId[i] ,review1.reviewId , null , "Review" , null, review1.bookId);
+                       
+                         CreatStatuses( user1.FollowersUserId[i] ,review1.reviewId , null , "Review" , null, review1.bookId);
 
                    }  
                 }

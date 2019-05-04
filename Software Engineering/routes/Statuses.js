@@ -176,7 +176,7 @@ router.post("/",(req,res)=>
  */
 
 
-router.get("/show" ,auth,async(req,res)=>
+router.get("/show" ,async(req,res)=>
  {
       if(req.query.UserId==null)
       {
@@ -189,7 +189,7 @@ router.get("/show" ,auth,async(req,res)=>
       }
 
 
-  await Status.find( {'UserId':req.user._id},async(err,doc)=>
+  await Status.find( {'UserId':req.query.UserId},async(err,doc)=>
 
    {
     if(!doc)
@@ -200,7 +200,7 @@ router.get("/show" ,auth,async(req,res)=>
    
     var n = doc.length;
     console.log (n);
-    let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Read Reading');
+    let Result = await User.find({'UserId': req.query.UserId}).select('-_id LikedReview WantToRead Read Reading');
        console.log(Result);
       
     for (var i=0 ;i<n;i++)
