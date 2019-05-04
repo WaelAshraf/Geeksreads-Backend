@@ -384,13 +384,19 @@ router.post('/isfollowed', async (req, res) => { //sends post request to /isfoll
        
        // console.log(to(doc.FollowingAuthorId));
 
-        if(!doc || err)
+        if(!doc)
         {
        //   console.log(doc);
-          res.status(404).json({  // sends a json with 404 code
+          res.status(200).json({  // sends a json with 404 code
              
              "isfollowed":"false"});
         }
+         else if(err)
+         {
+          res.status(404).json({  // sends a json with 404 code
+             
+            "isfollowed":"error"});
+         }
          else
          {
          //console.log(doc);
