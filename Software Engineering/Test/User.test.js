@@ -39,12 +39,12 @@ it("Invalid Name Sign Up",  (done) => {
          })
      .expect(401,done);
  });
- /*it("Send Verification Email",  (done) => {
+ it("Send Verification Email",  (done) => {
      request(app)
       .post('/api/Users/SignUp')
       .send({
               "UserName": "Saad",
-              "UserEmail": "samersosta2@Outlook.com",
+              "UserEmail": "AhmedSaad@nice.com",
               "UserPassword": "123456"
          })
      .expect(200,done);
@@ -58,10 +58,11 @@ it("Invalid Name Sign Up",  (done) => {
          })
      .expect(200,done);
 })
-*/
+
 it("Invalid New Name",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserInfo')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserName":"Mo",
        "NewUserBirthDate":"1998-06-26T23:28:56.82Z",
@@ -72,6 +73,7 @@ it("Invalid New Name",  (done) => {
 it("Invalid New Date",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserInfo')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserName":"Moh",
        "NewUserBirthDate":"",
@@ -82,6 +84,7 @@ it("Invalid New Date",  (done) => {
 it("Invalid New Photo",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserInfo')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserName":"Moh",
        "NewUserBirthDate":"1998-06-26T23:28:56.82Z",
@@ -92,6 +95,7 @@ it("Invalid New Photo",  (done) => {
 it("Info Updated",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserInfo')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserName":"Moh",
        "NewUserBirthDate":"1998-06-26T23:28:56.82Z",
@@ -102,6 +106,7 @@ it("Info Updated",  (done) => {
 it("Invalid New Password",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserPassword')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserPassword":"123",
        "OldUserPassword":"123456"
@@ -111,6 +116,7 @@ it("Invalid New Password",  (done) => {
 it("Invalid old Password",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserPassword')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserPassword":"123456",
        "OldUserPassword":"123"
@@ -120,6 +126,7 @@ it("Invalid old Password",  (done) => {
 it("Password Updated",  (done) => {
     request(app)
      .post('/api/Users/UpdateUserPassword')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "NewUserPassword":"123456",
        "OldUserPassword":"234567"
@@ -129,6 +136,7 @@ it("Password Updated",  (done) => {
 it("Invalid User Id",  (done) => {
     request(app)
      .post('/api/Users/GetUserById')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "UserId":"BlaBlaBla"
         })
@@ -137,6 +145,7 @@ it("Invalid User Id",  (done) => {
 it("gets User info by User Id",  (done) => {
     request(app)
      .post('/api/Users/GetUserById')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
      .send({
        "UserId":"5cc5df8c2e9c5800172864c9"
         })
