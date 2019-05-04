@@ -1796,18 +1796,14 @@ router.get("/Notifications" ,auth ,async(req,res)=>
    return res.status(404).send("No Notifications were found");
     }
       var n = doc.length;
-      console.log (n);
       let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Reading Read');
-         console.log(Result);
-
+ 
       for (var i=0 ;i<n;i++)
      {
        if (doc[i].ReviewId)
        {
-        console.log(doc[i].ReviewId);
          var exsist = Result[0].LikedReview.indexOf(doc[i].ReviewId);
-         console.log(exsist);
-
+ 
                  if (exsist>=0) {
 
                    doc[i].ReviewIsLiked =true;

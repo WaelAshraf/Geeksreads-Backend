@@ -178,18 +178,18 @@ router.post("/",(req,res)=>
 
 router.get("/show" ,async(req,res)=>
  {
-      if(req.query.UserId==null)
-      {
-         return  res.status(400).send("Bad request no UserID  Id is there");
-     }
+    //   if(req.user._id==null)
+    //   {
+    //      return  res.status(400).send("Bad request no UserID  Id is there");
+    //  }
 
-       if (req.query.UserId.length == 0)
-      {
-        return  res.status(400).send("Bad request no Satatus Id is there");
-      }
+    //    if (req.user._id.length == 0)
+    //   {
+    //     return  res.status(400).send("Bad request no Satatus Id is there");
+    //   }
 
 
-  await Status.find( {'UserId':req.query.UserId},async(err,doc)=>
+  await Status.find( {'UserId':req.user._id},async(err,doc)=>
 
    {
     if(!doc)
@@ -200,7 +200,7 @@ router.get("/show" ,async(req,res)=>
    
     var n = doc.length;
     console.log (n);
-    let Result = await User.find({'UserId': req.query.UserId}).select('-_id LikedReview WantToRead Read Reading');
+    let Result = await User.find({'UserId':req.user._id}).select('-_id LikedReview WantToRead Read Reading');
        console.log(Result);
       
     for (var i=0 ;i<n;i++)

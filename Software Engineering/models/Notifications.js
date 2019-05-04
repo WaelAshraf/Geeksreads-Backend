@@ -190,7 +190,6 @@ await review.findOne({ "reviewId": ReviewId},(err,doc) =>
  }
 
 });
-
 await Books.findOne({"BookId":Book1Id},(err,doc) =>
   {    
       if (!doc)
@@ -199,6 +198,7 @@ await Books.findOne({"BookId":Book1Id},(err,doc) =>
     }
     else
     {
+
       newNotification.BookId=doc.BookId;
       newNotification.BookName=doc.Title;
       newNotification.BookPhoto=doc.Cover;

@@ -16,7 +16,6 @@ const Comments = require("./routes/commentsController");
 const Review = require("./routes/reviewsController");
 const Resources= require("./routes/Resources");
 const Books = require("./routes/Books");
-const OwnedBooks= require("./routes/ownedBooks");
 const Search = require("./routes/Search");
 const app = express();
 
@@ -41,7 +40,6 @@ app.use('/api/user_status',Statuses);
 app.use('/api/comments/',Comments); 
 app.use('/api/review/',Review);
 app.use('/api/Resources',Resources);
-app.use('/api/owned_books',OwnedBooks);
 app.use ('/api/book',Books);
 app.use ('/api/search',Search);
 // the port where the application run
