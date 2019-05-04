@@ -154,7 +154,7 @@ if (MakerId)
   {
     if (!doc)
     {
-      return console.log("Wrong User Id")
+      return "Wrong User Id"
     }
     else
     {
@@ -169,13 +169,14 @@ if (MakerId)
 }
 if (Type =="Follow")
 {
+  newNotification.save();
   var x = { "FolloWSuccess": true};
   return x;
 }
 await review.findOne({ "reviewId": ReviewId},(err,doc) =>
 {   if (!doc)
   {
-    return console.log("Wrong review Id")
+    return "Wrong review Id"
   }
   else
   {
@@ -186,9 +187,7 @@ await review.findOne({ "reviewId": ReviewId},(err,doc) =>
     newNotification.UserName=doc.userName;
     newNotification.UserPhoto=doc.photo;
     Book1Id= doc.bookId;
-    console.log(doc.userName);
-    console.log(newNotification.UserName);
-  }
+ }
 
 });
 
@@ -219,7 +218,7 @@ await comment.findOne({"CommentId":Comment1Id},(err,doc) =>
 {    
     if (!doc)
   {
-    return console.log("Wrong comment Id")
+    return "Wrong comment Id";
   }
   else
   {
@@ -237,6 +236,7 @@ await comment.findOne({"CommentId":Comment1Id},(err,doc) =>
 
 newNotification.Seen = false;
 newNotification.save();
+return "Success"
 }
  
 exports.CreatNotification = CreatNotification;

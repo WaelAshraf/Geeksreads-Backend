@@ -42,6 +42,11 @@ router.post("/",(req,res)=>
     return res.status(400).send("No parameters was sent")
  }
 
+ if (req.body.StatusId== null)
+
+{
+  return res.status(400).send("No StatusId was sent")
+}
 
  var  newStatus = new Status(
    {
@@ -61,6 +66,7 @@ router.post("/",(req,res)=>
    "BookName":req.body.BookName,
    "BookPhoto":req.body.BookPhoto,
    "AuthorId":req.body.AuthorId,
+   "AuthorName":req.body.AuthorName,
    "CommentId":req.body.CommentId,
    "CommentBody":req.body.CommentBody,
    "CommentDate":req.body.CommentDate,
@@ -76,11 +82,12 @@ router.post("/",(req,res)=>
 
    Status.findOne({'StatusId': newStatus.StatusId},(err,doc)=>
    {
-    if(!doc)
+     console.log(doc);
+    if(!doc||err)
     {
    return res.status(400).send("Not there exist");
     }
-    //newStatus.save()
+    // newStatus.save()
     res.status(200).send(
         {
             UpdateSucc : true

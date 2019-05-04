@@ -1,7 +1,7 @@
 var app = require("../DB").app;
 const request = require("supertest");
 var {CreatNotification} = require("../models/Notifications");
-var {CreatStatusese} = require("../models/Statuses");
+var {CreatStatuses} = require("../models/Statuses");
 const expect= require("expect");
 /////////////////////////////////////////////////////////////////////
 //Update statuses request Tests
@@ -106,6 +106,45 @@ it("Normal acceptance for show",(done)=>
 //remove statuses request Tests
 ////////////////////////////////////////////////////////////////////
 //check the validations of the requests
+
+describe (" The Function",()=>
+{
+   it("Refused Worong Types",()=>
+   {
+       var x=CreatStatuses( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , null, " ", "5cb6067bd42e9b00173fa1fc" , null );
+      h= Promise.resolve({"TypeSuccess": false });
+      expect(x).toEqual(h);
+   })
+   it("Refused When the same person like himself",()=>
+   {
+       var x=CreatStatuses( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , null, "ReviewLike", "5cb63944711e440017db82b9" , null );
+      h= Promise.resolve("No notification will be added for the same user");
+      expect(x).toEqual(h);
+   })
+
+
+   it("Refused wrong Review Ids",()=>
+   {
+       var x=CreatStatuses( "5cb63944711e440017db82b9" ,"ss7" , null, "Comment ", "5cb6067bd42e9b00173fa1fc" , null );
+      h= Promise.resolve("Wrong review Id");
+      expect(x).toEqual(h);
+   })
+   
+   it("Refused Worong Types",()=>
+   {
+       var x=CreatStatuses( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , "ssd", "Comment ", "5cb6067bd42e9b00173fa1fc" , null );
+      h= Promise.resolve("Wrong comment Id");
+      expect(x).toEqual(h);
+   });
+   it("Normal acceptance ",()=>
+   {
+       var x=CreatStatuses( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , "5ccd51457fbb394a343cc6b2", "Comment ", "5cb6067bd42e9b00173fa1fc" , null );
+      h= Promise.resolve("Success");
+      expect(x).toEqual(h);
+   });
+   
+   
+});
 describe("Remove", ()=>
 {
 
@@ -174,8 +213,39 @@ describe ("Notifications", ()=>
           expect(x).toEqual(h);
        })
 
+       it("Refused wrong User Ids",()=>
+       {
+        var x=CreatNotification( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , null, "ReviewLike", "hs" , null );
+          h= Promise.resolve("Wrong User Id");
+          expect(x).toEqual(h);
+       })
 
 
-
+       it("Refused wrong Review Ids",()=>
+       {
+           var x=CreatNotification( "5cb63944711e440017db82b9" ,"ss7" , null, "Comment ", "5cb6067bd42e9b00173fa1fc" , null );
+          h= Promise.resolve("Wrong review Id");
+          expect(x).toEqual(h);
+       })
+       
+       it("Refused Worong Types",()=>
+       {
+           var x=CreatNotification( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , "ssd", "Comment ", "5cb6067bd42e9b00173fa1fc" , null );
+          h= Promise.resolve("Wrong comment Id");
+          expect(x).toEqual(h);
+       });
+       it("Normal acceptance ",()=>
+       {
+           var x=CreatNotification( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , "5ccd51457fbb394a343cc6b2", "Comment ", "5cb6067bd42e9b00173fa1fc" , null );
+          h= Promise.resolve("Success");
+          expect(x).toEqual(h);
+       });
+       
+       it("accept when its follow",()=>
+       {
+        var x=CreatNotification( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , null, "Follow", "5cb63944711e440017db82b9" , null );
+          h= Promise.resolve({ "FolloWSuccess": true});
+          expect(x).toEqual(h);
+       })
     });
 });
