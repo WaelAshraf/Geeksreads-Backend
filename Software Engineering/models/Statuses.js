@@ -148,10 +148,12 @@ function validateStatuses(Status) {
  */
 
 async function CreatStatuses( FollowerId ,ReviewId , Comment1Id, Type, NumberOfStars, Book1Id )
-{
+{ console.log ("hey");
 // basic infos
-if (Type != "Comment" ||Type != "Review" )
+console.log (Type);
+if (Type != "Comment" &&Type != "Review" )
 {
+  console.log ("hey hey")
   var x ={"TypeSuccess": false };
   return x;
 }
@@ -173,10 +175,11 @@ await review.findOne({"reviewId":ReviewId},(err,doc) =>
 {    
     if (!doc)
   {
-    return console.log("Wrong review Id")
+    return "Wrong review Id"
   }
   else
   {
+    console.log ("hey hey hey")
     newStatus.ReviewId=doc.reviewId;
     newStatus.ReviewBody=doc.reviewBody;
     newStatus.ReviewDate=doc.reviewDate;
@@ -197,6 +200,7 @@ await review.findOne({"reviewId":ReviewId},(err,doc) =>
     }
     else
     {
+      console.log ("hey hey hry hrey")
       newStatus.BookId=doc.BookId;
       newStatus.BookName=doc.Title;
       newStatus.BookPhoto=doc.Cover;    
@@ -215,8 +219,8 @@ await comment.findOne({CommentId:Comment1Id},(err,doc) =>
 {    
     if (!doc)
   {
-    return console.log("Wrong comment Id")
-  }
+    return "Wrong comment Id"
+    }
   else
   {
     newStatus.CommentId=doc.CommentId;
