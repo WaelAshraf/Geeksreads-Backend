@@ -102,24 +102,6 @@ Router.post('/add', async (req, res) => {
 });
 ///////////////////////////////////////////////
 ////////////////////// Get Review By ID /////////////////
-Router.get('/getReview',async(req,res)=>{
-    
-    const {error} = validateget(req.body);
-
-    if(error) return res.status(400).send(error.details[0].message);
-
-   review.findOne( {'reviewId':req.body.reviewId},(err,doc)=>
-   {
-       if(err) { res.status(400).send("review doesn't exist!")}
-
-       if(!doc) { 
-        console.log(doc); 
-        res.status(400).send("error while retrieving data!")}
-       if(doc)
-       { res.status(200).send(doc)}
-   })
-
-})
 /////////////////////////////////////////
 ////Remove////
 /**
@@ -138,11 +120,10 @@ Router.get('/getReview',async(req,res)=>{
  */
 //////////////////////////////
 Router.post('/remove',async (req,res)=>{
-    const { error } = validateget(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
  review.findOneAndDelete({'reviewId':req.body.reviewId},(err)=>{
     if(err)
-    {res.status(400).json({"deleteReviewSuc": false})}
+    {
+        res.status(400).json({"deleteReviewSuc": false})}
     else{ 
      res.status(200).json({"deleteReviewSuc": true});}
 })
@@ -265,8 +246,8 @@ Router.post('/editRevById',async (req, res) =>{
 /////////////////////////////////
 function validateget(reqin) {
     const schema = {
-    bookId:Joi.string().min(24),
-    UserId:Joi.string().min(24)
+    bookId:Joi.string().min(24).max(24),
+    UserId:Joi.string().min(24).max(24)
     };
     return Joi.validate(reqin, schema);
     }
@@ -274,17 +255,19 @@ function validateget(reqin) {
 
    Router.get('/getrev',async(req,res)=>{
     const { error } = validateget(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error){
+        return res.status(400).send(error.details[0].message);}
     var likedArr =Array();
     let Review = await review.find({bookId:req.body.bookId});
     let Result = await user.find({ 'UserId': req.body.UserId}).select('-_id LikedReview');
+
     var n=Review.length;
-    console.log(Review);
+    //console.log(Review);
     Result=Result[0].LikedReview;
-    console.log(Result);
+   // console.log(Result);
     for (var i = 0; i < n; i++) {
         var exsist = Result.indexOf(Review[i]._id);
-        console.log(exsist);
+       // console.log(exsist);
                 if (exsist>=0) {
                     Review[i].liked = true;
                     likedArr.push(Review[i]);
@@ -295,8 +278,7 @@ function validateget(reqin) {
                 }
     
     }
- console.log(likedArr);
+// console.log(likedArr);
  res.status(200).json(likedArr);
-})    
-
+});
 module.exports = Router;

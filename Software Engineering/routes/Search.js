@@ -20,46 +20,33 @@ router.get('/', async (req,res) => {
         success: false ,  // book not retrieved  
         "Message":"No valid parameter is given !"});
     books = await Books.find( { Title: { $regex: '.*'+req.query.search_param+'.*' } },async (err,doc1) =>{
-        if (err)
-        {
-         
-            console.log("=========================");
-            console.log(err);
-            console.log("=========================");
-          res.status(404).json({  // sends a json with 404 code
-            success: false ,  // book not retrieved  
-            "Message":"No valid parameter is given !"});
-        }
-        else
-        {
-          console.log(doc1);
+       
+       
+          //console.log(doc1);
            // console.log("=========================");
            // console.log(doc1);
            // console.log("=========================");
             retArr.push(doc1);
           
-          }
      } );
      books1 = await Books.find( { AuthorName: { $regex: '.*'+req.query.search_param+'.*' } },async (err,doc1) =>{
-      if (err)
-      {
-          console.log("=========================");
-          console.log(err);
-          console.log("=========================");
-        res.status(404).json({  // sends a json with 404 code
-          success: false ,  // book not retrieved  
-          "Message":"No valid parameter is given !"});
-      }
-      else
-      {
+      
        //   console.log("=========================");
        //   console.log(doc1);
        //   console.log("=========================");
           retArr.push(doc1);
-      }
    } 
    );
+   console.log(retArr[1].length);
+   console.log(retArr[0].length);
+   console.log(retArr[0].length==0 && retArr[1].length==0);
+   if(retArr[0].length==0 && retArr[1].length==0)
+   {
+     return res.status(404).json("Not Found");
+   }
    res.status(200).json(retArr);
+   
+   
 })
     
      
