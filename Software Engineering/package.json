@@ -10,6 +10,7 @@
     "body-parser": "^1.18.3",
     "config": "^3.0.1",
     "crypto": "^1.0.1",
+    "expect": "^1.20.2",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
     "fawn": "^2.1.5",
@@ -23,17 +24,16 @@
     "mongoose": "^5.4.19",
     "nodemailer": "^5.1.1",
     "nodemon": "^1.18.10",
-    "sendgrid": "^5.2.3",
-    "supertest": "^4.0.2"
+    "sendgrid": "^5.2.3"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
     "jsdoc": "^3.5.5",
-    "nyc": "^14.1.0"
+    "nyc": "^14.1.0",
+    "supertest": "file:node_modules/supertest"
   },
   "scripts": {
     "test": "nyc mocha --timeout 15000"
-    
   },
   "author": "",
   "license": "ISC"

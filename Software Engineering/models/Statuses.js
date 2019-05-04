@@ -101,12 +101,12 @@ const StatusesSchema = new mongoose.Schema({
     {
         type: String
     },
-    AutorName:
+    AuthorName:
     {
       type: String
    
     },
-    AutorId:
+    AuthorId:
     {
       type: String
    
@@ -150,6 +150,11 @@ function validateStatuses(Status) {
 async function CreatStatuses( FollowerId ,ReviewId , Comment1Id, Type, NumberOfStars, Book1Id )
 {
 // basic infos
+if (Type != "Comment" ||Type != "Review" )
+{
+  var x ={"TypeSuccess": false };
+  return x;
+}
   var  newStatus = new Statuses(
     {
       "UserId":FollowerId,
@@ -195,7 +200,7 @@ await review.findOne({"reviewId":ReviewId},(err,doc) =>
       newStatus.BookId=doc.BookId;
       newStatus.BookName=doc.Title;
       newStatus.BookPhoto=doc.Cover;    
-      newStatus.AuthorName= doc.AuthorName;
+      newStatus.AuthorName=doc.AuthorName;
       newStatus.AuthorId= doc.AuthorId;
 
     }

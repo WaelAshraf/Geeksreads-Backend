@@ -109,11 +109,11 @@ MakerName:
       {
           type: String
       },
-      AutorName:
+      AuthorName:
       {
         type: String
       },
-      AutorId:
+      AuthorId:
       {
         type: String
       },
@@ -128,9 +128,13 @@ const Notification = mongoose.model('Notification', NotificationSchema);
 async function CreatNotification( NotifiedUserId ,ReviewId , Comment1Id, Type, MakerId, Book1Id )
 {
 // basic infos
+if (Type != "Comment" ||Type != "ReviewLike"||Type != "Follow" )
+{
+  return "wrongType";
+}
 if ( NotifiedUserId ==MakerId)
 {
-return   console.log(" no notification will be added for the same user")
+return   "No notification will be added for the same user"
 }
 
   var  newNotification = new Notification(
@@ -162,6 +166,11 @@ if (MakerId)
 
   });
 
+}
+if (Type =="Follow")
+{
+  var x = { "FolloWSuccess": true};
+  return x;
 }
 await review.findOne({ "reviewId": ReviewId},(err,doc) =>
 {   if (!doc)
@@ -204,7 +213,7 @@ await Books.findOne({"BookId":Book1Id},(err,doc) =>
 //////// three types/////////////////
 //////////////////////////////////////////
 /////review//////
- if(Type == "Comment")
+if(Type == "Comment")
 {
 await comment.findOne({"CommentId":Comment1Id},(err,doc) =>
 {    

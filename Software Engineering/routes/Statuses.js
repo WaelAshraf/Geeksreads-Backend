@@ -45,12 +45,29 @@ router.post("/",(req,res)=>
 
  var  newStatus = new Status(
    {
-   "StatusId":req.body.StatusId,
     "UserId":req.body.UserId,
-    "ReviewId":req.body.ReviewId,
-    "CommentId":req.body.CommentId,
-   "StatusBody":req.body.StatusBody,
-    "StatusDate":req.body.StatusDate
+   "StatusType":req.body.StatusType,
+   "ReviewIsLiked":req.body.ReviewIsLiked,
+   "BookStatus":req.body.BookStatus,
+   "StatusId":req.body.StatusId,
+   "ReviewId":req.body.ReviewId,
+   "ReviewBody":req.body.ReviewBody,
+   "ReviewDate":req.body.ReviewDate,
+   "ReviewLikesCount":req.body.ReviewLikesCount,
+   "ReviewMakerId":req.body.ReviewMakerId,
+   "ReviewMakerName":req.body.ReviewMakerName,
+   "ReviewMakerPhoto":req.body.ReviewMakerPhoto,
+   "BookId":req.body.BookId,
+   "BookName":req.body.BookName,
+   "BookPhoto":req.body.BookPhoto,
+   "AuthorId":req.body.AuthorId,
+   "CommentId":req.body.CommentId,
+   "CommentBody":req.body.CommentBody,
+   "CommentDate":req.body.CommentDate,
+   "CommentMakerId":req.body.MakerId,
+   "CommentMakerName":req.body.CommentMakerName,
+   "CommentMakerPhoto":req.body.CommentMakerPhoto
+
    });
 
   const {error} = validate(newStatus.body);
@@ -59,11 +76,11 @@ router.post("/",(req,res)=>
 
    Status.findOne({'StatusId': newStatus.StatusId},(err,doc)=>
    {
-    if(doc)
+    if(!doc)
     {
-   return res.status(400).send("already exist");
+   return res.status(400).send("Not there exist");
     }
-    newStatus.save()
+    //newStatus.save()
     res.status(200).send(
         {
             UpdateSucc : true
@@ -154,15 +171,15 @@ router.post("/",(req,res)=>
 
 router.get("/show" ,auth,async(req,res)=>
  {
-//      if(req.query.UserId==null)
-//      {
-//         return  res.status(400).send("Bad request no UserID  Id is there");
-//     }
+      if(req.query.UserId==null)
+      {
+         return  res.status(400).send("Bad request no UserID  Id is there");
+     }
 
-//       if (req.query.UserId.length == 0)
-//      {
-//        return  res.status(400).send("Bad request no Satatus Id is there");
-//      }
+       if (req.query.UserId.length == 0)
+      {
+        return  res.status(400).send("Bad request no Satatus Id is there");
+      }
 
 
   await Status.find( {'UserId':req.user._id},async(err,doc)=>

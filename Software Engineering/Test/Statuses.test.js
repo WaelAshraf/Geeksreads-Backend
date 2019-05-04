@@ -1,5 +1,8 @@
 var app = require("../DB").app;
 const request = require("supertest");
+var {CreatNotification} = require("../models/Notifications");
+var {CreatStatusese} = require("../models/Statuses");
+const expect= require("expect");
 /////////////////////////////////////////////////////////////////////
 //Update statuses request Tests
 ////////////////////////////////////////////////////////////////////
@@ -30,11 +33,28 @@ it("can't accept requests with missing required argument",(done)=>
      request(app)
      .post("/api/user_status/")
      .send ({
-        "StatusId":"1ss998",
-         "UserId":"28938983",
-         "ReviewId":"83939839",
-        "StatusBody":"Hsis likes a comment"
-        })
+        "UserId":"5cb6e10c00eecd0017c37b2c",
+        "StatusType":"Comment",
+        "ReviewIsLiked":false,
+        "BookStatus":null,
+        "StatusId":"5cccaa0d1d018326882245d9",
+        "ReviewId":"5cc70e3fa5733545701e3167",
+        "ReviewBody":"Hello Software!",
+        "ReviewDate":"2008-09-15T12:53:00.000Z",
+        "ReviewLikesCount":7,
+        "ReviewMakerId":"5cb60a0ad42e9b00173fa1fd",
+        "ReviewMakerName":"joejack",
+        "ReviewMakerPhoto":"",
+        "BookId":"5c9114526f1439874b7cca1a",
+        "BookName":"consequat",
+        "BookPhoto":"http://placehold.it/32x32",
+        "AuthorId":"5c911452938ffea87b4672d7",
+        "CommentId":"5cccaa0b1d018326882245d7",
+        "CommentBody":"Hello Software!",
+        "CommentDate":"2008-09-15T12:53:00.000Z",
+        "CommentMakerId":"5cb6067bd42e9b00173fa1fc",
+        "CommentMakerName":"ahmedsalah",
+        "CommentMakerPhoto":""}) 
      .expect(200)
      .end(done)
  });
@@ -43,11 +63,13 @@ it("can't accept requests with missing required argument",(done)=>
 //get statuses request Tests
 ////////////////////////////////////////////////////////////////////
 //check the validations of the requests  
+describe("Get statuses", ()=>
+{
 it("can't accept requests with missing required argument",(done)=>
  {
      request(app)
      .get("/api/user_status/show")
-     .send ({})
+     .query({})
      .expect(400)
      .end(done)
  }) ;
@@ -56,7 +78,7 @@ it("can't accept requests with wrong argument",(done)=>
 {
      request(app)
      .get("/api/user_status/show")
-     .send ({"bookId ":"1989"})
+     .query ({"bookId ":"1989"})
      .expect(400)
      .end(done)
  }) ;
@@ -65,7 +87,7 @@ it("didn't find the status ",(done)=>
 {
      request(app)
      .get("/api/user_status/show")
-     .send({"StatusId":"198928"})
+     .query({"StatusId":"198928"})
      .expect(404)
      .end(done)
  }) ;
@@ -75,13 +97,19 @@ it("Normal acceptance for show",(done)=>
 {
     request(app)
     .get("/api/user_status/show")
-    .send({"StatusId":"198998"})// already exicting data
+    .query({"StatusId":"198998"})// already exicting data
     .expect(200)
     .end(done)
 }); 
+
+});
 //remove statuses request Tests
 ////////////////////////////////////////////////////////////////////
-//check the validations of the requests  
+//check the validations of the requests
+describe("Remove", ()=>
+{
+
+
 it("can't accept requests with missing required argument for delete",(done)=>
  {
      request(app)
@@ -118,5 +146,36 @@ it("Normal acceptance for delete",(done)=>
     .expect(200)
     .end(done)
 }); 
+});
+});
+describe ("Notifications", ()=>
+{
+    describe("Get Notification",()=>
+    {
 
-})
+    });
+    describe (" Make it Seen",()=>
+
+    {
+
+    });
+    describe (" The Function",()=>
+    {
+       it("Refused Worong Types",()=>
+       {
+           var x=CreatNotification( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , null, " ", "5cb6067bd42e9b00173fa1fc" , null );
+          h= Promise.resolve("wrongType");
+          expect(x).toEqual(h);
+       })
+       it("Refused When the same person like himself",()=>
+       {
+           var x=CreatNotification( "5cb63944711e440017db82b9" ,"5cc70e3fa5733545701e3167" , null, "ReviewLike", "5cb63944711e440017db82b9" , null );
+          h= Promise.resolve("No notification will be added for the same user");
+          expect(x).toEqual(h);
+       })
+
+
+
+
+    });
+});
