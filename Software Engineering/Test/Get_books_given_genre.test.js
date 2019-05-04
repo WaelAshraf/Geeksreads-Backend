@@ -4,7 +4,7 @@ it("Get info about multiple books by genre (invalid)", (done) => { //Test for an
     request(app) //sends request to server
         .get('/api/book/bygenre')//Define request as post  specific end point
         .query({ //adds Request Paramters 
-            Genre: "reality 101"
+            Genre: "reality_101"
         })
         .expect(404, done);//expects status 404 to pass test 
 });
