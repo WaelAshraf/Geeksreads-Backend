@@ -75,7 +75,7 @@ it("Remove Book from shelf",  (done) => {
     request(app)
      .get('/api/Users/RemoveFromShelf')
      .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTY5ODA1NDQsImV4cCI6MTU1NzA2Njk0NH0.f3EknhSw40xRqVoKjMXWibKcyF691Be3LuMTjsdn3vM')
-     .send({"BookId":"5c9114a01c049771a04cbce4" })
+     .send({"BookId":"5c911573d03a6fe10721f417" })
     .expect(200,done);
 });
 it("Invalid BookId",  (done) => {
