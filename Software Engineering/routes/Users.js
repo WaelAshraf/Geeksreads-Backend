@@ -889,7 +889,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           "BookName": book.BookName,
           "AuthorName": book.AuthorName,
           "RateCount":book.RateCount,
-          "Published": book.Published
+          "Published": book.Published,
+          "ReviewCount":book.ReviewCount
        };
        Result.ReadData.push(bookinfo);
     }
@@ -907,7 +908,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           "BookName": book.BookName,
           "AuthorName": book.AuthorName,
           "RateCount":book.RateCount,
-          "Published": book.Published
+          "Published": book.Published,
+          "ReviewCount":book.ReviewCount
        };
        Result.ReadingData.push(bookinfo);
     }
@@ -925,7 +927,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
           "BookName": book.BookName,
           "AuthorName": book.AuthorName,
           "RateCount":book.RateCount,
-          "Published": book.Published
+          "Published": book.Published,
+          "ReviewCount":book.ReviewCount
        };
        Result.WantToReadData.push(bookinfo);
     }
@@ -1032,7 +1035,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
             "BookName": book.BookName,
             "AuthorName": book.AuthorName,
             "RateCount":book.RateCount,
-            "Published": book.Published
+            "Published": book.Published,
+            "ReviewCount":book.ReviewCount
          };
          Result.ReadData.push(bookinfo);
       }
@@ -1138,7 +1142,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
               "BookName": book.BookName,
               "AuthorName": book.AuthorName,
               "RateCount":book.RateCount,
-              "Published": book.Published
+              "Published": book.Published,
+              "ReviewCount":book.ReviewCount
            };
            Result.ReadingData.push(bookinfo);
         }
@@ -1245,7 +1250,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
                 "BookName": book.BookName,
                 "AuthorName": book.AuthorName,
                 "RateCount":book.RateCount,
-                "Published": book.Published
+                "Published": book.Published,
+                "ReviewCount":book.ReviewCount
              };
              Result.WantToReadData.push(bookinfo);
           }
@@ -1553,7 +1559,7 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
                     FollowersUserId:req.query.myuserid
                   }}
                   ,function (err,doc) { // error handling and checking for returned mongo doc after query
-            
+
                      if (!doc  || err) //matched count checks for number of affected documents by query
                      { res.status(404).json({ // sends a json with 404 code
                       success: false , // Follow Failed
@@ -1562,8 +1568,8 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
                    else
                    {
                     CreatNotification(userId_tobefollowed,null,null,"Follow",req.query.myuserid,null)
-                    
-                    
+
+
                    res.status(200).json({ //sends a json with 200 code
                      success: true ,//Follow Done
                       "Message":"Sucessfully done"});
@@ -1585,14 +1591,14 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
                   "Message":"user ALREADY FOLLOWED!"});
                 }
               }
-              
-          
-            
-              
-            
+
+
+
+
+
             }
             );
-             
+
             }
           }
           );
@@ -1600,10 +1606,10 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
     }
     );
   });
- 
-  
 
-  
+
+
+
 
 
 
