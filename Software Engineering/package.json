@@ -33,7 +33,7 @@
     "supertest": "file:node_modules/supertest"
   },
   "scripts": {
-    "test": "nyc mocha --timeout 15000"
+    "test": " mocha --timeout 15000"
   },
   "author": "",
   "license": "ISC"
