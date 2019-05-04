@@ -8,6 +8,7 @@
     "apidoc": "^0.17.7",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
     "config": "^3.0.1",
     "crypto": "^1.0.1",
     "expect": "^1.20.2",
@@ -28,12 +29,13 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
+    "istanbul": "^0.4.5",
     "jsdoc": "^3.5.5",
     "nyc": "^14.1.0",
-    "supertest": "file:node_modules/supertest"
+    "supertest": "^4.0.2"
   },
   "scripts": {
-    "test": " mocha --timeout 15000"
+    "test": "nyc --reporter=html mocha --timeout 15000"
   },
   "author": "",
   "license": "ISC"
