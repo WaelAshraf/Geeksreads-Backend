@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">70.83% </span>
-        <span class="quiet">Statements</span>
-        <span class='fraction'>17/24</span>
-      </div>
-      <div class='fl pad1y space-right2'>
         <span class="strong">37.5% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>9/24</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>3/8</span>
+        <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>0/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">75% </span>
+        <span class="strong">45% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>15/20</span>
+        <span class='fraction'>9/20</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -165,28 +165,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -236,12 +236,12 @@ const router = express.Router();
  *
  */
 &nbsp;
-router.post('/', async (req, res) =&gt; {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
+router.post('/', <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+  const { error } = <span class="cstat-no" title="statement not covered" >validate(req.body);</span>
+<span class="cstat-no" title="statement not covered" >  if (error) <span class="cstat-no" title="statement not covered" >return res.status(400).send({"ReturnMsg":error.details[0].message});</span></span>
 &nbsp;
-  let user = await User.findOne({ UserEmail: req.body.UserEmail.toLowerCase() });
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (!user) return res.status(400).send({"ReturnMsg":"Invalid email or password."});
+  let user = <span class="cstat-no" title="statement not covered" >await User.findOne({ UserEmail: req.body.UserEmail.toLowerCase() });</span>
+<span class="cstat-no" title="statement not covered" >  if (!user) <span class="cstat-no" title="statement not covered" >return res.status(400).send({"ReturnMsg":"Invalid email or password."});</span></span>
 <span class="cstat-no" title="statement not covered" >  if (!user.Confirmed) <span class="cstat-no" title="statement not covered" >return res.status(401).send({ "ReturnMsg" :'Your account has not been verified.' });</span></span>
   const validPassword = <span class="cstat-no" title="statement not covered" >await bcrypt.compare(req.body.UserPassword, user.UserPassword);</span>
 <span class="cstat-no" title="statement not covered" >  if (!validPassword) <span class="cstat-no" title="statement not covered" >return res.status(400).send({"ReturnMsg":"Invalid email or password."});</span></span>
@@ -252,13 +252,13 @@ router.post('/', async (req, res) =&gt; {
       "Token":token});
 });
 &nbsp;
-function validate(req) {
-  const schema = {
+function <span class="fstat-no" title="function not covered" >validate(</span>req) {
+  const schema = <span class="cstat-no" title="statement not covered" >{</span>
     UserEmail: Joi.string().min(5).max(255).required().email(),
     UserPassword: Joi.string().min(5).max(255).required()
   };
 &nbsp;
-  return Joi.validate(req, schema);
+<span class="cstat-no" title="statement not covered" >  return Joi.validate(req, schema);</span>
 }
 &nbsp;
 module.exports = router;
@@ -268,7 +268,7 @@ module.exports = router;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat May 04 2019 14:54:41 GMT+0200 (Eastern European Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun May 05 2019 14:34:40 GMT+0300 (Arabian Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>

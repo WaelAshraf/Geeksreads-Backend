@@ -1771,32 +1771,36 @@ router.post('/Follow', async (req, res) => { //sends post request to /Follow End
  */
 
 
-router.get("/Notifications" ,auth ,async(req,res)=>
+router.get("/Notifications" ,async(req,res)=>
 {
-//      if(req.user._id==null)
-//      {
-//         return  res.status(400).send("Bad request no UserID  Id is there");
-//     }
+  var USER = req.query.UserId
 
-//       if (req.user._id.length == 0)
-//      {
-//        return  res.status(400).send("Bad request no Satatus Id is there");
-//      }
+  if(USER==null)
+      {
+         return  res.status(400).send("Bad request no UserID  Id is there");
+    }
+
+      if (USER.length == 0)
+     {
+       return  res.status(400).send("Bad request no Satatus Id is there");
+     }
 
 
-  Notification.find( {'UserId':req.user._id},async (err,doc)=>
+  Notification.find( {'UserId':USER},async (err,doc)=>
 
    {
+     
+     
     if(!doc)
     {
    return res.status(404).send("No Notifications were found");
     }
-    if(doc.lenght==0)
+    if(doc.length==0)
     {
    return res.status(404).send("No Notifications were found");
     }
       var n = doc.length;
-      let Result = await User.find({'UserId': req.user._id}).select('-_id LikedReview WantToRead Reading Read');
+      let Result = await User.find({'UserId': USER}).select('-_id LikedReview WantToRead Reading Read');
  
       for (var i=0 ;i<n;i++)
      {

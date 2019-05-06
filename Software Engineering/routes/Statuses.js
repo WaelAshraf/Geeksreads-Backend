@@ -177,31 +177,34 @@ router.post("/",(req,res)=>
 
 
 router.get("/show" ,async(req,res)=>
- {
-    //   if(req.user._id==null)
-    //   {
-    //      return  res.status(400).send("Bad request no UserID  Id is there");
-    //  }
+ { 
+   var USER =req.query.UserId
+      if(USER==null)
+     {
+         return  res.status(400).send("Bad request no UserID  Id is there");
+     }
 
-    //    if (req.user._id.length == 0)
-    //   {
-    //     return  res.status(400).send("Bad request no Satatus Id is there");
-    //   }
+       if (USER.length == 0)
+      {
+        return  res.status(400).send("Bad request no Satatus Id is there");
+      }
 
-
-  await Status.find( {'UserId':req.user._id},async(err,doc)=>
+  await Status.find( {'UserId':USER},async(err,doc)=>
 
    {
+ 
+    var n = doc.length;
+    console.log (n)
     if(!doc)
     {  return res.status(404).send("No statuses were found"); }
-    if(doc.lenght==0)
+    if(doc.length == 0|| doc.length == null )
     {return res.status(404).send("No statuses were found");}
    
-   
+  
     var n = doc.length;
-    console.log (n);
-    let Result = await User.find({'UserId':req.user._id}).select('-_id LikedReview WantToRead Read Reading');
-       console.log(Result);
+    
+    let Result = await User.find({'UserId':USER}).select('-_id LikedReview WantToRead Read Reading');
+       
       
     for (var i=0 ;i<n;i++)
    {

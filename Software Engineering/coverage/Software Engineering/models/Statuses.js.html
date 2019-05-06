@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">35.29% </span>
+        <span class="strong">25.49% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>18/51</span>
+        <span class='fraction'>13/51</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">25% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>3/12</span>
+        <span class='fraction'>0/12</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/5</span>
+        <span class='fraction'>0/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">35.29% </span>
+        <span class="strong">25.49% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>18/51</span>
+        <span class='fraction'>13/51</span>
       </div>
     </div>
     <p class="quiet">
@@ -414,7 +414,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -422,15 +422,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -439,10 +431,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -654,8 +654,8 @@ const StatusesSchema = new mongoose.Schema({
 const Statuses = mongoose.model('Statuses', StatusesSchema);
    
  // Important vaidations for the schema  
-function validateStatuses(Status) {
-    const schema = {
+function <span class="fstat-no" title="function not covered" >validateStatuses(</span>Status) {
+    const schema = <span class="cstat-no" title="statement not covered" >{</span>
         StatusId: Joi.string().required(),
         UserId: Joi.string().required(),
         StatusBody: Joi.string().required().max(200),
@@ -663,7 +663,7 @@ function validateStatuses(Status) {
         CommentId: Joi.string(),
         StatusDate:  Joi.date().iso()
     };
-    return Joi.validate(Status, schema);
+<span class="cstat-no" title="statement not covered" >    return Joi.validate(Status, schema);</span>
     }
     /**
  * Creating new statuses.
@@ -677,13 +677,13 @@ function validateStatuses(Status) {
  * 
  */
 &nbsp;
-async function CreatStatuses( FollowerId ,ReviewId , Comment1Id, Type, NumberOfStars, Book1Id )
-{
+async function <span class="fstat-no" title="function not covered" >CreatStatuses(</span> FollowerId ,ReviewId , Comment1Id, Type, NumberOfStars, Book1Id )
+{ 
 // basic infos
-<span class="missing-if-branch" title="else path not taken" >E</span>if (Type != "Comment" ||Type != "Review" )
+<span class="cstat-no" title="statement not covered" >if (Type != "Comment" &amp;&amp;Type != "Review" )</span>
 {
-  var x ={"TypeSuccess": false };
-  return x;
+  var x =<span class="cstat-no" title="statement not covered" >{"TypeSuccess": false };</span>
+<span class="cstat-no" title="statement not covered" >  return x;</span>
 }
   var  newStatus = <span class="cstat-no" title="statement not covered" >new Statuses(</span>
     {
@@ -703,7 +703,7 @@ async function CreatStatuses( FollowerId ,ReviewId , Comment1Id, Type, NumberOfS
 {    
 <span class="cstat-no" title="statement not covered" >    if (!doc)</span>
   {
-<span class="cstat-no" title="statement not covered" >    return console.log("Wrong review Id")</span>
+<span class="cstat-no" title="statement not covered" >    return "Wrong review Id"</span>
   }
   else
   {
@@ -745,8 +745,8 @@ async function CreatStatuses( FollowerId ,ReviewId , Comment1Id, Type, NumberOfS
 {    
 <span class="cstat-no" title="statement not covered" >    if (!doc)</span>
   {
-<span class="cstat-no" title="statement not covered" >    return console.log("Wrong comment Id")</span>
-  }
+<span class="cstat-no" title="statement not covered" >    return "Wrong comment Id"</span>
+    }
   else
   {
 <span class="cstat-no" title="statement not covered" >    newStatus.CommentId=doc.CommentId;</span>
@@ -775,7 +775,7 @@ exports.validate = validateStatuses;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat May 04 2019 14:54:41 GMT+0200 (Eastern European Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun May 05 2019 14:34:40 GMT+0300 (Arabian Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>

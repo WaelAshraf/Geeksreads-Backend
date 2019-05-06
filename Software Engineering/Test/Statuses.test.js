@@ -87,7 +87,7 @@ it("didn't find the status ",(done)=>
 {
      request(app)
      .get("/api/user_status/show")
-     .query({"StatusId":"198928"})
+       .query({"UserId":" 5cb63782711e440017db82b7  "})
      .expect(404)
      .end(done)
  }) ;
@@ -97,7 +97,7 @@ it("Normal acceptance for show",(done)=>
 {
     request(app)
     .get("/api/user_status/show")
-    .query({"StatusId":"198998"})// already exicting data
+    .query({"UserId":"5cb6dd8a00eecd0017c37b2a"})// already exicting data
     .expect(200)
     .end(done)
 }); 
@@ -191,11 +191,92 @@ describe ("Notifications", ()=>
 {
     describe("Get Notification",()=>
     {
-
+        
+ it("No UserId",(done)=>
+ { 
+        request(app)
+        .get("/api/Users/Notifications")
+        .query({"StatusId":"198998"})// already exicting data
+        .expect(400)
+        .end(done)
+    
+ });
+      
+ it("empty UserId",(done)=>
+ { 
+        request(app)
+        .get("/api/Users/Notifications")
+        .query({"UserId":""})// already exicting data
+        .expect(400)
+        .end(done)
+    
+ });
+   
+ 
+ it("No Notifications",(done)=>
+ { 
+        request(app)
+        .get("/api/Users/Notifications")
+        .query({"UserId":" 5cb727e5599e4c001703dc2a "})// already exicting data
+        .expect(404)
+        .end(done)
+    
+ });
+ it("Normal acceptance Notifications",(done)=>
+ { 
+        request(app)
+        .get("/api/Users/Notifications")
+        .query({"UserId":"5cb6067bd42e9b00173fa1fc"})// already exicting data
+        .expect(200)
+        .end(done)
+    
+ });
+   
     });
     describe (" Make it Seen",()=>
 
     {
+              
+ it("No NotificationId",(done)=>
+ { 
+        request(app)
+        .post("/api/Users/Notification/seen")
+        .send({"StatusId":"198998"})// already exicting data
+        .expect(400)
+        .end(done)
+    
+ });
+      
+ it("empty NotificationId",(done)=>
+ { 
+        request(app)
+        .post("/api/Users/Notification/seen")
+        .send({"NotificationId":""})// already exicting data
+        .expect(400)
+        .end(done)
+    
+ });
+   
+ 
+ it("No Notifications were found",(done)=>
+ { 
+        request(app)
+        .post("/api/Users/Notification/seen")
+        .send({"NotificationId":" 5cb727e5599e4c001703dc2a "})// already exicting data
+        .expect(404)
+        .end(done)
+    
+ });
+ it("Normal acceptance Notifications",(done)=>
+ { 
+        request(app)
+        .post("/api/Users/Notification/seen")
+        .send({"NotificationId":"5ccd57c52f55804eac802f9f"})// already exicting data
+        .expect(200)
+        .end(done)
+    
+ });
+  
 
     });
     describe (" The Function",()=>
@@ -248,4 +329,4 @@ describe ("Notifications", ()=>
           expect(x).toEqual(h);
        })
     });
-});n
+});
