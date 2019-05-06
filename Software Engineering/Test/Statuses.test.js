@@ -181,7 +181,7 @@ it("Normal acceptance for delete",(done)=>
 {
     request(app)
     .post("/api/user_status/delete")
-    .send({"StatusId":"198998"})// already exicting data
+    .send({"StatusId":"5ccf7a419d38220017b6d92d"})// already exicting data
     .expect(200)
     .end(done)
 }); 
