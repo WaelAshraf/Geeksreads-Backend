@@ -83,8 +83,7 @@ Router.post('/add', async (req, res) => {
                 }
                 else {
                     console.log('error during log insertion: ' + err);
-                    return res.status(404).send("Not found");
-                    console.log('error during log insertion: ' + err);}
+                    return res.status(404).send("Not found");}
             });
         }  
         }
@@ -152,18 +151,18 @@ Router.post('/rate', async (req, res) => {
                 if (!err & user1!=null) {
                     user.findOneAndUpdate({"userId": req.body.userId }, { $push: { ratedBooks: { bookId: req.body.bookId, rating: req.body.rating } } }, (err1, user2)=>{
                         if(!err1) {
-                            console.log(req.body);
+                            
                             return res.status(200).send("Updated Succesfuly");
                         }
-                else {
+                else { console.log('error during log insertion: ' + err1);
                             return res.status(404).send("Not found");
-                            console.log('error during log insertion: ' + err1);
+                           
                         }
                     });
                 }
-                else {
+                else {console.log('error during log insertion: ' + err);
                     return res.status(404).send("Not found");
-                    console.log('error during log insertion: ' + err);
+                    
                 }
             });
     }  
@@ -229,9 +228,9 @@ Router.post('/editRevById',async (req, res) =>{
         if (!err) {             
             return res.status(200).send({ "UpdatedReviewSuc": true });
         }
-        else {
+        else {  console.log('error during log insertion: ' + err);
             return res.status(404).send("Not found");
-            console.log('error during log insertion: ' + err);}
+          }
     });
     
 });
@@ -247,8 +246,8 @@ function validateget(reqin) {
     }
 //////////////////////////////////
 
-   Router.get('/getrev',auth,async(req,res)=>{
-       var USER = req.user._id;
+   Router.get('/getrev',async(req,res)=>{
+       var USER = req.query.UserId;
     const { error } = validateget(req.body);
     if (error){
         return res.status(400).send(error.details[0].message);}
@@ -257,12 +256,12 @@ function validateget(reqin) {
     let Result = await user.find({ 'UserId':USER}).select('-_id LikedReview');
 
     var n=Review.length;
-    //console.log(Review);
+  
     Result=Result[0].LikedReview;
-   // console.log(Result);
+ 
     for (var i = 0; i < n; i++) {
         var exsist = Result.indexOf(Review[i]._id);
-       // console.log(exsist);
+    
                 if (exsist>=0) {
                     Review[i].liked = true;
                     likedArr.push(Review[i]);
@@ -273,7 +272,7 @@ function validateget(reqin) {
                 }
     
     }
-// console.log(likedArr);
+
  res.status(200).json(likedArr);
 });
 module.exports = Router;

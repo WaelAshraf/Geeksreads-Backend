@@ -29,10 +29,10 @@ const router = express.Router();
     
 
 */
-router.post('/like',(req,res)=>{
+router.post('/like',async (req,res)=>{
 
     // input validation
-    console.log(req.body.resourceId);
+    
     if (req.body.resourceId == null)
     { 
         res.status(400).send(" wrong parameters no id");
@@ -43,58 +43,21 @@ router.post('/like',(req,res)=>{
  {
      res.status(400).send(" wrong parameters no id")
  }   
-
- if (req.body.Type == "Comment")
- {
-    comment.findOneAndUpdate({CommentId: req.body.resourceId},{ $inc: { LikesCount: 1 } },function(err, doc){
-        if(err){
-            console.log("Something wrong when updating data!");
-        }
-    
-        if (!doc)
-        {
-            return res.status(404).send("Not found");
-       
-        }
-        if (doc)
-        {    
-            user.findByIdAndUpdate(req.body.User_Id,
-                { "$push": { "LikedComment": req.body.resourceId } },
-                function (err, user1) {
-                    if (!err) {           
-                        
-                   
-                        comment.findOne({"CommentId": req.body.resourceId},(err,doc)=>
-                        {
-                            //console.log(doc);
-                             if(doc)
-                            {
-                                var NotifiedUserId = doc.userId;
-                              //  console.log(doc.userId);
-                                var ReviewId = doc.reviewId;
-                                
-            
-                              CreatNotification (NotifiedUserId,ReviewId,req.body.resourceId,"CommentLike", req.body.User_Id,null);
-                      
-                            }
-                        });
-
-
-                    return res.status(200).send("liked");
-                   
-                   
-                    }
-                    else {
-                        return res.status(404).send("Not found");
-                        console.log('error during log insertion: ' + err);
-                    }});
-       
-        }
-    });
-}
-   else if (req.body.Type == "Review")
+ if (req.body.Type == "Review")
     {
-       review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: 1 } },function(err, doc){
+        let Result = await user.find({'UserId':req.body.User_Id}).select('-_id LikedReview');
+       
+     
+           var exsist = Result[0].LikedReview.indexOf(req.body.resourceId);
+           if (exsist >= 0)
+           {
+               res.status(401).send (" You Already liked it ")
+           }
+     
+
+
+
+        review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: 1 } },function(err, doc){
            if(err){
                console.log("Something wrong when updating data!");
            }
@@ -159,10 +122,10 @@ router.post('/like',(req,res)=>{
  * 
  */
 
-router.post('/unlike',(req,res)=>{
+router.post('/unlike',async (req,res)=>{
 
     // input validation
-    console.log(req.body.resourceId);
+   console.log("hey");
     if (req.body.resourceId == null)
     { 
         res.status(400).send(" wrong parameters no id");
@@ -173,38 +136,20 @@ router.post('/unlike',(req,res)=>{
  {
      res.status(400).send(" wrong parameters no id")
  }   
-
- if (req.body.Type == "Comment")
- {
-    comment.findOneAndUpdate({CommentId: req.body.resourceId},{ $inc: { LikesCount: -1 } },function(err, doc){
-        if(err){
-            console.log("Something wrong when updating data!");
-        }
-    
-        if (!doc)
-        {
-            return res.status(404).send("Not found");
-       
-        }
-        if (doc)
-        {
-            user.findByIdAndUpdate(req.body.User_Id,
-                { "$pull": { "LikedComment": req.body.resourceId } },
-                function (err, user1) {
-                    if (!err) {           
-                    
-                        
-                        return res.status(200).send("unliked");
-                    }
-                    else {
-                        return res.status(404).send("Not found");
-                        console.log('error during log insertion: ' + err);
-                    }});
-        }
-    });
-}
-   else if (req.body.Type == "Review")
+ if (req.body.Type == "Review")
     {
+        console.log("heyReview");
+        let Result = await user.find({'UserId':req.body.User_Id}).select('-_id LikedReview');
+       
+     
+        var exsist = Result[0].LikedReview.indexOf(req.body.resourceId);
+        if (exsist == -1)
+        {
+            res.status(401).send (" You Already unliked it ")
+        }
+  
+
+
        review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: -1 } },function(err, doc){
            if(err){
                console.log("Something wrong when updating data!");
