@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">28.64% </span>
+        <span class="strong">29.83% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>120/419</span>
+        <span class='fraction'>125/419</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">24.24% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>16/40</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">33.33% </span>
+        <span class="strong">35.04% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>117/351</span>
+        <span class='fraction'>123/351</span>
       </div>
     </div>
     <p class="quiet">
@@ -2541,16 +2541,16 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3902,32 +3902,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">49x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">49x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">49x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">49x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">49x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">37x</span>
-<span class="cline-any cline-yes">37x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">37x</span>
-<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">37x</span>
-<span class="cline-any cline-yes">37x</span>
-<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4589,18 +4589,18 @@ router.post('/SignUp', async (req, res) =&gt; {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
   let user = await User.findOne({ UserEmail: req.body.UserEmail.toLowerCase() });
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (user) return res.status(400).send({"ReturnMsg":"User already registered."});
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (user) <span class="cstat-no" title="statement not covered" >return res.status(400).send({"ReturnMsg":"User already registered."});</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >user = new User ({</span>
+user = new User ({
   "UserName":req.body.UserName,
   "UserEmail":req.body.UserEmail.toLowerCase(),
   "UserPassword":req.body.UserPassword
 });
-const salt = <span class="cstat-no" title="statement not covered" >await bcrypt.genSalt(10);</span>
-<span class="cstat-no" title="statement not covered" >user.UserId = user._id;</span>
-<span class="cstat-no" title="statement not covered" >user.UserPassword = await bcrypt.hash(user.UserPassword, salt);</span>
-<span class="cstat-no" title="statement not covered" >await user.save();</span>
-const token = <span class="cstat-no" title="statement not covered" >jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'));</span>
+const salt = await bcrypt.genSalt(10);
+user.UserId = user._id;
+user.UserPassword = await bcrypt.hash(user.UserPassword, salt);
+await user.save();
+const token = jwt.sign({ UserEmail:req.body.UserEmail.toLowerCase() }, config.get('jwtPrivateKey'));
 let transporter = <span class="cstat-no" title="statement not covered" >nodeMailer.createTransport({</span>
           host: 'smtp.gmail.com',
           port: 465,
@@ -6202,7 +6202,7 @@ module.exports = router;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue May 07 2019 17:51:12 GMT+0300 (Arabian Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue May 07 2019 21:34:03 GMT+0300 (Arabian Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>
