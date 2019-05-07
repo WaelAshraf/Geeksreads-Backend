@@ -149,10 +149,10 @@ Router.post('/rate', async (req, res) => {
         review.findOneAndUpdate({ "bookId": req.body.bookId, "userId": req.body.userId }, { $set: { rating: req.body.rating } },
             function (err, user1) {
                 if (!err & user1!=null) {
-                    user.findOneAndUpdate({"userId": req.body.userId }, { $push: { ratedBooks: { bookId: req.body.bookId, rating: req.body.rating } } }, (err1, user2)=>{
+                    user.findOneAndUpdate({"UserId": req.body.userId }, { $push: { RatedBooks: { bookId: req.body.bookId, rating: req.body.rating } } }, (err1, doc)=>{
                         if(!err1) {
                             
-                            return res.status(200).send("Updated Succesfuly");
+                                                        return res.status(200).send("Updated Succesfuly");
                         }
                 else { console.log('error during log insertion: ' + err1);
                             return res.status(404).send("Not found");

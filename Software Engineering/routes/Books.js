@@ -4,6 +4,7 @@ const {Books,validate} = require('../models/Book');
 const Author= require('../models/Author.model');
 const auth = require('../middleware/auth');
 const Joi = require('joi');
+const user = require('../models/User').User;
 const router = express.Router();
 
 //Find book by ID.
@@ -50,12 +51,13 @@ const router = express.Router();
  * @apiError Book-not-found   The <code>Book</code> was not found.
  */
 
-router.get('/byid', async (req,res) => {
+router.get('/byid',async (req,res) => {
   
-        
+
+  var USER = req.query.User;
       
    mongoose.connection.collection("books").findOne({'BookId':req.query.BookId},
-   (err,doc) =>{
+   async (err,doc) =>{
     
      if(!doc || err)
      {
@@ -65,6 +67,21 @@ router.get('/byid', async (req,res) => {
      }
       else
       {
+         user.find({'UserId':USER},(err,doc1)=>
+         {
+           
+          console.log(doc1); 
+          var exsist = doc1.RatedBooks.indexOf(req.query.BookId);
+          console.log(exsist);
+          if (exsist>=0) {
+            doc.BookRating =RatedBooks[exsist].rating;
+        
+        }
+         });
+        
+      
+    
+        
       res.status(200).json(doc);
      
       }
