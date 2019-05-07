@@ -35,7 +35,7 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "test": "nyc --reporter=html mocha --timeout 15000 --exit"
+    "test": "nyc --reporter=html mocha --timeout 25000 --exit"
   },
   "author": "",
   "license": "ISC"
