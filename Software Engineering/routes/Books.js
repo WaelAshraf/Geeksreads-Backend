@@ -56,7 +56,7 @@ router.get('/byid',async (req,res) => {
 
   var USER = req.query.User;
       
-   mongoose.connection.collection("books").findOne({'BookId':req.query.BookId},
+    mongoose.connection.collection("books").findOne({'BookId':req.query.BookId},
    async (err,doc) =>{
     
      if(!doc || err)
@@ -67,21 +67,23 @@ router.get('/byid',async (req,res) => {
      }
       else
       {
-         user.find({'UserId':USER},(err,doc1)=>
+        await user.find({'UserId':USER},(err,doc1)=>
          {
-           
-          console.log(doc1); 
-          var exsist = doc1.RatedBooks.indexOf(req.query.BookId);
-          console.log(exsist);
-          if (exsist>=0) {
-            doc.BookRating =RatedBooks[exsist].rating;
+          var rated = doc1[0].RatedBooks
+            var hasTag = false; 
+            var i = null;
+             for (i = 0; rated.length > i; i += 1) {
+               if (rated[i].bookId == req.query.BookId) {
+                hasTag= true;
+                break;
+               }
+             }
+          
+         if (hasTag) {
+            doc.BookRating =rated[i].rating;
         
-        }
-         });
-        
-      
-    
-        
+          }
+         }); 
       res.status(200).json(doc);
      
       }
