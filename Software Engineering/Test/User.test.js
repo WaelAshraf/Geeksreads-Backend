@@ -44,7 +44,7 @@ it("Invalid Name Sign Up",  (done) => {
       .post('/api/Users/SignUp')
       .send({
               "UserName": "Saad",
-              "UserEmail": "AhmedSaad@nice.com",
+              "UserEmail": "AhmedSaad@gmail.com",
               "UserPassword": "123456"
          })
      .expect(200,done);
@@ -54,7 +54,7 @@ it("Invalid Name Sign Up",  (done) => {
       .post('/api/Auth/')
       .send({
               "UserEmail": "samersosta@gmail.com",
-              "UserPassword": "123456"
+              "UserPassword": "234567"
          })
      .expect(200,done);
 })
@@ -128,7 +128,7 @@ it("Password Updated",  (done) => {
      .post('/api/Users/UpdateUserPassword')
      .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTcyNTE1NjMsImV4cCI6MTU1NzMzNzk2M30.Df1i2HepFXJ3C7rNAKzVf3kmL6hr2EqMxSMlWYBUZhM')
      .send({
-       "NewUserPassword":"123456",
+       "NewUserPassword":"234567",
        "OldUserPassword":"234567"
         })
     .expect(200,done);
@@ -138,7 +138,7 @@ it("Invalid User Id",  (done) => {
      .post('/api/Users/GetUserById')
      .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTcyNTE1NjMsImV4cCI6MTU1NzMzNzk2M30.Df1i2HepFXJ3C7rNAKzVf3kmL6hr2EqMxSMlWYBUZhM')
      .send({
-       "UserId":"BlaBlaBla"
+       "UserId":"5cc5df8c2e9c5800172864c"
         })
     .expect(400,done);
 });
