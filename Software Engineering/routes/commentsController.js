@@ -140,7 +140,81 @@ Router.post('/', async (req, res) => {
         }
     });
 });
+///////Edit review by id/////////
+/**
+ * @api{POST}/comment/editCommById edit a review on a book using the reviewId 
+ * @apiName editCommentById 
+ *@apiParam {String} CommentId
+ *@apiParam {String} NewBody
+ * @apiGroup Comments
+ * @apiError {404} not found
+ * @apiSuccess {Bool} UpdatedCommentSuc review edited succesfuly
+ * @apiSuccessExample
+ * HTTP/1.1 200 OK
+ *{ 
+ *"UpdatedReviewSuc": true 
+ *}
+   * @apiParam{ObjectID} reviewId the id of the book reviewed by the user
+* @apiParam{ObjectID} reviewBody the new body of the review
 
+ */
+/////////////////////////////////////
+Router.post('/editCommById',async (req, res) =>{
+    if (req.body.CommentId == null ||req.body.CommentId.length == 0 )
+    {
+        return res.status(400).send("No Id was sent");
+       
+    }
+
+    if (req.body.NewBody == null ||req.body.NewBody.length == 0 )
+    {
+        return res.status(400).send("No Body was sent");
+       
+    }
+    
+    comment.findOneAndUpdate({"CommentId":req.body.CommentId},{$set:{Body:req.body.NewBody}},function (err, user1) {
+        if (!err) {             
+            return res.status(200).send({ "UpdatedCommentSuc": true });
+        }
+        else {  console.log('error during log insertion: ' + err);
+            return res.status(404).send("Not found");
+          }
+    });
+
+    
+});
+////Remove////
+/**
+ * @api{POST}/comment/remove remove and review on a book using the reviewId 
+ * @apiName removeCommentById 
+ * @apiGroup Comment
+ * @apiParam CommentId
+ * @apiError {400} Bad request
+ * @apiSuccess {Bool} deleteCommentSuc the review deleted succesfuly
+ * @apiSuccessExample
+ * HTTP/1.1 200 OK
+ *{ 
+ *"deleteReviewSuc": true 
+ *}
+   * @apiParam{ObjectID} reviewId the id of the book reviewed by the user
+
+ */
+//////////////////////////////
+Router.post('/remove',async (req,res)=>{
+    if (req.body.CommentId == null ||req.body.CommentId.length == 0 )
+    {
+        return res.status(400).send("No Id was sent");
+       
+    }
+    comment.findOneAndRemove({'CommentId':req.body.CommentId},(err,doc)=>{
+ 
+    if(err || !doc )
+    {
+        res.status(404).json({"deleteCommentSuc": false})}
+    else{ 
+     res.status(200).json({"deleteCommentSuc": true});}
+})
+})
 /////////////////////////////////////////
 function validateget(reqin) {
     const schema = {
