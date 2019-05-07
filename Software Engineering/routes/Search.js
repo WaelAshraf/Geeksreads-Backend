@@ -37,9 +37,6 @@ router.get('/', async (req,res) => {
           retArr.push(doc1);
    } 
    );
-   console.log(retArr[1].length);
-   console.log(retArr[0].length);
-   console.log(retArr[0].length==0 && retArr[1].length==0);
    if(retArr[0].length==0 && retArr[1].length==0)
    {
      return res.status(404).json("Not Found");

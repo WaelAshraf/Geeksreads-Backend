@@ -33,44 +33,51 @@ router.post('/like',async (req,res)=>{
 
     // input validation
     
-    if (req.body.resourceId == null)
+    if (req.body.resourceId == null ||req.body.resourceId.lenght == 0)
     { 
         res.status(400).send(" wrong parameters no id");
    
     }
 
- if (req.body.resourceId.lenght == 0)
+ if (req.body.User_Id == null ||req.body.User_Id.lenght == 0)
  {
      res.status(400).send(" wrong parameters no id")
  }   
+
  if (req.body.Type == "Review")
     {
-        let Result = await user.find({'UserId':req.body.User_Id}).select('-_id LikedReview');
-       
+        user.findOne({'UserId':req.body.User_Id},async(err, doc)=>
+    {
+    
+       if (!doc|| err)
+       {
+        return res.status(404).send("User Not found");
+       }
+       else
+       {
+        var exsist = doc.LikedReview.indexOf(req.body.resourceId);
+        if (exsist >= 0)
+        {
+          return  res.status(401).send (" You Already unliked it ")
+        }
      
-           var exsist = Result[0].LikedReview.indexOf(req.body.resourceId);
-           if (exsist >= 0)
-           {
-               res.status(401).send (" You Already liked it ")
-           }
-     
 
 
 
-        review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: 1 } },function(err, doc){
+        await review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: 1 } },async function(err, doc){
            if(err){
                console.log("Something wrong when updating data!");
            }
        
            if (!doc)
            {
-               console.log(req.body);
+               
                return res.status(404).send("Not found");
           
            }
            if (doc)
            {
-            user.findByIdAndUpdate(req.body.User_Id,
+            await user.findByIdAndUpdate(req.body.User_Id,
                 { "$push": { "LikedReview": req.body.resourceId } },
                 function (err, user1) {
                     if (!err) {           
@@ -81,7 +88,7 @@ router.post('/like',async (req,res)=>{
                 {
                     var NotifiedUserId = doc.userId;
                     var BookID = doc.bookId
-                 console.log (" i liked  a comment ");
+                
                   CreatNotification(NotifiedUserId, doc.reviewId, null,"ReviewLike", req.body.User_Id,BookID);
                 }
  
@@ -89,16 +96,20 @@ router.post('/like',async (req,res)=>{
            
                         return res.status(200).send("liked");
                     }
-                    else {
+                    else {  console.log('error during log insertion: ' + err);
                         return res.status(404).send("Not found");
-                        console.log('error during log insertion: ' + err);
+                      
                     }});
-           }
-       });
-    }          
+                }
+            });
+              }
+             });
+      } 
+        
+          
  else // wrong type
  {
-   res.status(400).send("wrong type");
+   return res.status(400).send("wrong type");
  }    
 
 
@@ -125,57 +136,68 @@ router.post('/like',async (req,res)=>{
 router.post('/unlike',async (req,res)=>{
 
     // input validation
-   console.log("hey");
-    if (req.body.resourceId == null)
+ 
+    if (req.body.resourceId == null ||req.body.resourceId.lenght == 0)
     { 
-        res.status(400).send(" wrong parameters no id");
+       return res.status(400).send(" wrong parameters no id");
    
     }
 
- if (req.body.resourceId.lenght == 0)
+ if (req.body.User_Id == null ||req.body.User_Id.lenght == 0)
  {
-     res.status(400).send(" wrong parameters no id")
+     return res.status(400).send(" wrong parameters no id")
  }   
+ 
  if (req.body.Type == "Review")
     {
-        console.log("heyReview");
-        let Result = await user.find({'UserId':req.body.User_Id}).select('-_id LikedReview');
        
-     
-        var exsist = Result[0].LikedReview.indexOf(req.body.resourceId);
+    user.findOne({'UserId':req.body.User_Id},async(err, doc)=>
+    {
+    
+       if (!doc|| err)
+       {
+        return res.status(404).send("User Not found");
+       }
+       else
+       {
+        var exsist = doc.LikedReview.indexOf(req.body.resourceId);
         if (exsist == -1)
         {
-            res.status(401).send (" You Already unliked it ")
+          return  res.status(401).send (" You Already unliked it ")
         }
   
 
+    
+       review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: -1 } },async function(err, doc)
+       {
+        
 
-       review.findOneAndUpdate({ reviewId: req.body.resourceId},{ $inc: { likesCount: -1 } },function(err, doc){
-           if(err){
-               console.log("Something wrong when updating data!");
-           }
-       
-           if (!doc)
+           if (!doc||err)
            {
                return res.status(404).send("Not found");
           
            }
            if (doc)
-           {user.findByIdAndUpdate(req.body.User_Id,
+           {
+               await user.findByIdAndUpdate(req.body.User_Id,
             { "$pull": { "LikedReview": req.body.resourceId } },
             function (err, user1) {
-                if (!err) {           
-                
-                    
+                if (!err)
+                {              
                     return res.status(200).send("unliked");
                 }
-                else {
+                else
+                 {console.log('error during log insertion: ' + err);
                     return res.status(404).send("Not found");
-                    console.log('error during log insertion: ' + err);
+                    
                 }});
-           }
+          
+            }
        });
-    }          
+         }
+        });
+ } 
+              
  else // wrong type
  {
    res.status(400).send("wrong type");

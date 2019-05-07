@@ -124,15 +124,15 @@ router.get('/byid', async (req,res) => {
 
 router.get('/author', async (req,res) => {
   Books.find({ISBN:req.query.search_param},(err,doc) =>{
-    console.log(doc);   
+ 
     if(!doc|| doc.length ==0)
     {
-      console.log(doc);
+     
       Books.find({AuthorId:req.query.search_param},
         (err,doc) =>{
           if(!doc|| doc.length ==0)
           {
-            console.log(doc);
+           
             Books.find({Title:req.query.search_param},
               (err,doc) =>{
                 if(!doc|| doc.length ==0)
@@ -149,7 +149,7 @@ router.get('/author', async (req,res) => {
                 }
                 else
                 {
-                  console.log(doc);
+                 
                   res.status(200).json(doc);
                 }
 
@@ -442,7 +442,7 @@ router.get('/genre', async (req,res) => {
       
   Books.find({'Genre':req.query.Genre}).then
   (bookArr =>{
-    console.log(bookArr);
+   
    
     if(bookArr.length==0)
     {

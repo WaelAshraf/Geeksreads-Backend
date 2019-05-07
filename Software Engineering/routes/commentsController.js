@@ -109,7 +109,7 @@ Router.post('/', async (req, res) => {
                     var NotifiedUserId = doc.userId;
   
                  CreatNotification(NotifiedUserId,req.body.ReviewId,comment1.CommentId,"Comment",comment1.userId,null);
-                 console.log(user1.FollowersUserId); 
+                
                  if ( user1.FollowersUserId)
              {
 
@@ -124,9 +124,9 @@ Router.post('/', async (req, res) => {
             });             
                     return res.status(200).send({ "AddedCommentSuc": true });
                 }
-                else {
+                else {console.log('error during log insertion: ' + err);
                     return res.status(404).send("Not found");
-                    console.log('error during log insertion: ' + err);}
+                    }
             });
         
   //  console.log(user1.UserName);

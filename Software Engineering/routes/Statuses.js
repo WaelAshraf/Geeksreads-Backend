@@ -82,7 +82,7 @@ router.post("/",(req,res)=>
 
    Status.findOne({'StatusId': newStatus.StatusId},(err,doc)=>
    {
-     console.log(doc);
+    
     if(!doc||err)
     {
    return res.status(400).send("Not there exist");
@@ -194,7 +194,7 @@ router.get("/show" ,async(req,res)=>
    {
  
     var n = doc.length;
-    console.log (n)
+  
     if(!doc)
     {  return res.status(404).send("No statuses were found"); }
     if(doc.length == 0|| doc.length == null )
