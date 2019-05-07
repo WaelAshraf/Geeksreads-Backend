@@ -4,7 +4,7 @@ it("Get book reviews using its own ISBN (invalid)", (done) => { //Test for an in
     request(app) //sends request to server
         .get('/api/book/reviewbyisbn')//Define request as post  specific end point
         .query({ //adds Request Paramters 
-            book_isbn: "551"
+            book_isbn: "book 551"
         })
         .expect(404, done);//expects status 404 to pass test 
 });

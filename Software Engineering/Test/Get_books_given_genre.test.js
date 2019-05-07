@@ -2,7 +2,7 @@ const request = require('supertest'); //imports supertest framework
 var app = require('../DB').app; // imports server app
 it("Get info about multiple books by genre (invalid)", (done) => { //Test for an invalid book ID to fetch 
     request(app) //sends request to server
-        .get('/api/book/bygenre')//Define request as post  specific end point
+        .get('/api/book/genre')//Define request as post  specific end point
         .query({ //adds Request Paramters 
             Genre: "reality 101"
         })
@@ -13,7 +13,7 @@ it("Get info about multiple books by genre (invalid)", (done) => { //Test for an
 
 it("Get info about multiple books by genre (valid)", (done) => { //Test for an valid  Request
     request(app)// imports server app
-        .get('/api/book/bygenre')//Define request as post 
+        .get('/api/book/genre')//Define request as post 
         .query({ //sends request to server
             Genre: "Thriller"
         })
