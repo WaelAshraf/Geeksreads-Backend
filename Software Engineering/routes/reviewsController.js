@@ -4,6 +4,7 @@ const {CreatStatuses} = require("../models/Statuses")
 var Router = express.Router();
 const mongoose = require('mongoose');
 const {validate,review} = require('../models/reviews.model');
+const auth = require('../middleware/auth');
 const book =require('../models/Book').Books;
 const user = require('../models/User').User;
 const Joi = require('joi');
@@ -246,13 +247,14 @@ function validateget(reqin) {
     }
 //////////////////////////////////
 
-   Router.get('/getrev',async(req,res)=>{
+   Router.get('/getrev',auth,async(req,res)=>{
+       var USER = req.user._id;
     const { error } = validateget(req.body);
     if (error){
         return res.status(400).send(error.details[0].message);}
     var likedArr =Array();
     let Review = await review.find({bookId:req.body.bookId});
-    let Result = await user.find({ 'UserId': req.body.UserId}).select('-_id LikedReview');
+    let Result = await user.find({ 'UserId':USER}).select('-_id LikedReview');
 
     var n=Review.length;
     //console.log(Review);
