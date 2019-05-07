@@ -122,14 +122,9 @@ router.get('/byid', async (req,res) => {
  * @apiError Author-not-found   The <code>Author</code> was not found.
  */
 
-router.get('/find', async (req,res) => {
-  
- 
-  Books.find({ISBN:req.query.search_param},
-  (err,doc) =>{
-   
-    console.log(doc);
-      
+router.get('/author', async (req,res) => {
+  Books.find({ISBN:req.query.search_param},(err,doc) =>{
+    console.log(doc);   
     if(!doc|| doc.length ==0)
     {
       console.log(doc);
@@ -500,28 +495,28 @@ router.get('/byisbn', async (req,res) => {
  * @apiError genre-not-found   The <code>genre</code> was not found.
  */
 
-  router.get('/bygenre', async (req,res) => {
+router.get('/genre', async (req,res) => {
   
         
       
-    Books.find({'Genre':req.query.Genre}).then
-    (bookArr =>{
-     
-      if(bookArr.length==0)
-      {
-        res.status(404).json({  // sends a json with 404 code
-          success: false ,  // book not retrieved 
-          "Message":"No books with this Genre was Found"});
-        }
-       else
-       {
-       res.status(200).json(bookArr);
-      
-       }
-      }).catch(err => res.status(404).json({ success: false }));
-  
-  
-    });
+  Books.find({'Genre':req.query.Genre}).then
+  (bookArr =>{
+   
+    if(bookArr.length==0)
+    {
+      res.status(404).json({  // sends a json with 404 code
+        success: false ,  // book not retrieved 
+        "Message":"No books with this Genre was Found"});
+      }
+     else
+     {
+     res.status(200).json(bookArr);
+    
+     }
+    }).catch(err => res.status(404).json({ success: false }));
+
+
+  });
  
   
 
