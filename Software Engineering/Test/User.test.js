@@ -151,3 +151,37 @@ it("gets User info by User Id",  (done) => {
         })
     .expect(200,done);
 });
+it("Invalid User Email",  (done) => {
+    request(app)
+     .post('/api/Users/ForgotPassword')
+     .send({
+       "UserEmail":"samersostagmail.com"
+        })
+    .expect(400,done);
+});
+it("Send Email to Change Password",  (done) => {
+    request(app)
+     .post('/api/Users/ForgotPassword')
+     .send({
+       "UserEmail":"samersosta@gmail.com"
+        })
+    .expect(200,done);
+});
+it("Signs User Out",  (done) => {
+    request(app)
+     .post('/api/Users/SignOut')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTcyNTE1NjMsImV4cCI6MTU1NzMzNzk2M30.Df1i2HepFXJ3C7rNAKzVf3kmL6hr2EqMxSMlWYBUZhM')
+    .expect(200,done);
+});
+it("Gets Current User Info",  (done) => {
+    request(app)
+     .get('/api/Users/me')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTcyNTE1NjMsImV4cCI6MTU1NzMzNzk2M30.Df1i2HepFXJ3C7rNAKzVf3kmL6hr2EqMxSMlWYBUZhM')
+    .expect(200,done);
+});
+it("Gets Current User Shelves",  (done) => {
+    request(app)
+     .get('/api/Users/GetUserShelves')
+     .set('x-auth-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Y2M1ZGY4YzJlOWM1ODAwMTcyODY0YzkiLCJpYXQiOjE1NTcyNTE1NjMsImV4cCI6MTU1NzMzNzk2M30.Df1i2HepFXJ3C7rNAKzVf3kmL6hr2EqMxSMlWYBUZhM')
+    .expect(200,done);
+});
