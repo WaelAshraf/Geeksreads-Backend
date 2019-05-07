@@ -15,7 +15,7 @@ it("Get book reviews using its own ISBN (valid)", (done) => { //Test for an vali
     request(app)// imports server app
         .get('/api/book/reviewbyisbn')//Define request as post 
         .query({ //sends request to server
-            book_isbn: "5c911452f03269139ce699af"
+            book_isbn: "5c911452ce18b2b3276d4b45"
         })
         .expect(200, done);//expects status 200 to pass test 
 });

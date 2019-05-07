@@ -4,7 +4,7 @@ it("Get info about book by ID (invalid)", (done) => { //Test for an invalid book
     request(app) //sends request to server
         .get('/api/book/byid')//Define request as post  specific end point
         .query({ //adds Request Paramters 
-            book_id: "551"
+            book_id: "book 551"
         })
         .expect(404, done);//expects status 404 to pass test 
 });
