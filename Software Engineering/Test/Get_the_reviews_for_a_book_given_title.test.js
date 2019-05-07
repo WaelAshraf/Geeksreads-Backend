@@ -4,7 +4,7 @@ it("Get book reviews using its own title (invalid)", (done) => { //Test for an i
     request(app) //sends request to server
         .get('/api/book/reviewbytitle')//Define request as post  specific end point
         .query({ //adds Request Paramters 
-            book_title: "mohammed"
+            book_title: "mohammed 21"
         })
         .expect(404, done);//expects status 404 to pass test 
 });
