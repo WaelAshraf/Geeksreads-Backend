@@ -221,10 +221,9 @@ router.post('/SignOut', auth, async (req, res) => {
  */
 
  router.all('/me', auth, async (req, res) => {
-   let check = await User.findOne({ UserId: req.user._id });
-   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+   //let check = await User.findOne({ UserId: req.user._id });
+   //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
    const user = await User.findById(req.user._id).select('-UserPassword  -_id  -__v ');
-   if (!user.Confirmed) return res.status(401).send({  "ReturnMsg" : 'Your account has not been verified.' });
    var NoOfFollowings = user.FollowingUserId.length;
    var NoOfFollowers = user.FollowersUserId.length;
    var Result={
@@ -292,8 +291,8 @@ router.post('/SignOut', auth, async (req, res) => {
  *
  */
 router.all('/GetUserById', auth, async (req, res) => {
-  let check = await User.findOne({ UserId: req.user._id });
-  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  //let check = await User.findOne({ UserId: req.user._id });
+  //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
   const userdisplay = await User.findOne({ UserId: req.body.UserId }).select('-UserPassword  -_id  -__v ');
   if (!userdisplay) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
   var NoOfFollowings = userdisplay.FollowingUserId.length;
@@ -521,8 +520,8 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
   *
   */
   router.post('/UpdateUserPassword', auth, async (req, res) => {
-    let check = await User.findOne({ UserId: req.user._id });
-    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    //let check = await User.findOne({ UserId: req.user._id });
+    //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
     const { error } = NewPassWordValidate(req.body);
     if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
     const user = await User.findById(req.user._id);
@@ -582,8 +581,8 @@ res.status(200).send({"ReturnMsg":"A verification email has been sent to " + use
  * }
  */
 router.post('/UpdateUserInfo', auth, async (req, res) => {
-  let check = await User.findOne({ UserId: req.user._id });
-  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+  //let check = await User.findOne({ UserId: req.user._id });
+  //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
   const { error } = DateValidate(req.body);
   if (error) return res.status(400).send({"ReturnMsg":error.details[0].message});
   const user = await User.findById(req.user._id).select('-UserPassword');
@@ -649,8 +648,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
  *
  */
  router.get('/GetBookReadStatus', auth, async (req, res) => {
-   let check = await User.findOne({ UserId: req.user._id });
-   if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+   //let check = await User.findOne({ UserId: req.user._id });
+   //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
    let Read =  await User.findOne({ UserId: req.user._id, Read:req.body.BookId });
    let WantToRead = await User.findOne({ UserId: req.user._id, WantToRead:req.body.BookId });
    let Reading =  await User.findOne({ UserId: req.user._id, Reading:req.body.BookId });
@@ -711,8 +710,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   * }
   */
   router.get('/GetUserShelves', auth, async (req, res) => {
-    let check = await User.findOne({ UserId: req.user._id });
-    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    //let check = await User.findOne({ UserId: req.user._id });
+    //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
     const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
     var NoOfRead = user.Read.length;
     var NoOfReading = user.Reading.length;
@@ -766,8 +765,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    * }
    */
    router.get('/ShelvesCount', auth, async (req, res) => {
-     let check = await User.findOne({ UserId: req.user._id });
-     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+     //let check = await User.findOne({ UserId: req.user._id });
+     //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
      const user = await User.findOne({ UserId: req.body.UserId}).select('-_id Read WantToRead Reading');
      if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
      var NoOfRead = user.Read.length;
@@ -861,8 +860,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
 
 
   router.get('/GetUserShelvesDetails', auth, async (req, res) => {
-    let check = await User.findOne({ UserId: req.user._id });
-    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    //let check = await User.findOne({ UserId: req.user._id });
+    //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
 
     //const user = await User.findById(req.user._id).select('-UserBirthDate -UserPassword  -_id  -__v -UserId -UserEmail -Photo -Confirmed -UserName -FollowingAuthorId -FollowingUserId -FollowersUserId -OwnedBookId');
     const user = await User.findById(req.user._id).select('-_id Read WantToRead Reading');
@@ -1013,8 +1012,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    * }
    */
     router.get('/GetUserReadDetails', auth, async (req, res) => {
-      let check = await User.findOne({ UserId: req.user._id });
-      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+      //let check = await User.findOne({ UserId: req.user._id });
+      //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
       const user = await User.findOne({UserId:req.body.UserId}).select('-_id Read WantToRead Reading');
       if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
       var Result = {
@@ -1120,8 +1119,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
      * }
      */
       router.get('/GetUserReadingDetails', auth, async (req, res) => {
-        let check = await User.findOne({ UserId: req.user._id });
-        if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+      //  let check = await User.findOne({ UserId: req.user._id });
+        //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
         const user = await User.findOne({UserId:req.body.UserId}).select('-_id Read WantToRead Reading');
         if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
         var Result = {
@@ -1228,8 +1227,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
        * }
        */
         router.get('/GetUserWantToReadDetails', auth, async (req, res) => {
-          let check = await User.findOne({ UserId: req.user._id });
-          if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+          //let check = await User.findOne({ UserId: req.user._id });
+          //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
           const user = await User.findOne({UserId:req.body.UserId}).select('-_id Read WantToRead Reading');
           if (!user) return res.status(400).send({  "ReturnMsg" : "User Doesn't Exist" });
           var Result = {
@@ -1306,8 +1305,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    */
 
    router.post('/AddToShelf', auth, async (req, res) => {
-     let check = await User.findOne({ UserId: req.user._id });
-     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+     //let check = await User.findOne({ UserId: req.user._id });
+     //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
      if(req.body.ShelfType != "Read" && req.body.ShelfType != "Reading" && req.body.ShelfType != "WantToRead" )
      return res.status(400).send({"ReturnMsg":"Invalid Shelf"});
      const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
@@ -1357,8 +1356,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
   * }
   */
   router.post('/RemoveFromShelf', auth, async (req, res) => {
-    let check = await User.findOne({ UserId: req.user._id });
-    if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+    //let check = await User.findOne({ UserId: req.user._id });
+    //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
     const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
     if(!book) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
     const read = await User.findOne({UserId: req.user._id, Read:  req.body.BookId});
@@ -1406,8 +1405,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
    * }
    */
    router.post('/UpdateWantToReading', auth, async (req, res) => {
-     let check = await User.findOne({ UserId: req.user._id });
-     if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+     //let check = await User.findOne({ UserId: req.user._id });
+     //if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
      const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
      if(!book) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
      const wanttoread = await User.findOne({UserId: req.user._id, WantToRead:  req.body.BookId});
@@ -1453,8 +1452,8 @@ router.post('/UpdateUserInfo', auth, async (req, res) => {
     * }
     */
     router.post('/UpdateReadingToRead', auth, async (req, res) => {
-      let check = await User.findOne({ UserId: req.user._id });
-      if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
+      //let check = await User.findOne({ UserId: req.user._id });
+    //  if (!check) return res.status(400).send({"ReturnMsg":"User Doesn't Exist"});
       const book = await mongoose.connection.collection("books").findOne({ BookId: req.body.BookId });
       if(!book) return res.status(400).send({"ReturnMsg":"Book Doesn't Exist"});
       const reading = await User.findOne({UserId: req.user._id, Reading:  req.body.BookId});
@@ -1789,8 +1788,8 @@ router.get("/Notifications" ,async(req,res)=>
   Notification.find( {'UserId':USER},async (err,doc)=>
 
    {
-     
-     
+
+
     if(!doc)
     {
    return res.status(404).send("No Notifications were found");
@@ -1801,13 +1800,13 @@ router.get("/Notifications" ,async(req,res)=>
     }
       var n = doc.length;
       let Result = await User.find({'UserId': USER}).select('-_id LikedReview WantToRead Reading Read');
- 
+
       for (var i=0 ;i<n;i++)
      {
        if (doc[i].ReviewId)
        {
          var exsist = Result[0].LikedReview.indexOf(doc[i].ReviewId);
- 
+
                  if (exsist>=0) {
 
                    doc[i].ReviewIsLiked =true;
